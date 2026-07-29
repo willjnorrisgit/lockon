@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lock On — Aerospace &amp; Defence Consultancy</title>
+  <meta
+    name="description"
+    content="Lock On is an aerospace and defence consultancy providing proactive, tailored expertise drawn from top-tier tactical, test and fast-jet operational experience."
+  />
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%230A0A0A'/%3E%3Ccircle cx='20' cy='20' r='16' fill='none' stroke='%23FFFFFF' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='2' fill='%23FFFFFF'/%3E%3Cline x1='20' y1='2' x2='20' y2='10' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='20' y1='30' x2='20' y2='38' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='2' y1='20' x2='10' y2='20' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='30' y1='20' x2='38' y2='20' stroke='%23FFFFFF' stroke-width='2'/%3E%3C/svg%3E"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/dots.css" />
+  <link rel="stylesheet" href="css/sections/landing.css" />
+  <link rel="stylesheet" href="css/sections/what-we-do.css" />
+  <link rel="stylesheet" href="css/sections/why-us.css" />
+  <link rel="stylesheet" href="css/sections/team.css" />
+  <link rel="stylesheet" href="css/sections/contact.css" />
+</head>
+<body>
+  <!-- Shared icon sprite: single reticle mark reused in nav + landing logo -->
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="icon-reticle" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" />
+      <circle cx="20" cy="20" r="2" fill="currentColor" />
+      <line x1="20" y1="1" x2="20" y2="9" stroke="currentColor" stroke-width="1.5" />
+      <line x1="20" y1="31" x2="20" y2="39" stroke="currentColor" stroke-width="1.5" />
+      <line x1="1" y1="20" x2="9" y2="20" stroke="currentColor" stroke-width="1.5" />
+      <line x1="31" y1="20" x2="39" y2="20" stroke="currentColor" stroke-width="1.5" />
+    </symbol>
+  </svg>
+
+  <a class="visually-hidden" href="#what-we-do">Skip to content</a>
+
+  <!-- ============================== NAV ============================== -->
+  <header class="nav" id="site-nav">
+    <a href="#landing" class="nav__logo" aria-label="Lock On — back to top">
+      <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
+      <span>Lock On</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#what-we-do">What We Do</a>
+      <a href="#why-us">Why Us</a>
+      <a href="#team">Team</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ============================ DOT NAV ============================ -->
+  <nav class="dots" aria-label="Section navigation">
+    <button class="dots__item" data-target="landing" aria-current="true">
+      <span class="dots__dot"></span>
+      <span class="dots__label">Landing</span>
+    </button>
+    <button class="dots__item" data-target="what-we-do" aria-current="false">
+      <span class="dots__dot"></span>
+      <span class="dots__label">What We Do</span>
+    </button>
+    <button class="dots__item" data-target="why-us" aria-current="false">
+      <span class="dots__dot"></span>
+      <span class="dots__label">Why Us</span>
+    </button>
+    <button class="dots__item" data-target="team" aria-current="false">
+      <span class="dots__dot"></span>
+      <span class="dots__label">Team</span>
+    </button>
+    <button class="dots__item" data-target="contact" aria-current="false">
+      <span class="dots__dot"></span>
+      <span class="dots__label">Contact</span>
+    </button>
+  </nav>
+
+  <main class="scroll-container">
+    <!-- =========================== 01 LANDING =========================== -->
+    <section class="section landing" id="landing">
+      <div class="landing__media">
+        <div class="landing__fallback"></div>
+        <!--
+          Drop compressed hero footage in assets/video/ as hero.webm + hero.mp4
+          (see README for ffmpeg commands). Until then, the animated fallback
+          backdrop above shows through.
+        -->
+        <video
+          class="landing__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="assets/img/hero-poster.jpg"
+        >
+          <source src="assets/video/hero.webm" type="video/webm" />
+          <source src="assets/video/hero.mp4" type="video/mp4" />
+        </video>
+        <div class="landing__scrim"></div>
+      </div>
+
+      <div class="landing__content">
+        <div class="landing__logo">
+          <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
+          <span class="landing__logo-word">Lock On</span>
+        </div>
+        <h1 class="landing__title">Unparalleled Operational Experience</h1>
+        <p class="landing__tagline">
+          Proactive, tailored aerospace and defence consultancy — built on operational
+          pedigree and absolute discretion.
+        </p>
+      </div>
+
+      <div class="landing__scroll-cue" aria-hidden="true">
+        <span>Scroll</span>
+        <span class="scroll-line"></span>
+      </div>
+    </section>
+
+    <!-- ========================= 02 WHAT WE DO ========================= -->
+    <section class="section section--alt" id="what-we-do">
+      <div class="section__inner">
+        <p class="section__label">02 — Capabilities</p>
+        <h2 class="section__heading">What We Do</h2>
+        <p class="section__intro">
+          We provide proactive, tailored consultancy to defence and aerospace clients —
+          engineered around your mission, not a generic playbook.
+        </p>
+
+        <div class="capabilities">
+          <article class="capability">
+            <span class="capability__index">01</span>
+            <h3 class="capability__title">Operating Procedures</h3>
+            <p class="capability__text">
+              Development of robust operating procedures tailored to platform, mission
+              and regulatory environment.
+            </p>
+          </article>
+          <article class="capability">
+            <span class="capability__index">02</span>
+            <h3 class="capability__title">Specialist Advice</h3>
+            <p class="capability__text">
+              Direct access to specialist aerospace and tactical advice, drawn from
+              operational fast-jet and test experience.
+            </p>
+          </article>
+          <article class="capability">
+            <span class="capability__index">03</span>
+            <h3 class="capability__title">Programme &amp; Advisory Support</h3>
+            <p class="capability__text">
+              Embedded support across acquisition, capability and programme advisory
+              work.
+            </p>
+          </article>
+          <article class="capability">
+            <span class="capability__index">04</span>
+            <h3 class="capability__title">Information Security</h3>
+            <p class="capability__text">
+              Every engagement is built around a premium on information security, from
+              first contact through to delivery.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================== 03 WHY US =========================== -->
+    <section class="section" id="why-us">
+      <div class="section__inner">
+        <p class="section__label">03 — Why Us</p>
+        <h2 class="section__heading">Why Us</h2>
+        <p class="section__intro">Four things that set Lock On apart.</p>
+
+        <div class="differentiators">
+          <div class="differentiator">
+            <span class="differentiator__index">01</span>
+            <h3 class="differentiator__title">Founded 2018</h3>
+            <p class="differentiator__text">
+              Built specifically for the defence sector from day one — not a
+              generalist firm branching in.
+            </p>
+          </div>
+          <div class="differentiator">
+            <span class="differentiator__index">02</span>
+            <h3 class="differentiator__title">Operational Pedigree</h3>
+            <p class="differentiator__text">
+              Consultants drawn from the top tier of tactical, test and fast-jet pilot
+              instructors on the world's most advanced combat air platforms.
+            </p>
+          </div>
+          <div class="differentiator">
+            <span class="differentiator__index">03</span>
+            <h3 class="differentiator__title">Global Reach</h3>
+            <p class="differentiator__text">
+              Trusted by clients across the UK, United States, Europe and the Middle
+              East.
+            </p>
+          </div>
+          <div class="differentiator">
+            <span class="differentiator__index">04</span>
+            <h3 class="differentiator__title">Security First</h3>
+            <p class="differentiator__text">
+              Every engagement is built around absolute discretion and a premium on
+              information security.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= 04 MEET THE TEAM ========================= -->
+    <section class="section section--alt" id="team">
+      <div class="section__inner">
+        <p class="section__label">04 — Meet the Team</p>
+        <h2 class="section__heading">Meet the Team</h2>
+        <p class="section__intro">
+          Our people are drawn from the top tier of tactical, test and pilot
+          instructors from the most advanced combat air platforms in the world.
+        </p>
+
+        <!--
+          Placeholder roster — swap names, roles, bios and photos for the real
+          team (see README). Hover reveals the overlay on desktop; on touch
+          devices, tapping a card toggles the same reveal (js/team.js).
+        -->
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-card__photo"><span class="team-card__initials">JW</span></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">James Whitfield</h3>
+              <p class="team-card__bio">
+                Former fast-jet pilot and test instructor; leads Lock On's operational
+                and client strategy.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__photo"><span class="team-card__initials">SC</span></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Head of Flight Test</p>
+              <h3 class="team-card__name">Sarah Coleman</h3>
+              <p class="team-card__bio">
+                Qualified test pilot with two decades across fixed-wing combat air
+                programmes.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__photo"><span class="team-card__initials">DO</span></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Senior Tactics Consultant</p>
+              <h3 class="team-card__name">David Okafor</h3>
+              <p class="team-card__bio">
+                Specialist in tactics and doctrine development for fast-jet and
+                multi-role platforms.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__photo"><span class="team-card__initials">EH</span></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Head of Programmes</p>
+              <h3 class="team-card__name">Emily Hartson</h3>
+              <p class="team-card__bio">
+                Leads programme and acquisition advisory across UK and allied defence
+                clients.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== 05 CONTACT US ========================== -->
+    <section class="section contact" id="contact">
+      <div class="section__inner contact__inner">
+        <p class="section__label">05 — Contact</p>
+        <h2 class="section__heading">Contact Us</h2>
+
+        <a class="contact__email" href="mailto:info@lockon.ltd">info@lockon.ltd</a>
+
+        <div class="contact__details">
+          <div>
+            <p class="contact__block-label">UK Office</p>
+            <p class="contact__block-text">
+              London, United Kingdom
+              <br />
+              <!-- Confirm exact registered address before launch -->
+            </p>
+          </div>
+          <div>
+            <p class="contact__block-label">Enquiries</p>
+            <p class="contact__block-text">
+              For consultancy and programme enquiries, email us directly and a member
+              of the team will respond promptly.
+            </p>
+          </div>
+        </div>
+
+        <div class="contact__footer">
+          <span>&copy; 2026 Lock On Ltd</span>
+          <span>Aerospace &amp; Defence Consultancy</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

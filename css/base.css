@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Base — reset, typography, scroll behaviour, shared section scaffolding
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Scroll-snap container. `proximity` (not `mandatory`) keeps fast trackpad /
+   touch flicks from feeling trapped, while still settling on a section
+   boundary once scrolling stops. */
+.scroll-container {
+  scroll-snap-type: y proximity;
+}
+
+.section {
+  position: relative;
+  min-height: 100svh;
+  min-height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--section-padding-y) var(--section-padding-x);
+  overflow: hidden;
+}
+
+.section--alt {
+  background: var(--color-bg-alt);
+}
+
+.section__inner {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+/* Small uppercase "eyebrow" numbering used above each section heading,
+   e.g. "02 — WHAT WE DO" */
+.section__label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 20px;
+  font-family: var(--font-heading);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.section__label::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.section__heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  letter-spacing: var(--ls-heading);
+  text-transform: uppercase;
+  margin: 0 0 24px;
+  color: var(--color-text);
+}
+
+.section__intro {
+  max-width: 640px;
+  font-size: var(--fs-body);
+  color: var(--color-text-secondary);
+  font-weight: 300;
+  margin: 0 0 56px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

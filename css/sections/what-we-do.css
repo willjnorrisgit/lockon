@@ -1,0 +1,53 @@
+/* ==========================================================================
+   What We Do — capability list
+   ========================================================================== */
+
+.capabilities {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+.capability {
+  background: var(--color-bg);
+  padding: clamp(28px, 3.5vw, 44px);
+  transition: background var(--duration-base) var(--ease);
+}
+
+.capability:hover {
+  background: #121212;
+}
+
+.capability__index {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  color: var(--color-text-secondary);
+  margin-bottom: 18px;
+}
+
+.capability__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  letter-spacing: var(--ls-heading);
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.capability__text {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin: 0;
+  max-width: 42ch;
+}
+
+@media (max-width: 767px) {
+  .capabilities {
+    grid-template-columns: 1fr;
+  }
+}

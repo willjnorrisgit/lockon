@@ -1,0 +1,47 @@
+/* ==========================================================================
+   Design tokens — Lock On
+   Monochrome palette (SpaceX-inspired restraint): no accent hues, only
+   value/contrast steps. Update here to retheme the whole site.
+   ========================================================================== */
+
+:root {
+  /* Palette */
+  --color-bg: #0a0a0a;
+  --color-bg-alt: #1a1a1a;
+  --color-text: #ffffff;
+  --color-text-secondary: #a0a0a0;
+  --color-border: #2e2e2e;
+  --color-active: #e5e5e5;
+  --color-overlay: rgba(10, 10, 10, 0.55);
+
+  /* Type */
+  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale — consistent across every section */
+  --fs-hero: clamp(2.75rem, 8vw, 6.5rem);
+  --fs-h2: clamp(2rem, 5vw, 3.75rem);
+  --fs-h3: clamp(1.15rem, 2.2vw, 1.5rem);
+  --fs-body: clamp(1rem, 1.2vw, 1.125rem);
+  --fs-small: 0.8125rem;
+  --fs-label: 0.8125rem;
+
+  --ls-heading: 0.04em;
+  --ls-label: 0.28em;
+
+  --lh-body: 1.6;
+
+  /* Layout */
+  --nav-height: 84px;
+  --section-padding-x: clamp(24px, 6vw, 96px);
+  --section-padding-y: clamp(96px, 12vh, 160px);
+  --max-content-width: 1280px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 0.2s;
+  --duration-base: 0.4s;
+  --duration-slow: 0.7s;
+}

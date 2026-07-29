@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Meet the Team — card grid with hover reveal (tap fallback on touch)
+   ========================================================================== */
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.team-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #141414;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.team-card:focus-visible {
+  outline: 1px solid var(--color-active);
+  outline-offset: 2px;
+}
+
+.team-card__photo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #1c1c1c, #0d0d0d);
+  transition: transform var(--duration-slow) var(--ease), filter var(--duration-slow) var(--ease);
+}
+
+.team-card__initials {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+.team-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.96) 20%, rgba(10, 10, 10, 0.55) 65%, rgba(10, 10, 10, 0) 100%);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease);
+}
+
+.team-card__role {
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin: 0 0 6px;
+}
+
+.team-card__name {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: var(--ls-heading);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.team-card__bio {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Desktop hover reveal */
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover .team-card__overlay,
+  .team-card:focus-visible .team-card__overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .team-card:hover .team-card__photo,
+  .team-card:focus-visible .team-card__photo {
+    transform: scale(1.04);
+    filter: brightness(0.6);
+  }
+}
+
+/* Touch / tap fallback — JS toggles .is-active */
+.team-card.is-active .team-card__overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.team-card.is-active .team-card__photo {
+  filter: brightness(0.6);
+}
+
+@media (max-width: 1023px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .team-card__bio {
+    display: none;
+  }
+}

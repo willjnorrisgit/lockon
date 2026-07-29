@@ -1,0 +1,52 @@
+/* ==========================================================================
+   Why Us — differentiator grid
+   ========================================================================== */
+
+.differentiators {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+}
+
+.differentiator {
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
+}
+
+.differentiator__index {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-active);
+  margin-bottom: 20px;
+}
+
+.differentiator__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.differentiator__text {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 1023px) {
+  .differentiators {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 40px;
+  }
+}
+
+@media (max-width: 560px) {
+  .differentiators {
+    grid-template-columns: 1fr;
+  }
+}
