@@ -1,9 +1,14 @@
 /* ==========================================================================
    Meet the Team — masked cutout portraits over a shared parallax backdrop,
-   laid out as a 4-across grid. Click-to-open: a tile is just the photo
-   until clicked, then an info panel opens inside that same tile's square
-   (js/team.js drives .is-open — same behaviour on mouse, touch and
-   keyboard, no separate hover state).
+   laid out as a 4-across grid. Two-stage interaction:
+     - HOVER (mouse only): a brief summary (name + role) rises in.
+     - CLICK / tap / keyboard: the full profile (role, name, bio, more
+       detail) opens in the same tile, replacing the summary.
+   Touch has no hover state, so a tap goes straight to the full profile —
+   there's no equivalent "brief peek" gesture on touch, so skipping straight
+   to the full open state is the closest match rather than requiring a
+   double-tap. See js/team.js for the click/tap/keyboard logic (unchanged
+   by the hover addition — hover is pure CSS).
    ========================================================================== */
 
 .team-grid {
@@ -20,7 +25,7 @@
 }
 
 .team-card:focus-visible {
-  outline: 1px solid var(--color-accent);
+  outline: 1px solid var(--color-active);
   outline-offset: 4px;
 }
 
@@ -87,7 +92,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 3;
+  z-index: 4;
   width: 22px;
   height: 22px;
   display: flex;
@@ -106,8 +111,8 @@
 
 .team-card:hover .team-card__expand,
 .team-card:focus-visible .team-card__expand {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-active);
+  color: var(--color-active);
 }
 
 .team-card.is-open .team-card__expand {
@@ -115,7 +120,9 @@
   transform: scale(0.6);
 }
 
-.team-card__overlay {
+/* Stage 1 — hover summary: name + role only, lighter scrim. Desktop/mouse
+   only; touch has no hover so this never shows there (see file header). */
+.team-card__summary {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -123,7 +130,37 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 16px;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.94) 25%, rgba(10, 10, 10, 0.55) 65%, rgba(10, 10, 10, 0) 100%);
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.85) 20%, rgba(10, 10, 10, 0) 80%);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease-settle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover .team-card__cutout,
+  .team-card:focus-visible .team-card__cutout {
+    transform: scale(1.02) translateY(-4px);
+  }
+
+  .team-card:hover .team-card__summary,
+  .team-card:focus-visible .team-card__summary {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stage 2 — full profile: role, name, bio, extra detail. Opens on
+   click/tap/keyboard (js/team.js toggles .is-open) and takes over from
+   the hover summary. */
+.team-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.96) 35%, rgba(10, 10, 10, 0.6) 70%, rgba(10, 10, 10, 0) 100%);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease-settle);
@@ -134,7 +171,7 @@
   font-size: 0.6875rem;
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-text-secondary);
   margin: 0 0 4px;
 }
 
@@ -151,15 +188,29 @@
   font-size: 0.75rem;
   font-weight: 300;
   color: var(--color-text-secondary);
-  margin: 0;
+  margin: 0 0 8px;
   line-height: 1.45;
 }
 
+.team-card__detail {
+  font-size: 0.6875rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.45;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 /* Click/tap/keyboard-open state — the "character reveal": cutout lifts and
-   scales slightly, the info panel rises in underneath it. Same class for
-   every input method, driven entirely by js/team.js. */
+   scales, the full profile rises in underneath it, hover summary steps
+   aside. Same class for every input method, driven entirely by js/team.js. */
 .team-card.is-open .team-card__cutout {
   transform: scale(1.045) translateY(-10px);
+}
+
+.team-card.is-open .team-card__summary {
+  opacity: 0;
 }
 
 .team-card.is-open .team-card__overlay {
@@ -179,7 +230,8 @@
     gap: 10px;
   }
 
-  .team-card__bio {
+  .team-card__bio,
+  .team-card__detail {
     display: none;
   }
 }

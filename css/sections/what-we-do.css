@@ -21,17 +21,8 @@
 
 .capability:hover {
   background: rgba(10, 10, 10, 0.72);
-  border-color: var(--color-accent-dim);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-4px);
-}
-
-.capability__index {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  letter-spacing: var(--ls-label);
-  color: var(--color-text-secondary);
-  margin-bottom: 18px;
 }
 
 .capability__title {

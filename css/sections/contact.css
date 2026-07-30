@@ -29,8 +29,8 @@
 
 .contact__email:hover,
 .contact__email:focus-visible {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
+  color: var(--color-active);
+  border-color: var(--color-active);
   transform: translateX(6px);
 }
 

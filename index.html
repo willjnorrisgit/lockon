@@ -9,10 +9,16 @@
     content="Lock On is an aerospace and defence consultancy providing proactive, tailored expertise drawn from top-tier tactical, test and fast-jet operational experience."
   />
 
-  <link
-    rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%230A0A0A'/%3E%3Ccircle cx='20' cy='20' r='16' fill='none' stroke='%23FFFFFF' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='2' fill='%23FFFFFF'/%3E%3Cline x1='20' y1='2' x2='20' y2='10' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='20' y1='30' x2='20' y2='38' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='2' y1='20' x2='10' y2='20' stroke='%23FFFFFF' stroke-width='2'/%3E%3Cline x1='30' y1='20' x2='38' y2='20' stroke='%23FFFFFF' stroke-width='2'/%3E%3C/svg%3E"
-  />
+  <!-- Favicon set generated from the real logo mark (the target-rings +
+       jet icon cropped out of assets/lockon-logo.webp) — see
+       assets/favicon/README.md for how to regenerate if the logo changes. -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/favicon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/favicon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -155,7 +161,6 @@
 
         <div class="capabilities">
           <article class="capability">
-            <span class="capability__index">01</span>
             <h3 class="capability__title">Operating Procedures</h3>
             <p class="capability__text">
               Development of robust operating procedures tailored to platform, mission
@@ -163,7 +168,6 @@
             </p>
           </article>
           <article class="capability">
-            <span class="capability__index">02</span>
             <h3 class="capability__title">Specialist Advice</h3>
             <p class="capability__text">
               Direct access to specialist aerospace and tactical advice, drawn from
@@ -171,7 +175,6 @@
             </p>
           </article>
           <article class="capability">
-            <span class="capability__index">03</span>
             <h3 class="capability__title">Programme &amp; Advisory Support</h3>
             <p class="capability__text">
               Embedded support across acquisition, capability and programme advisory
@@ -179,7 +182,6 @@
             </p>
           </article>
           <article class="capability">
-            <span class="capability__index">04</span>
             <h3 class="capability__title">Information Security</h3>
             <p class="capability__text">
               Every engagement is built around a premium on information security, from
@@ -203,7 +205,6 @@
 
         <div class="differentiators" data-parallax-speed="1.08">
           <div class="differentiator">
-            <span class="differentiator__index">01</span>
             <h3 class="differentiator__title">Founded 2018</h3>
             <p class="differentiator__text">
               Built specifically for the defence sector from day one — not a
@@ -211,7 +212,6 @@
             </p>
           </div>
           <div class="differentiator">
-            <span class="differentiator__index">02</span>
             <h3 class="differentiator__title">Operational Pedigree</h3>
             <p class="differentiator__text">
               Consultants have flown 4th and 5th Generation platforms, with combat
@@ -220,7 +220,6 @@
             </p>
           </div>
           <div class="differentiator">
-            <span class="differentiator__index">03</span>
             <h3 class="differentiator__title">Track Record</h3>
             <p class="differentiator__text">
               A diverse portfolio of aerospace projects delivered for clients across
@@ -228,7 +227,6 @@
             </p>
           </div>
           <div class="differentiator">
-            <span class="differentiator__index">04</span>
             <h3 class="differentiator__title">Security First</h3>
             <p class="differentiator__text">
               Every engagement is built around absolute discretion and a premium on
@@ -258,8 +256,11 @@
           (real names/photos; only 2 actual team members exist right now).
           Roles/bios are reasonable copy pending confirmed per-person detail
           — see README.md "Copy status" for what's independently verified vs.
-          filler. Click/tap/keyboard opens the info panel in-place (js/team.js);
-          closed tiles show only the photo + a small "+" affordance.
+          filler. Two-stage interaction: hover reveals a brief name/role
+          summary (.team-card__summary, mouse only — see css/sections/team.css
+          for why touch skips straight to stage 2), click/tap/keyboard opens
+          the full profile in-place (.team-card__overlay, js/team.js). Closed
+          tiles show only the photo + a small "+" affordance.
         -->
         <div class="team-grid">
           <div class="team-card">
@@ -276,12 +277,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -299,12 +308,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -322,12 +339,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -345,12 +370,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -368,12 +401,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -391,12 +432,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -414,12 +463,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -437,12 +494,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Co-founder of Lock On; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on operational planning, mission rehearsal and capability
+                integration across fast-jet and multi-role platforms.
               </p>
             </div>
           </div>
@@ -460,12 +525,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Managing Director</p>
               <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
                 Fast-jet instructor pilot with a background in capability
                 development and operational delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on client strategy and the day-to-day running of Lock
+                On's engagements.
               </p>
             </div>
           </div>
@@ -483,12 +556,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Managing Director</p>
               <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
                 Fast-jet instructor pilot with a background in capability
                 development and operational delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on client strategy and the day-to-day running of Lock
+                On's engagements.
               </p>
             </div>
           </div>
@@ -506,12 +587,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Managing Director</p>
               <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
                 Fast-jet instructor pilot with a background in capability
                 development and operational delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on client strategy and the day-to-day running of Lock
+                On's engagements.
               </p>
             </div>
           </div>
@@ -529,12 +618,20 @@
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+            </div>
             <div class="team-card__overlay">
               <p class="team-card__role">Managing Director</p>
               <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
                 Fast-jet instructor pilot with a background in capability
                 development and operational delivery.
+              </p>
+              <p class="team-card__detail">
+                Focuses on client strategy and the day-to-day running of Lock
+                On's engagements.
               </p>
             </div>
           </div>

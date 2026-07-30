@@ -49,7 +49,7 @@
 
 .site-footer__email:hover,
 .site-footer__email:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-active);
 }
 
 .site-footer__policies {
@@ -69,7 +69,7 @@
 
 .site-footer__policies a:hover,
 .site-footer__policies a:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-active);
 }
 
 .site-footer__badges {

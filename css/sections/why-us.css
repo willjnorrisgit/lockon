@@ -10,18 +10,8 @@
 }
 
 .differentiator {
-  border-top: 2px solid var(--color-accent-dim);
+  border-top: 2px solid rgba(255, 255, 255, 0.25);
   padding-top: 24px;
-}
-
-.differentiator__index {
-  display: block;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--color-accent);
-  margin-bottom: 20px;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
 }
 
 .differentiator__title {

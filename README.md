@@ -14,6 +14,8 @@ index.html                 All markup: nav, dots, 5 sections, footer
 privacy.html                Placeholder legal page (see "Legal pages" below)
 terms.html                   ditto
 cookies.html                  ditto
+favicon.ico                 Copy of assets/favicon/favicon.ico at the site
+                             root (some browsers check /favicon.ico directly)
 css/
   variables.css             Design tokens (colour, type scale, spacing, easing)
   base.css                  Reset + shared section scaffolding + scroll-snap
@@ -39,6 +41,7 @@ js/
   reveal.js                 Continuous IntersectionObserver-ratio crossfade
 assets/
   lockon-logo.webp           Logo (nav only) — full wordmark lockup
+  favicon/                  Favicon set, cropped from the logo mark (see its README)
   video/                    Hero background video + other stock clips (see its README)
   images/                   Background parallax stills, hero poster, cert badges
   team/                     Team portraits (see its README)
@@ -79,6 +82,12 @@ Then open the printed localhost URL.
   the brief calls for low-intensity there and the calm gradient covers it.
 - **Logo** — done. `assets/lockon-logo.webp`, the real "LockOn" wordmark
   lockup, used in the nav only.
+- **Favicon** — done. `assets/favicon/` has the full size set (16/32/48/192/512
+  PNG, `apple-touch-icon.png`, `favicon.ico`), cropped from the target-rings
+  + jet mark inside the logo wordmark and composited on a solid `#0A0A0A`
+  backing (a transparent version would disappear on a light-themed browser
+  tab bar) — see `assets/favicon/README.md` for the exact crop/regenerate
+  steps.
 - **Certification badges** — not placed. Mentioned as coming "from the old
   website," but that site 403s automated fetches and the badges weren't
   shared as attached files (same limitation as the rest of this list) — see
@@ -126,20 +135,19 @@ address above.
 
 ## Design system
 
-- **Palette** — monochrome base (tokens in `css/variables.css`): `#0A0A0A`
-  background, `#1A1A1A` alt background, `#FFFFFF` headings, `#A0A0A0` body
-  text, `#2E2E2E` dividers, `#E5E5E5` neutral active/hover state. Photography
-  carries the visual weight now rather than flat colour blocks, but stays
-  inside this palette — every real photo/video is run through
-  `--photo-filter` (`grayscale(55%) contrast(1.08) brightness(0.85)`) so
-  colour footage still reads as part of the same restrained system instead
-  of introducing hue.
-- **Accent** — one teal/blue hue, `--color-accent` (`#3fb8c9`), used
-  sparingly for interactive/active affordances only: the active nav dot,
-  nav-link hover underline, contact-email hover, capability-card hover
-  border, the Why Us divider rule, and the open/focus states on team tiles.
-  It does not appear on body text, headings, or anywhere decorative — the
-  rest of the site stays monochrome by design.
+- **Palette** — black/white/grey only, no accent hue anywhere (tokens in
+  `css/variables.css`): `#0A0A0A` background, `#1A1A1A` alt background,
+  `#FFFFFF` headings, `#A0A0A0` body text, `#2E2E2E` dividers, `#E5E5E5`
+  (`--color-active`) for every hover/active/focus affordance — the active
+  nav dot, nav-link hover underline, contact-email hover, capability-card
+  hover border, team-tile focus ring. Feedback comes from brightness
+  contrast, not colour. Photography carries the visual weight rather than
+  flat colour blocks, but stays inside this palette too — every real
+  photo/video runs through `--photo-filter`
+  (`grayscale(55%) contrast(1.08) brightness(0.85)`) so colour footage
+  still reads as part of the same restrained system. (An earlier pass added
+  a teal/blue accent for these same states; it's been fully removed per
+  feedback — `--color-accent` no longer exists anywhere in the CSS.)
 - **Type**: Inter (Google Fonts, with a system-font fallback stack). Headings
   are bold, uppercase, wide letter-spacing; body copy is light-weight,
   sentence case, grey. Sizes are driven by shared `clamp()` tokens so the
@@ -180,9 +188,12 @@ address above.
 - **Team cutouts** (`css/sections/team.css`) — the photo/fallback sits behind
   a `mask-image: radial-gradient(...)`, fading the rectangular edges out so
   it reads as an isolated subject over the shared background rather than a
-  pasted-on photo. Clicking/tapping/keyboard-activating a tile ("character
-  reveal") scales + lifts the cutout with `--ease-settle` while the info
-  panel fades in underneath, inside that same tile — see `js/team.js`.
+  pasted-on photo. Two-stage "character reveal": hovering (mouse only)
+  lifts the cutout slightly and shows a brief name/role summary; clicking,
+  tapping, or activating via keyboard lifts it further and opens the full
+  profile (role, name, bio, one extra placeholder detail line) in the same
+  spot, stepping the summary aside. Touch has no hover, so a tap goes
+  straight to the full profile rather than requiring a double-tap.
 - **Reduced motion** — `prefers-reduced-motion: reduce` disables parallax
   transforms, Ken Burns, and eases section reveals down to a plain opacity
   fade with no clip-path/translate. This is enforced in both CSS (belt) and
@@ -198,11 +209,12 @@ address above.
   scrolling down past 96px hides it, scrolling up (or a fast upward flick)
   shows it immediately. Below 640px the link list is dropped (it wrapped and
   collided with the logo) — the dot sidebar covers section-jumping there.
-- **Team tiles** — click, tap, and keyboard (Enter/Space) all open the same
-  in-tile info panel via `js/team.js` (no separate hover state — closed
-  tiles show only the photo + a small "+" affordance). Opening a tile closes
-  any other open one; clicking outside the grid or pressing Escape closes
-  whatever's open. `aria-expanded` reflects state for assistive tech.
+- **Team tiles** — hover (mouse) shows a brief name/role summary, pure CSS;
+  click/tap/keyboard (Enter/Space, via `js/team.js`) opens the full profile
+  in the same tile, replacing the summary. Opening a tile closes any other
+  open one; clicking outside the grid or pressing Escape closes whatever's
+  open. `aria-expanded` reflects state for assistive tech. Closed tiles show
+  only the photo + a small "+" affordance.
 - **Smooth scroll** — `scroll-snap-type: y proximity` on the page plus
   `scroll-behavior: smooth`, so wheel/trackpad scrolling settles on section
   boundaries without feeling "trapped" the way `mandatory` snapping can.

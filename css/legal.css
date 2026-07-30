@@ -28,7 +28,7 @@ body {
 
 .legal-page__back:hover,
 .legal-page__back:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-active);
 }
 
 .legal-page__label {
@@ -63,5 +63,5 @@ body {
 }
 
 .legal-page__contact a {
-  color: var(--color-accent);
+  color: var(--color-active);
 }
