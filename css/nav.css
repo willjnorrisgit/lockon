@@ -45,13 +45,15 @@
   flex-shrink: 0;
 }
 
-/* Real logo mark (assets/lockon-logo.png) swaps in for the reticle SVG
-   once it loads — see the onload/is-loaded pattern in index.html. Until
-   then the img stays display:none and the SVG fallback shows. */
+/* Real logo (assets/lockon-logo.webp) swaps in for the reticle + "Lock On"
+   text once it loads — see the onload/is-loaded pattern in index.html.
+   It's a full wordmark lockup (394x100), not just an icon, so once it
+   loads both the SVG *and* the text span are redundant and get hidden.
+   Until then the img stays display:none and the SVG+text fallback shows. */
 .nav__logo-img {
   display: none;
-  width: 22px;
-  height: 22px;
+  height: 20px;
+  width: auto;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -60,7 +62,8 @@
   display: block;
 }
 
-.nav__logo-img.is-loaded ~ svg {
+.nav__logo-img.is-loaded ~ svg,
+.nav__logo-img.is-loaded ~ span {
   display: none;
 }
 

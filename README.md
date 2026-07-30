@@ -33,9 +33,9 @@ js/
   parallax.js               rAF-throttled scroll-parallax engine
   reveal.js                 IntersectionObserver-driven section entrance (mask/fade)
 assets/
-  lockon-logo.png            Logo (nav + landing) — see below
-  video/                    Hero background video (see its README)
-  img/                      Poster frame + background stills (see its README)
+  lockon-logo.webp           Logo (nav + landing) — full wordmark lockup
+  video/                    Hero background video + other stock clips (see its README)
+  images/                   Poster frame + background parallax stills (see its README)
   team/                     Team portraits (see its README)
 ```
 
@@ -58,31 +58,32 @@ Then open the printed localhost URL.
 
 ## Asset status
 
+Everything's in now except one background still (see below) and the copy
+that was always going to need your sign-off (roles/bios, contact details).
+
 - **Hero video** — done. `assets/video/hero.mp4` / `.webm` are the 8-second
   clip you provided (compressed from the original 1080×1920/2.6MB down to
-  ~540×960, 688KB/262KB — see `assets/video/README.md` for the exact ffmpeg
-  commands used). Whatever sits at those exact filenames is what plays as
-  primary — if you send a different clip later, replace those two files and
-  regenerate `assets/img/hero-poster.jpg` the same way.
-- **Team photos** — not yet placed. `index.html` (`#team`) already has Guy
-  Lockwood and Jamie Norris in the right order (Guy first, Jamie second) with
-  correct roles pending confirmation; it expects
-  `assets/team/guy-lockwood.jpg` and `assets/team/jamie-norris.jpg`. I can see
-  the two portraits you shared in chat, but images pasted inline in the
-  conversation don't reach me as files the way the video did (that arrived
-  via an `@`-attached path) — could you push them to the repo directly, or
-  resend the same way you sent the video? Once those two files exist at
-  those paths, the masked-cutout treatment picks them up automatically, no
-  markup changes needed.
-- **Background stills** (formation/cockpit/runway/sky, used as the parallax
-  backdrops for What We Do / Why Us / Team / Contact) — also not yet placed;
-  same situation, same fix. Expected paths and fallback behaviour are in
-  `assets/img/README.md`.
-- **Logo** — `assets/lockon-logo.png` doesn't exist yet either; nav and
-  landing both fall back to the reticle mark + "Lock On" wordmark until it's
-  added (same load/fallback pattern, see below).
+  ~540×960, 688KB/262KB — see `assets/video/README.md`). Three other raw
+  clips landed in `assets/video/` too (including one GitHub flagged at
+  86.84MB) — all compressed in place the same way; none are wired into a
+  section yet, say the word if one should replace the hero or power
+  something else.
+- **Team photos** — done. `assets/team/guy-lockwood.jpg` and
+  `jamie-norris.jpg` are in and rendering through the masked-cutout
+  treatment, Guy first per your correction. Roles/bios in `index.html`
+  (`#team`) are still placeholder copy pending the real thing.
+- **Background stills** — 3 of 4 done (`assets/images/formation.jpg`,
+  `cockpit.jpg`, `runway.jpg`, matched from the stock stills you shared to
+  the section that suited each best — see `assets/images/README.md` for the
+  reasoning). `sky.jpg` (Contact) was deliberately left unset; the brief
+  calls for a low-intensity treatment there and the existing calm gradient
+  already does that job.
+- **Logo** — done. `assets/lockon-logo.webp` is the real "LockOn" wordmark
+  (target-rings + jet mark built into the "O"). Since it's a full lockup and
+  not just an icon, nav and landing both hide the reticle-SVG-plus-text
+  fallback once it loads rather than showing both.
 
-Every real-asset reference in this build follows the same rule: if the file
+Every real-asset reference in this build follows the same rule: if a file
 isn't there, something sensible (a themed gradient, the reticle mark, or the
 initials-on-dark placeholder) shows instead — nothing ever renders as a
 broken image or empty box. That's deliberate so you can hand this over

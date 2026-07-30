@@ -116,10 +116,12 @@
   height: 38px;
 }
 
+/* Full "LockOn" wordmark lockup (394x100), not just an icon — once it
+   loads, the reticle SVG *and* the "Lock On" text are redundant. */
 .landing__logo-img {
   display: none;
-  width: 38px;
-  height: 38px;
+  height: 40px;
+  width: auto;
   object-fit: contain;
 }
 
@@ -127,7 +129,8 @@
   display: block;
 }
 
-.landing__logo-img.is-loaded ~ svg {
+.landing__logo-img.is-loaded ~ svg,
+.landing__logo-img.is-loaded ~ .landing__logo-word {
   display: none;
 }
 

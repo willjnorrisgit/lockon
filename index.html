@@ -34,8 +34,10 @@
 </head>
 <body>
   <!-- Shared icon sprite: reticle mark, used as the logo fallback until
-       assets/lockon-logo.png loads (see .is-loaded swap in nav.css /
-       sections/landing.css). -->
+       assets/lockon-logo.webp loads (see .is-loaded swap in nav.css /
+       sections/landing.css). The real logo is a full "LockOn" wordmark
+       lockup, so once it loads the "Lock On" text span is hidden too —
+       otherwise it'd be redundant. -->
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <symbol id="icon-reticle" viewBox="0 0 40 40" fill="none">
       <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" />
@@ -54,8 +56,8 @@
     <a href="#landing" class="nav__logo" aria-label="Lock On — back to top">
       <img
         class="nav__logo-img"
-        src="assets/lockon-logo.png"
-        alt=""
+        src="assets/lockon-logo.webp"
+        alt="Lock On"
         onload="this.classList.add('is-loaded')"
       />
       <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
@@ -113,7 +115,7 @@
             muted
             loop
             playsinline
-            poster="assets/img/hero-poster.jpg"
+            poster="assets/images/hero-poster.jpg"
           >
             <source src="assets/video/hero.webm" type="video/webm" />
             <source src="assets/video/hero.mp4" type="video/mp4" />
@@ -126,8 +128,8 @@
         <div class="landing__logo">
           <img
             class="landing__logo-img"
-            src="assets/lockon-logo.png"
-            alt=""
+            src="assets/lockon-logo.webp"
+            alt="Lock On"
             onload="this.classList.add('is-loaded')"
           />
           <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
