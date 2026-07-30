@@ -30,8 +30,8 @@
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/depth.css" />
+  <link rel="stylesheet" href="css/camera-bg.css" />
   <link rel="stylesheet" href="css/nav.css" />
-  <link rel="stylesheet" href="css/dots.css" />
   <link rel="stylesheet" href="css/flight-route.css" />
   <link rel="stylesheet" href="css/sections/landing.css" />
   <link rel="stylesheet" href="css/sections/what-we-do.css" />
@@ -79,29 +79,6 @@
     </nav>
   </header>
 
-  <!-- ============================ DOT NAV ============================ -->
-  <nav class="dots" aria-label="Section navigation">
-    <button class="dots__item" data-target="landing" aria-current="true">
-      <span class="dots__dot"></span>
-      <span class="dots__label">Landing</span>
-    </button>
-    <button class="dots__item" data-target="what-we-do" aria-current="false">
-      <span class="dots__dot"></span>
-      <span class="dots__label">What We Do</span>
-    </button>
-    <button class="dots__item" data-target="why-us" aria-current="false">
-      <span class="dots__dot"></span>
-      <span class="dots__label">Why Us</span>
-    </button>
-    <button class="dots__item" data-target="team" aria-current="false">
-      <span class="dots__dot"></span>
-      <span class="dots__label">Team</span>
-    </button>
-    <button class="dots__item" data-target="contact" aria-current="false">
-      <span class="dots__dot"></span>
-      <span class="dots__label">Contact</span>
-    </button>
-  </nav>
 
   <!-- ========================== FLIGHT ROUTE =========================== -->
   <!--
@@ -146,6 +123,28 @@
       </g>
     </svg>
   </aside>
+
+  <!-- ============================ CAMERA BG ============================ -->
+  <!--
+    One shared jet photo behind What We Do / Why Us / Team / Contact,
+    replacing the old per-section background images. js/camera.js pans and
+    zooms it to a different framing per section as you scroll, fading it
+    to black through Contact — see css/camera-bg.css / js/camera.js for how
+    the pan/zoom math and keyframes work. Fixed + low z-index so normal
+    section content (z-index:2, css/depth.css) always paints above it;
+    hidden on Landing and past the footer, same fade approach as the
+    flight-route rail. aria-hidden: decorative, not announced.
+  -->
+  <div class="camera-bg" aria-hidden="true">
+    <img
+      class="camera-bg__image"
+      src="assets/images/formation.jpg"
+      alt=""
+      onload="this.classList.add('is-loaded')"
+    />
+    <div class="camera-bg__scrim"></div>
+    <div class="camera-bg__fade"></div>
+  </div>
 
   <main class="scroll-container">
     <!-- =========================== 01 LANDING =========================== -->
@@ -192,11 +191,6 @@
 
     <!-- ========================= 02 WHAT WE DO ========================= -->
     <section class="section section--depth" id="what-we-do">
-      <div class="section__bg" data-parallax-speed="0.35">
-        <div class="section__bg-image section__bg-image--formation"></div>
-      </div>
-      <div class="section__bg-scrim section__bg-scrim--strong"></div>
-
       <div class="section__inner reveal">
         <h2 class="section__heading">What We Do</h2>
         <p class="section__intro">
@@ -239,11 +233,6 @@
 
     <!-- =========================== 03 WHY US =========================== -->
     <section class="section section--depth" id="why-us">
-      <div class="section__bg" data-parallax-speed="0.3">
-        <div class="section__bg-image section__bg-image--cockpit"></div>
-      </div>
-      <div class="section__bg-scrim section__bg-scrim--strong"></div>
-
       <div class="section__inner reveal">
         <h2 class="section__heading">Why Us</h2>
         <p class="section__intro">Four things that set Lock On apart.</p>
@@ -284,11 +273,6 @@
 
     <!-- ========================= 04 MEET THE TEAM ========================= -->
     <section class="section section--depth" id="team">
-      <div class="section__bg" data-parallax-speed="0.3">
-        <div class="section__bg-image section__bg-image--runway"></div>
-      </div>
-      <div class="section__bg-scrim section__bg-scrim--strong"></div>
-
       <div class="section__inner reveal">
         <h2 class="section__heading">Meet the Team</h2>
         <p class="section__intro">
@@ -686,11 +670,6 @@
 
     <!-- ========================== 05 CONTACT US ========================== -->
     <section class="section section--depth contact" id="contact">
-      <div class="section__bg" data-parallax-speed="0.6">
-        <div class="section__bg-image section__bg-image--sky"></div>
-      </div>
-      <div class="section__bg-scrim section__bg-scrim--low"></div>
-
       <div class="section__inner contact__inner reveal">
         <h2 class="section__heading">Contact Us</h2>
 

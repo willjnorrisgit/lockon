@@ -9,63 +9,12 @@
   padding-bottom: 0;
 }
 
-/* Oversized (inset < 0) so the parallax translate never exposes an edge;
-   the section's own `overflow: hidden` (css/base.css) clips it. */
-.section__bg {
-  position: absolute;
-  inset: -18% 0;
-  z-index: 0;
-  will-change: transform;
-}
-
-.section__bg-image {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: var(--photo-filter);
-}
-
-/* Each background references a real asset path first, a themed gradient
-   second — CSS paints whichever layer actually loads, so a missing photo
-   just leaves the gradient visible instead of a broken image. Swap in the
-   real files at these paths (see assets/images/README.md) and they take
-   over automatically, no markup changes needed. */
-.section__bg-image--formation {
-  background-image: url("../assets/images/formation.jpg"),
-    linear-gradient(155deg, #242424 0%, #101010 55%, #0a0a0a 100%);
-}
-
-.section__bg-image--cockpit {
-  background-image: url("../assets/images/cockpit.jpg"),
-    radial-gradient(ellipse at 50% 70%, #262626 0%, #0d0d0d 60%, #0a0a0a 100%);
-}
-
-.section__bg-image--runway {
-  background-image: url("../assets/images/runway.jpg"),
-    linear-gradient(to bottom, #1c1c1c 0%, #141414 45%, #0a0a0a 100%);
-}
-
-.section__bg-image--sky {
-  background-image: url("../assets/images/sky.jpg"),
-    linear-gradient(to bottom, #26282b 0%, #17181a 60%, #0a0a0a 100%);
-}
-
-.section__bg-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.section__bg-scrim--strong {
-  background: var(--scrim-strong);
-}
-
-.section__bg-scrim--low {
-  background: var(--scrim-low);
-}
+/* Per-section background images/scrims used to live here, one photo per
+   section (What We Do/Why Us/Team/Contact each with their own file). Now
+   replaced by the single shared, continuously scroll-panned background in
+   css/camera-bg.css + js/camera.js — see that file for the "one image,
+   moving camera" system. This file keeps the section-entrance crossfade
+   and the text-legibility treatment those photo sections still need. */
 
 .section__inner {
   position: relative;

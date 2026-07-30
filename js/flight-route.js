@@ -73,7 +73,12 @@ export function initFlightRoute() {
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
     rangeStart = sections[0].offsetTop;
-    rangeEnd = footer.offsetTop;
+    // footer.offsetTop is the semantic target ("end at the footer"), but if
+    // the footer is shorter than one viewport the page can never actually
+    // scroll that far (max scrollY tops out below it) — cap at whatever's
+    // really reachable, or the route would never fully draw in.
+    const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+    rangeEnd = Math.min(footer.offsetTop, maxScrollY);
     const span = Math.max(1, rangeEnd - rangeStart);
     nodeFractions = sections.map((sec) => clamp01((sec.offsetTop - rangeStart) / span));
 
@@ -123,8 +128,8 @@ export function initFlightRoute() {
     // A node is "reached" once scroll progress has caught up to it, not
     // just while its section happens to be the active one — so several
     // nodes stay lit as you continue past them (a route trail, not a
-    // single active-item highlight, which the dots sidebar already does).
-    // Re-evaluated on every tick, so scrolling back up un-lights it again.
+    // single current-section highlight). Re-evaluated on every tick, so
+    // scrolling back up un-lights it again.
     nodeFractions.forEach((nf, i) => {
       nodeEls[i].classList.toggle("is-lit", fraction >= nf - 0.001);
     });

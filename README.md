@@ -10,7 +10,7 @@ rather than flat colour blocks.
 ## Structure
 
 ```
-index.html                 All markup: nav, dots, 5 sections, footer
+index.html                 All markup: nav, flight-route, camera bg, 5 sections, footer
 privacy.html                Placeholder legal page (see "Legal pages" below)
 terms.html                   ditto
 cookies.html                  ditto
@@ -19,35 +19,39 @@ favicon.ico                 Copy of assets/favicon/favicon.ico at the site
 css/
   variables.css             Design tokens (colour, type scale, spacing, easing)
   base.css                  Reset + shared section scaffolding + scroll-snap
-  depth.css                 Background/foreground layering, section-entrance
-                             crossfade, and photography treatment shared by
-                             every section except Landing
+  depth.css                 Section-entrance crossfade + text-legibility
+                             treatment shared by every section except Landing
   nav.css                   Top nav bar
-  dots.css                  Scroll-progress dot sidebar
   flight-route.css          Decorative scroll-linked route rail (left edge)
+  camera-bg.css             Shared scroll-panned jet photo behind 4 sections
   footer.css                Legal/registration footer (outside the scroll-snap flow)
   legal.css                 Chrome shared by privacy/terms/cookies.html
   sections/
     landing.css              01 — hero video/fallback, Ken Burns, tagline
-    what-we-do.css           02 — capability cards over a parallax backdrop
-    why-us.css                03 — differentiator grid over a parallax backdrop
+    what-we-do.css           02 — capability cards over the camera background
+    why-us.css                03 — differentiator grid over the camera background
     team.css                   04 — 12-tile masked cutout grid, click-to-open
-    contact.css                 05 — contact block, low-intensity backdrop
+    contact.css                 05 — contact block, fades to black via the camera background
 js/
   main.js                   Entry point, wires everything up on load
   nav.js                    Hide-on-scroll-down / show-on-scroll-up nav
-  dots.js                   IntersectionObserver-driven active dot + click-to-scroll
   team.js                   Click/tap/keyboard open-in-place for team tiles
-  parallax.js               rAF-throttled scroll-parallax engine
+  parallax.js               rAF-throttled scroll-parallax engine (foreground depth only now — see below)
   reveal.js                 Continuous IntersectionObserver-ratio crossfade
   flight-route.js           Scroll-linked route line, plane marker, node lighting
+  camera.js                 Scroll-linked pan/zoom camera + fade-to-black
 assets/
   lockon-logo.webp           Logo (nav only) — full wordmark lockup
   favicon/                  Favicon set, cropped from the logo mark (see its README)
   video/                    Hero background video + other stock clips (see its README)
-  images/                   Background parallax stills, hero poster, cert badges
+  images/                   Camera background photo, hero poster, unused legacy stills, cert badges
   team/                     Team portraits (see its README)
 ```
+
+There's no dot-sidebar nav control anymore (removed — the flight-route rail
+is now the only scroll-progress indicator, and it's intentionally decorative
+rather than clickable). Section-jumping is still available via the top nav
+links.
 
 Each section's markup lives in one clearly-commented block in `index.html`,
 and its styling is fully isolated to its own file in `css/sections/`, so you
@@ -78,10 +82,11 @@ Then open the printed localhost URL.
   `jamie-norris.jpg` render through the masked-cutout treatment across a
   12-tile placeholder grid (Guy's tile ×8, Jamie's ×4 — only 2 real team
   members exist, this is filler until more people/photos are confirmed).
-- **Background stills** — 3 of 4 done (`assets/images/formation.jpg`,
-  `cockpit.jpg`, `runway.jpg` — see `assets/images/README.md` for how each
-  was matched to its section). `sky.jpg` (Contact) is deliberately unset;
-  the brief calls for low-intensity there and the calm gradient covers it.
+- **Camera background** — done. `assets/images/formation.jpg` (your F-35
+  banking shot) is now the single shared, scroll-panned background behind
+  What We Do / Why Us / Team / Contact, replacing the earlier one-photo-
+  per-section setup — see "Camera background" below and
+  `assets/images/README.md`.
 - **Logo** — done. `assets/lockon-logo.webp`, the real "LockOn" wordmark
   lockup, used in the nav only.
 - **Favicon** — done. `assets/favicon/` has the full size set (16/32/48/192/512
@@ -140,9 +145,9 @@ address above.
 - **Palette** — black/white/grey only, no accent hue anywhere (tokens in
   `css/variables.css`): `#0A0A0A` background, `#1A1A1A` alt background,
   `#FFFFFF` headings, `#A0A0A0` body text, `#2E2E2E` dividers, `#E5E5E5`
-  (`--color-active`) for every hover/active/focus affordance — the active
-  nav dot, nav-link hover underline, contact-email hover, capability-card
-  hover border, team-tile focus ring. Feedback comes from brightness
+  (`--color-active`) for every hover/active/focus affordance — nav-link
+  hover underline, contact-email hover, capability-card hover border,
+  team-tile focus ring. Feedback comes from brightness
   contrast, not colour. Photography carries the visual weight rather than
   flat colour blocks, but stays inside this palette too — every real
   photo/video runs through `--photo-filter`
@@ -157,9 +162,9 @@ address above.
 - **Easing** — no default `ease`/`linear` anywhere. `--ease` (emphasized
   deceleration) drives continuous/large motion (nav, scroll reveals,
   parallax-adjacent transitions); `--ease-settle` (slight overshoot into
-  place) drives discrete UI feedback — dot activation, team-card hover lift,
-  the contact email nudge — so interaction feels considered rather than
-  mechanical.
+  place) drives discrete UI feedback — flight-route node lighting, team-card
+  hover lift, the contact email nudge — so interaction feels considered
+  rather than mechanical.
 
 ## Depth &amp; motion system
 
@@ -202,12 +207,73 @@ address above.
   JS (suspenders: `parallax.js`/`reveal.js` bail out entirely rather than
   relying on the CSS override).
 
+## Camera background
+
+`css/camera-bg.css` + `js/camera.js`. One shared jet photo
+(`assets/images/formation.jpg`) sits as a `position: fixed` full-bleed layer
+(`z-index: 1`, behind `.section__inner`'s `z-index: 2`) behind What We Do,
+Why Us, Team, and Contact, replacing what used to be four separate
+per-section background stills. As the user scrolls through that span, a
+single continuous scroll fraction drives a pan+zoom "camera" move across the
+same image — wide framing at the top of What We Do, zoomed into the nose at
+Why Us, pulled back to show more of the airframe at Team, then fading to
+black through Contact.
+
+- **Keyframes, not per-section jumps.** `KEYFRAMES` in `camera.js` is an
+  array of `{ fraction, fx, fy, zoom, black }` objects — `fx`/`fy` are the
+  focal point as a fraction of the image's natural size, `zoom` is extra
+  zoom on top of the baseline "cover" scale, `black` is the fade-to-black
+  overlay opacity. The four section keyframes' `fraction`s are computed at
+  measure time from each section's actual `offsetTop` within the scroll
+  range, and `update()` finds the surrounding keyframe pair for the current
+  scroll fraction and interpolates every field with a `smoothstep` ease —
+  so it reads as one fluid continuous move, the same interpolation pattern
+  the flight route uses for its progress path.
+- **Transform math is compositor-only.** Every scroll tick only ever writes
+  `transform: translate(Tx,Ty) scale(s)` (plus the separate fade layer's
+  `opacity`) — never `width`/`height`/`top`/`left`/`background-position` —
+  so there's no layout/paint cost per frame, just compositing. With
+  `transform-origin: 0 0`, scaling is applied before translating (it's
+  closer to the point in the transform-function list), so a point at
+  natural-image coordinates `(fx * naturalWidth, fy * naturalHeight)` always
+  lands exactly at the viewport's center regardless of `zoom` — verified
+  both algebraically and by screenshotting all four keyframes plus mobile
+  and ultrawide viewports for edge exposure.
+- **Two bugs worth knowing about if you touch this file.** (1) The global
+  `img { max-width: 100% }` reset in `css/base.css` silently capped
+  `.camera-bg__image`'s rendered box below its true natural size, which
+  broke the translate/scale math (it assumes the untransformed box is
+  exactly `naturalWidth x naturalHeight`) — fixed with `max-width: none;
+  width: auto; height: auto;` in `camera-bg.css`. (2) `rangeEnd =
+  footer.offsetTop` is only reachable if the page can actually scroll that
+  far; if the footer is shorter than one viewport (typical), max scrollY
+  tops out below it and the scroll fraction could never hit `1`, so the
+  fade-to-black would never fully complete. Fixed by capping with
+  `Math.min(footer.offsetTop, document.documentElement.scrollHeight -
+  window.innerHeight)` — the same fix was needed in `flight-route.js` for
+  the identical reason (see below).
+- **Reduced motion** — no camera movement: `camera.js` applies the Team
+  keyframe's framing once as a static crop (a representative, well-composed
+  shot without Why Us's dramatic close-up zoom) and never calls
+  `applyFraming()` again. The black fade-through-Contact still animates,
+  since it's a simple opacity ramp tied to scroll position rather than
+  continuous camera motion — same reasoning as the flight route's node
+  lighting staying live under reduced motion.
+- **Legibility** — `.camera-bg__scrim` is a constant dark gradient overlay
+  present at every scroll position and zoom level (`--scrim-strong`,
+  `variables.css`), independent of the fade-to-black layer. The image itself
+  runs through the same `--photo-filter` (grayscale/contrast/darken) as
+  every other photo on the site.
+- `cockpit.jpg` and `runway.jpg` (the two previous per-section stills this
+  replaced) are still in `assets/images/` but unreferenced by any CSS/HTML
+  now — see `assets/images/README.md`.
+
 ## Flight route
 
 A decorative rail on the left edge (`css/flight-route.css` +
-`js/flight-route.js`), separate from the hero and not a nav control — the
-dots already cover navigation. Runs from the top of What We Do to the
-footer; hidden on Landing and below 900px width.
+`js/flight-route.js`), separate from the hero and not a nav control. Runs
+from the top of What We Do to the footer; hidden on Landing and below 900px
+width.
 
 - **Line draw** — a dim dashed grey guide (`.flight-route__base`) always
   shows the full route. A brighter overlay with identical path geometry
@@ -234,8 +300,7 @@ footer; hidden on Landing and below 900px width.
   highlight.** A node lights up amber once scroll progress has reached its
   fraction of the route (`fraction >= nodeFraction`), and *stays* lit as you
   scroll past it — several nodes can be lit at once, like waypoints already
-  flown. This is deliberately different from the dots sidebar's one-at-a-time
-  active state, which the flight route doesn't duplicate. It's recomputed
+  flown, rather than a single current-section indicator. It's recomputed
   every scroll tick rather than using an `IntersectionObserver`, so
   scrolling back up un-lights a node the moment you pass back above its
   point — no separate enter/exit event wiring needed.
@@ -248,18 +313,17 @@ footer; hidden on Landing and below 900px width.
 - **Reduced motion** — the progress path renders fully drawn (static, no
   scroll-tied reveal) and the plane is hidden entirely; node lighting still
   updates (it's a discrete position check, not continuous motion), same
-  reasoning as the dots' active state staying live under reduced motion
-  elsewhere in this build.
+  reasoning as the camera background's fade-to-black staying live under
+  reduced motion.
 
 ## Interaction notes
 
-- **Scroll-progress dots** (`js/dots.js`) use one `IntersectionObserver`
-  watching all five `<section>`s; whichever is ≥50% in view gets the active
-  dot. Clicking a dot calls `scrollIntoView({ behavior: "smooth" })`.
 - **Nav hide/show** (`js/nav.js`) tracks scroll delta per animation frame:
   scrolling down past 96px hides it, scrolling up (or a fast upward flick)
   shows it immediately. Below 640px the link list is dropped (it wrapped and
-  collided with the logo) — the dot sidebar covers section-jumping there.
+  collided with the logo) — there's no dot-sidebar fallback for
+  section-jumping at that width anymore, just the nav links above it and
+  ordinary scrolling.
 - **Team tiles** — hover (mouse) shows a brief name/role summary, pure CSS;
   click/tap/keyboard (Enter/Space, via `js/team.js`) opens the full profile
   in the same tile, replacing the summary. Opening a tile closes any other
@@ -286,14 +350,22 @@ full-viewport slide and doesn't get a dot — it's site chrome, not a section.
 ## Performance
 
 Tested with Chrome DevTools CPU throttling at 4x (simulates a low-power
-device) while scripting a full-page scroll sweep: average frame time
-~16-20ms, the vast majority under the 32ms (dropped-frame) threshold. (The
-continuous crossfade in `reveal.js` and the larger 1080p hero video both add
-a little decode/paint cost over the previous build's ~16.6ms/zero-drops
-baseline — still comfortably smooth, just noted here in case it's worth
-revisiting if more full-bleed video gets added later.) Every parallax/Ken
-Burns layer carries `will-change: transform` so the browser can promote it
-to its own compositor layer ahead of time.
+device) while scripting a full-page scroll sweep: average frame time has
+crept up as scroll-tied effects have stacked — ~16.6ms with none of them,
+~20.5ms once the flight route was added, ~22.8ms with the camera background
+on top of that too (15/120 sampled frames over the 32ms dropped-frame
+threshold). Untethered from throttling it's ~22.5ms average, with most
+frames past the stricter 17ms/60fps budget but only 13/150 actually dropped
+frames. Still comfortably smooth in practice — three independent
+`requestAnimationFrame`-throttled scroll listeners (`parallax.js`,
+`flight-route.js`, `camera.js`) is real, additive cost, though. Each does
+the minimum necessary work per tick (parallax/camera: pure transform math;
+flight-route: `SVGPathElement.getPointAtLength()` calls, which are
+unavoidable for position-on-path), so the numbers reflect the actual
+feature cost rather than an implementation inefficiency — worth knowing if
+more scroll-tied effects get added later, since the budget isn't infinite.
+Every parallax/Ken Burns/camera layer carries `will-change: transform` so
+the browser can promote it to its own compositor layer ahead of time.
 
 ## Deployment
 

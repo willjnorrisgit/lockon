@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Camera background — one shared jet photo behind What We Do / Why Us /
+   Team / Contact, panned and zoomed to a different framing per section by
+   js/camera.js as the user scrolls (continuous, not per-section jumps).
+   Fixed + low z-index: sits behind normal section content (.section__inner
+   is z-index:2, css/depth.css) but above the plain page background.
+   ========================================================================== */
+
+.camera-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 40%, #242424 0%, #111111 55%, #0a0a0a 100%);
+}
+
+/* Positioned/sized entirely via JS transform (js/camera.js), not the usual
+   min-width/height:100% cover trick — that technique fights percentage-based
+   translate()/transform-origin math once you need an arbitrary, continuously
+   changing focal point rather than a fixed center. Starting from natural
+   top-left placement with transform-origin:0 0 makes the pan/zoom formula a
+   plain, verifiable `translate(Tx,Ty) scale(s)` (see js/camera.js), still
+   entirely on the compositor (no layout/paint per frame). */
+.camera-bg__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Override the global `img { max-width: 100% }` reset (css/base.css) —
+     js/camera.js's transform math assumes this renders at its true natural
+     pixel size (naturalWidth x naturalHeight) before any transform, same
+     as img.naturalWidth/naturalHeight report. Capped at viewport width by
+     the reset, it would render smaller than that and every computed
+     translate/scale would be wrong. */
+  max-width: none;
+  width: auto;
+  height: auto;
+  transform-origin: 0 0;
+  filter: var(--photo-filter);
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease);
+  will-change: transform;
+}
+
+.camera-bg__image.is-loaded {
+  opacity: 1;
+}
+
+/* Constant legibility darkening, present at every scroll position/zoom
+   level — independent of the fade-to-black overlay below, which only
+   ramps up through Contact. */
+.camera-bg__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim-strong);
+  pointer-events: none;
+}
+
+/* Contact's "fade to black" — opacity driven by js/camera.js from the
+   same continuous scroll fraction as the pan/zoom, not a separate effect. */
+.camera-bg__fade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .camera-bg__image {
+    transition: opacity var(--duration-slow) var(--ease);
+  }
+}
