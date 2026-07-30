@@ -15,11 +15,13 @@
   -webkit-backdrop-filter: blur(8px);
   padding: clamp(28px, 3.5vw, 44px);
   transition: background var(--duration-base) var(--ease),
+    border-color var(--duration-base) var(--ease),
     transform var(--duration-base) var(--ease-settle);
 }
 
 .capability:hover {
   background: rgba(10, 10, 10, 0.72);
+  border-color: var(--color-accent-dim);
   transform: translateY(-4px);
 }
 

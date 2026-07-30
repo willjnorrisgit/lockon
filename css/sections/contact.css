@@ -29,8 +29,8 @@
 
 .contact__email:hover,
 .contact__email:focus-visible {
-  color: var(--color-active);
-  border-color: var(--color-active);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
   transform: translateX(6px);
 }
 
@@ -56,20 +56,4 @@
   margin: 0;
   line-height: 1.6;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
-}
-
-.contact__footer {
-  margin-top: clamp(80px, 12vh, 140px);
-  padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-family: var(--font-heading);
-  font-size: var(--fs-small);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
 }

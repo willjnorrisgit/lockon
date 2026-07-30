@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="css/sections/why-us.css" />
   <link rel="stylesheet" href="css/sections/team.css" />
   <link rel="stylesheet" href="css/sections/contact.css" />
+  <link rel="stylesheet" href="css/footer.css" />
 </head>
 <body>
   <!-- Shared icon sprite: reticle mark, used as the logo fallback until
@@ -124,17 +125,7 @@
         <div class="landing__scrim"></div>
       </div>
 
-      <div class="landing__content">
-        <div class="landing__logo">
-          <img
-            class="landing__logo-img"
-            src="assets/lockon-logo.webp"
-            alt="Lock On"
-            onload="this.classList.add('is-loaded')"
-          />
-          <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
-          <span class="landing__logo-word">Lock On</span>
-        </div>
+      <div class="landing__content reveal">
         <h1 class="landing__title">Unparalleled Operational Experience</h1>
         <p class="landing__tagline">
           Proactive, tailored aerospace and defence consultancy — built on operational
@@ -156,7 +147,6 @@
       <div class="section__bg-scrim section__bg-scrim--strong"></div>
 
       <div class="section__inner reveal">
-        <p class="section__label">02 — Capabilities</p>
         <h2 class="section__heading">What We Do</h2>
         <p class="section__intro">
           Proactive, tailored expertise, always focused on your requirements — with a
@@ -208,7 +198,6 @@
       <div class="section__bg-scrim section__bg-scrim--strong"></div>
 
       <div class="section__inner reveal">
-        <p class="section__label">03 — Why Us</p>
         <h2 class="section__heading">Why Us</h2>
         <p class="section__intro">Four things that set Lock On apart.</p>
 
@@ -258,7 +247,6 @@
       <div class="section__bg-scrim section__bg-scrim--strong"></div>
 
       <div class="section__inner reveal">
-        <p class="section__label">04 — Meet the Team</p>
         <h2 class="section__heading">Meet the Team</h2>
         <p class="section__intro">
           Our people are drawn from top-tier tactical, test and pilot instructors on
@@ -266,16 +254,15 @@
         </p>
 
         <!--
-          Names and photos are real (Jamie Norris, Guy Lockwood). Roles/bios are
-          reasonable copy in the absence of confirmed titles/bios for each —
-          the only specifics that are independently confirmed are company-level
-          (founding year, sector, general consultant background), not
-          per-person, so treat these two as easy to swap once you have the
-          real thing. Hover reveals on desktop; tapping does the same on
-          touch (js/team.js).
+          12-tile placeholder grid: Guy Lockwood's tile x8, Jamie Norris's x4
+          (real names/photos; only 2 actual team members exist right now).
+          Roles/bios are reasonable copy pending confirmed per-person detail
+          — see README.md "Copy status" for what's independently verified vs.
+          filler. Click/tap/keyboard opens the info panel in-place (js/team.js);
+          closed tiles show only the photo + a small "+" affordance.
         -->
         <div class="team-grid">
-          <div class="team-card" data-parallax-speed="1.06">
+          <div class="team-card">
             <div class="team-card__cutout">
               <img
                 class="team-card__photo-img"
@@ -287,17 +274,179 @@
                 <span class="team-card__initials">GL</span>
               </div>
             </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__overlay">
-              <p class="team-card__role">Senior Consultant</p>
+              <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
-                Combat experience as a fast-jet instructor pilot, with a background in
-                operational planning and delivery.
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
               </p>
             </div>
           </div>
-          <div class="team-card" data-parallax-speed="0.95">
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Co-Founder</p>
+              <h3 class="team-card__name">Guy Lockwood</h3>
+              <p class="team-card__bio">
+                Co-founder of Lock On; combat experience as a fast-jet instructor
+                pilot, with a background in operational planning and delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
             <div class="team-card__cutout">
               <img
                 class="team-card__photo-img"
@@ -309,13 +458,83 @@
                 <span class="team-card__initials">JN</span>
               </div>
             </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__overlay">
               <p class="team-card__role">Managing Director</p>
               <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
-                Fast-jet instructor pilot with a background in capability development
-                and operational delivery.
+                Fast-jet instructor pilot with a background in capability
+                development and operational delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/jamie-norris.jpg"
+                alt="Jamie Norris"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">JN</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__bio">
+                Fast-jet instructor pilot with a background in capability
+                development and operational delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/jamie-norris.jpg"
+                alt="Jamie Norris"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">JN</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__bio">
+                Fast-jet instructor pilot with a background in capability
+                development and operational delivery.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/jamie-norris.jpg"
+                alt="Jamie Norris"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">JN</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__bio">
+                Fast-jet instructor pilot with a background in capability
+                development and operational delivery.
               </p>
             </div>
           </div>
@@ -331,7 +550,6 @@
       <div class="section__bg-scrim section__bg-scrim--low"></div>
 
       <div class="section__inner contact__inner reveal">
-        <p class="section__label">05 — Contact</p>
         <h2 class="section__heading">Contact Us</h2>
 
         <a class="contact__email" href="mailto:info@lockon.ltd">info@lockon.ltd</a>
@@ -353,14 +571,39 @@
             </p>
           </div>
         </div>
-
-        <div class="contact__footer">
-          <span>&copy; 2026 Lock On Ltd</span>
-          <span>Aerospace &amp; Defence Consultancy</span>
-        </div>
       </div>
     </section>
   </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__legal">
+        <p class="site-footer__brand">LockOn&trade;</p>
+        <p class="site-footer__meta">
+          &copy; 2026 Lock-On Ltd. &middot; Registered in England No. 11282660
+        </p>
+        <a class="site-footer__email" href="mailto:info@lockon.ltd">info@lockon.ltd</a>
+      </div>
+
+      <nav class="site-footer__policies" aria-label="Legal">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="cookies.html">Cookie Policy</a>
+      </nav>
+
+      <!--
+        Certification badges from the previous site weren't reachable —
+        lockon.ltd blocks automated fetches, and these weren't shared as
+        attached files. Drop the badge images in assets/images/badges/ and
+        replace this placeholder with <img> tags once you have them (see
+        assets/images/badges/README.md).
+      -->
+      <div class="site-footer__badges">
+        <p class="site-footer__badges-note">Certification badges — pending</p>
+      </div>
+    </div>
+  </footer>
 
   <script type="module" src="js/main.js"></script>
 </body>

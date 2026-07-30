@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Minimal chrome for the legal placeholder pages (privacy/terms/cookies).
+   Not part of the scroll-snap single page — plain static documents.
+   ========================================================================== */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.legal-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 96px) var(--section-padding-x);
+}
+
+.legal-page__back {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: clamp(32px, 6vh, 64px);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.legal-page__back:hover,
+.legal-page__back:focus-visible {
+  color: var(--color-accent);
+}
+
+.legal-page__label {
+  font-family: var(--font-heading);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin: 0 0 12px;
+}
+
+.legal-page__heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: var(--ls-heading);
+  text-transform: uppercase;
+  margin: 0 0 32px;
+}
+
+.legal-page__placeholder {
+  font-size: var(--fs-body);
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin: 0 0 32px;
+}
+
+.legal-page__contact {
+  font-size: var(--fs-small);
+  color: var(--color-text-secondary);
+}
+
+.legal-page__contact a {
+  color: var(--color-accent);
+}

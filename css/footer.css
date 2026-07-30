@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Site footer — legal/registration line, policy links, cert badges.
+   Sits outside the scroll-snap sequence (below <main>): a footer bar
+   isn't a "section," it's site chrome, so it isn't a sixth full-viewport
+   slide and doesn't get a dot.
+   ========================================================================== */
+
+.site-footer {
+  background: var(--color-bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: clamp(32px, 5vh, 56px) var(--section-padding-x);
+}
+
+.site-footer__inner {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.site-footer__brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  color: var(--color-text);
+}
+
+.site-footer__meta {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  margin: 0 0 8px;
+}
+
+.site-footer__email {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.site-footer__email:hover,
+.site-footer__email:focus-visible {
+  color: var(--color-accent);
+}
+
+.site-footer__policies {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.site-footer__policies a {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.site-footer__policies a:hover,
+.site-footer__policies a:focus-visible {
+  color: var(--color-accent);
+}
+
+.site-footer__badges {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 32px;
+}
+
+.site-footer__badges img {
+  height: 32px;
+  width: auto;
+  filter: var(--photo-filter);
+  opacity: 0.9;
+}
+
+.site-footer__badges-note {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-border);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .site-footer__inner {
+    flex-direction: column;
+  }
+}

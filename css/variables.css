@@ -1,7 +1,9 @@
 /* ==========================================================================
    Design tokens — Lock On
-   Monochrome palette (SpaceX-inspired restraint): no accent hues, only
-   value/contrast steps. Update here to retheme the whole site.
+   Monochrome base (SpaceX-inspired restraint) with a single teal/blue
+   accent used sparingly for interactive/active states — hover underlines,
+   the active nav dot, focus rings, open team tiles. Everything else stays
+   value/contrast steps, no hue. Update here to retheme the whole site.
    ========================================================================== */
 
 :root {
@@ -13,6 +15,11 @@
   --color-border: #2e2e2e;
   --color-active: #e5e5e5;
   --color-overlay: rgba(10, 10, 10, 0.55);
+
+  /* The one accent hue in the system — sparing use only (see comment above) */
+  --color-accent: #3fb8c9;
+  --color-accent-dim: #1f6b76;
+  --color-accent-glow: rgba(63, 184, 201, 0.45);
 
   /* Photography treatment — keeps real imagery inside the monochrome
      palette instead of letting it introduce colour */

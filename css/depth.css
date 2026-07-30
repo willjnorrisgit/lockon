@@ -74,27 +74,20 @@
 
 /* Photography behind text needs a legibility guarantee the scrim alone
    doesn't always provide at every scroll offset. */
-.section--depth .section__label,
 .section--depth .section__heading,
 .section--depth .section__intro {
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
 }
 
-/* Cinematic entrance: content masks/fades in as its section scrolls into
-   view rather than hard-cutting between sections. Toggled by js/reveal.js. */
+/* Cinematic crossfade: js/reveal.js drives `opacity`/`transform` directly,
+   continuously, from each section's live IntersectionObserver ratio — so
+   as one section scrolls out its content visibly dims while the next
+   section's content is simultaneously brightening in, a true crossfade
+   rather than a single one-shot fade-in on arrival. The short transition
+   here just smooths between the observer's threshold steps. */
 .reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  clip-path: inset(10% 0 10% 0);
-  transition: opacity var(--duration-reveal) var(--ease),
-    transform var(--duration-reveal) var(--ease),
-    clip-path var(--duration-reveal) var(--ease);
-}
-
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  clip-path: inset(0 0 0 0);
+  will-change: opacity, transform;
+  transition: opacity 0.15s var(--ease), transform 0.25s var(--ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -104,9 +97,8 @@
   }
 
   .reveal {
-    opacity: 1;
-    transform: none;
-    clip-path: none;
-    transition: opacity var(--duration-base) var(--ease);
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
   }
 }

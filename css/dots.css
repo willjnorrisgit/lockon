@@ -41,13 +41,14 @@
 
 .dots__item:hover .dots__dot,
 .dots__item:focus-visible .dots__dot {
-  border-color: var(--color-active);
+  border-color: var(--color-accent);
   transform: scale(1.2);
 }
 
 .dots__item[aria-current="true"] .dots__dot {
-  background: var(--color-active);
-  border-color: var(--color-active);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px 2px var(--color-accent-glow);
   transform: scale(1.3);
 }
 

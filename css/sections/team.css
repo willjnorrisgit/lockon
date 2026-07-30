@@ -1,14 +1,15 @@
 /* ==========================================================================
-   Meet the Team — masked cutout portraits over a shared parallax backdrop.
-   Hover/tap "character reveal": cutout lifts + scales slightly, bio panel
-   fades in. Same touch fallback logic as before (js/team.js).
+   Meet the Team — masked cutout portraits over a shared parallax backdrop,
+   laid out as a 4-across grid. Click-to-open: a tile is just the photo
+   until clicked, then an info panel opens inside that same tile's square
+   (js/team.js drives .is-open — same behaviour on mouse, touch and
+   keyboard, no separate hover state).
    ========================================================================== */
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(240px, 420px));
-  justify-content: center;
-  gap: clamp(24px, 4vw, 64px);
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(10px, 1.5vw, 20px);
 }
 
 .team-card {
@@ -19,8 +20,8 @@
 }
 
 .team-card:focus-visible {
-  outline: 1px solid var(--color-active);
-  outline-offset: 6px;
+  outline: 1px solid var(--color-accent);
+  outline-offset: 4px;
 }
 
 /* The cutout itself — image + fallback both live here so both get the
@@ -64,7 +65,7 @@
 .team-card__initials {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   letter-spacing: 0.02em;
   color: var(--color-text-secondary);
 }
@@ -80,6 +81,40 @@
   pointer-events: none;
 }
 
+/* Small always-visible affordance so a grid of identical closed tiles
+   still reads as "clickable" before any interaction. Fades out once open. */
+.team-card__expand {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: opacity var(--duration-fast) var(--ease), transform var(--duration-base) var(--ease-settle),
+    background var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
+}
+
+.team-card:hover .team-card__expand,
+.team-card:focus-visible .team-card__expand {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.team-card.is-open .team-card__expand {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
 .team-card__overlay {
   position: absolute;
   inset: 0;
@@ -87,8 +122,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 22px;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.92) 15%, rgba(10, 10, 10, 0.4) 55%, rgba(10, 10, 10, 0) 85%);
+  padding: 16px;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.94) 25%, rgba(10, 10, 10, 0.55) 65%, rgba(10, 10, 10, 0) 100%);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease-settle);
@@ -96,57 +131,55 @@
 
 .team-card__role {
   font-family: var(--font-heading);
-  font-size: var(--fs-small);
+  font-size: 0.6875rem;
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--color-text-secondary);
-  margin: 0 0 6px;
+  color: var(--color-accent);
+  margin: 0 0 4px;
 }
 
 .team-card__name {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
   letter-spacing: var(--ls-heading);
   text-transform: uppercase;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .team-card__bio {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 300;
   color: var(--color-text-secondary);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
-/* Desktop hover — the "character reveal": cutout lifts/scales with a
-   slight overshoot, bio panel rises in underneath it. */
-@media (hover: hover) and (pointer: fine) {
-  .team-card:hover .team-card__cutout,
-  .team-card:focus-visible .team-card__cutout {
-    transform: scale(1.045) translateY(-10px);
-  }
-
-  .team-card:hover .team-card__overlay,
-  .team-card:focus-visible .team-card__overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Touch / tap fallback — JS toggles .is-active */
-.team-card.is-active .team-card__cutout {
+/* Click/tap/keyboard-open state — the "character reveal": cutout lifts and
+   scales slightly, the info panel rises in underneath it. Same class for
+   every input method, driven entirely by js/team.js. */
+.team-card.is-open .team-card__cutout {
   transform: scale(1.045) translateY(-10px);
 }
 
-.team-card.is-active .team-card__overlay {
+.team-card.is-open .team-card__overlay {
   opacity: 1;
   transform: translateY(0);
 }
 
+@media (max-width: 1023px) {
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 640px) {
   .team-grid {
-    grid-template-columns: minmax(0, 340px);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .team-card__bio {
+    display: none;
   }
 }

@@ -72,29 +72,6 @@ ul {
   margin: 0 auto;
 }
 
-/* Small uppercase "eyebrow" numbering used above each section heading,
-   e.g. "02 — WHAT WE DO" */
-.section__label {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 0 0 20px;
-  font-family: var(--font-heading);
-  font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--color-text-secondary);
-}
-
-.section__label::before {
-  content: "";
-  display: inline-block;
-  width: 32px;
-  height: 1px;
-  background: var(--color-border);
-}
-
 .section__heading {
   font-family: var(--font-heading);
   font-weight: 700;
