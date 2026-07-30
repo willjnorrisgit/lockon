@@ -58,8 +58,11 @@ Then open the printed localhost URL.
 
 ## Asset status
 
-Everything's in now except one background still (see below) and the copy
-that was always going to need your sign-off (roles/bios, contact details).
+Everything's in now except one background still (see below). Copy has been
+tightened using what's verifiably public about Lock On (lockon.ltd blocks
+automated fetches, so this came from search-indexed snippets + Companies
+House, not a direct scrape) — see "Copy status" below for exactly what's
+confirmed vs. invented.
 
 - **Hero video** — done. `assets/video/hero.mp4` / `.webm` are the 8-second
   clip you provided (compressed from the original 1080×1920/2.6MB down to
@@ -70,8 +73,7 @@ that was always going to need your sign-off (roles/bios, contact details).
   something else.
 - **Team photos** — done. `assets/team/guy-lockwood.jpg` and
   `jamie-norris.jpg` are in and rendering through the masked-cutout
-  treatment, Guy first per your correction. Roles/bios in `index.html`
-  (`#team`) are still placeholder copy pending the real thing.
+  treatment, Guy first per your correction.
 - **Background stills** — 3 of 4 done (`assets/images/formation.jpg`,
   `cockpit.jpg`, `runway.jpg`, matched from the stock stills you shared to
   the section that suited each best — see `assets/images/README.md` for the
@@ -88,6 +90,34 @@ isn't there, something sensible (a themed gradient, the reticle mark, or the
 initials-on-dark placeholder) shows instead — nothing ever renders as a
 broken image or empty box. That's deliberate so you can hand this over
 mid-build and it never looks unfinished.
+
+## Copy status
+
+`lockon.ltd` returns 403 to automated fetches, so none of this is scraped —
+it's assembled from search-engine-indexed snippets of the live site plus
+Companies House's public register. Confirmed facts, now used verbatim or
+close to it:
+
+- Founded 2018 (Companies House: incorporated 29 March 2018)
+- UK office: The Officers' Mess, Royston Road, Duxford, England, CB22 4QH
+  (`#contact`)
+- Email: `info@lockon.ltd`
+- Consultants "have flown 4th and 5th Generation platforms," with
+  "combat experience as fast jet instructor pilots" and backgrounds in
+  "strategy, capability development and operational delivery" (`#why-us`)
+- Services centre on "development of operating procedures," "specialist
+  aerospace advice," and "a premium on information security" (`#what-we-do`)
+- "A diverse portfolio of aerospace projects" for UK/US/European/Middle
+  Eastern clients (`#why-us` — the client geography was already given to me
+  in the original brief, not independently re-verified here)
+
+Not confirmed anywhere public: Jamie Norris's and Guy Lockwood's individual
+titles and bios (`#team`). Per your steer, those are reasonable filler
+copy — built from the same public company-level language above (fast-jet
+instructor pilot, capability development, operational delivery) rather than
+invented from nothing, but the specific title/bio pairing per person isn't
+sourced. Easy to swap — they're isolated in the `.team-card__role` /
+`.team-card__bio` elements in `index.html`.
 
 ## Design system
 
