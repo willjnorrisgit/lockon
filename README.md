@@ -218,58 +218,78 @@ calculation per `requestAnimationFrame` tick:
    formation.jpg` (`.camera-bg__jet`) starts large on the right at the top
    of What We Do, then a single scroll fraction across that specific range
    drives a continuous `translate(Tx,Ty) scale(s)` move: it slides left and
-   shrinks until it's fully past the left edge (`jetTransformAt()` in
-   `camera.js` interpolates translateX/scale together from a "start"
-   framing to an "exit" framing with a `smoothstep` ease — same easing
-   pattern as the flight route's path progress). Past that point the
-   fraction is clamped at `1`, so the jet stays parked off-screen and its
-   opacity is explicitly set to `0` — it can't drift back into view later.
-2. **Dark transition, then runway** (40% into Why Us → 25% into Team) — with
-   the jet gone, `.camera-bg__fade` ramps to full black by the start of
-   Team (nothing else renders in between — no jet, no runway — just the
-   layer's own dark radial-gradient backdrop deepening under it), then
-   `assets/images/runway.jpg` (`.camera-bg__runway`) crossfades in as the
-   black recedes, finishing early in Team so "Team through Contact" reads
-   as runway being the settled background. Runway doesn't move or zoom —
-   it's a plain `object-fit: cover`, no transform math needed since nothing
-   animates but its opacity.
+   shrinks (`jetTransformAt()` in `camera.js` interpolates translateX/scale
+   together from a "start" framing to an "exit" framing with a
+   `smoothstep` ease — same easing pattern as the flight route's path
+   progress). Over the tail of the flight (`JET_BLUR_START` onward, 55%
+   through) it dissolves rather than hard-cutting: blur and opacity ramp
+   together (`--jet-blur`, a CSS custom property so JS only ever touches
+   one thing per frame), and a second, much-blurrier, masked copy of the
+   same photo (`.camera-bg__jet-trail`) trails behind it — screen-right,
+   since the jet is flying left — growing, blurring and fading in a rise-
+   then-fall hump (`JET_TRAIL_PEAK`) so it billows like vapor/exhaust off
+   the rear of the aircraft and disperses again by the exit point, rather
+   than the jet just shrinking to a dot against a flat backdrop. Past the
+   exit point both fractions are clamped at `1`, so both layers stay parked
+   off-screen/invisible and can't drift back into view later.
+2. **Dark transition, then runway** (overlapping, ~30-100% into the dark
+   ramp → 12% into Team) — with the jet dissolved, `.camera-bg__fade` ramps
+   toward black, then `assets/images/runway.jpg` (`.camera-bg__runway`)
+   crossfades in — starting before the dark ramp finishes
+   (`RUNWAY_START_INTO_DARK`, 75% of the way through it) rather than
+   waiting for a beat of plain black first, and finishing early in Team
+   (`RUNWAY_REVEAL_FRACTION`, 12%) so "Team through Contact" reads as
+   runway being the settled background almost immediately. Runway doesn't
+   move or zoom — it's a plain `object-fit: cover`, no transform math
+   needed since nothing animates but its opacity.
 
-Both images' transforms/opacity are recomputed every scroll tick from pixel
-ranges measured off each section's actual `offsetTop` (`measure()`), not
-hardcoded — `JET_EXIT_FRACTION` (0.4) and `RUNWAY_REVEAL_FRACTION` (0.25)
-are the two tunable knobs if you want the flyover or the reveal to take
-more/less of their section.
+All three layers' transforms/opacity/blur are recomputed every scroll tick
+from pixel ranges measured off each section's actual `offsetTop`
+(`measure()`), not hardcoded — the constants at the top of `initCamera()`
+(`JET_EXIT_FRACTION`, `JET_BLUR_START`, `RUNWAY_START_INTO_DARK`,
+`RUNWAY_REVEAL_FRACTION`, etc.) are the tunable knobs if you want any of
+these beats to take more/less of their range.
 
 - **Transform math is compositor-only.** Every scroll tick only ever writes
-  `transform`/`opacity` — never `width`/`height`/`top`/`left`/
-  `background-position` — so there's no layout/paint cost per frame, just
-  compositing. The jet uses `transform-origin: 0 0` with pixel-based
-  `translate`/`scale` (not the min-width/height:100% cover trick, which
-  fights this kind of arbitrary continuously-changing framing), verified
-  both algebraically and by screenshotting the flyover at 1440px, 390px,
-  and 1920px-wide viewports to confirm no edge exposure and a fully
-  off-screen exit at every width. Deliberately no CSS `transition` on
-  either image's opacity — JS sets a new value every frame, and a
-  transition would fight that, lagging the crossfade behind the actual
-  scroll position instead of tracking it exactly.
+  `transform`/`opacity`/`filter: blur()` — never `width`/`height`/`top`/
+  `left`/`background-position` — so there's no layout/paint cost per frame,
+  just compositing. The jet and its trail use `transform-origin: 0 0` with
+  pixel-based `translate`/`scale` (not the min-width/height:100% cover
+  trick, which fights this kind of arbitrary continuously-changing
+  framing), verified both algebraically and by screenshotting the flyover
+  at 1440px, 390px, and 1920px-wide viewports to confirm no edge exposure
+  and a fully off-screen exit at every width. Deliberately no CSS
+  `transition` on any of these layers' opacity/filter — JS sets a new
+  value every frame, and a transition would fight that, lagging the
+  crossfade behind the actual scroll position instead of tracking it
+  exactly.
+- **The trail is a masked duplicate, not a distinct asset.** `.camera-bg__
+  jet-trail` reuses `formation.jpg` rather than a bespoke smoke/vapor
+  graphic, offset to the jet's rear and given a heavy `blur()` plus a
+  `mask-image: linear-gradient(...)` that fades out the half of the copy
+  nearest the jet — so it reads as diffuse haze trailing off the airframe
+  rather than a second, recognisable aircraft riding alongside it.
 - **A bug worth knowing about if you touch this file.** The global `img {
   max-width: 100% }` reset in `css/base.css` silently caps an `<img>`'s
   rendered box below its true natural size unless overridden — the jet's
   transform math assumes its untransformed box is exactly `naturalWidth x
-  naturalHeight`, so `.camera-bg__jet` overrides with `max-width: none;
-  width: auto; height: auto;` in `camera-bg.css` (the runway image doesn't
-  need this override since it's sized via `width/height: 100%` +
-  `object-fit: cover`, not natural-size transform math).
-- **Reduced motion** — no camera movement: `camera.js` applies the jet's
-  start framing once as a static crop and never updates its transform
-  again, only toggling its opacity off once scroll passes the (still
-  measured) exit point. The dark-transition/runway crossfade still
-  animates, since it's a simple opacity ramp tied to scroll position rather
-  than continuous camera motion — same reasoning as the flight route's
-  node lighting staying live under reduced motion.
+  naturalHeight`, so `.camera-bg__jet`/`.camera-bg__jet-trail` override
+  with `max-width: none; width: auto; height: auto;` in `camera-bg.css`
+  (the runway image doesn't need this override since it's sized via
+  `width/height: 100%` + `object-fit: cover`, not natural-size transform
+  math).
+- **Reduced motion** — no camera movement, no dissolve, no trail:
+  `camera.js` applies the jet's start framing once as a static crop and
+  never updates its transform/blur again, only toggling its opacity off
+  once scroll passes the (still measured) exit point; the trail layer's
+  opacity is held at `0` throughout, since it's purely a continuous-motion
+  effect with no sensible static equivalent. The dark-transition/runway
+  crossfade still animates, since it's a simple opacity ramp tied to
+  scroll position rather than continuous camera motion — same reasoning
+  as the flight route's node lighting staying live under reduced motion.
 - **Legibility** — `.camera-bg__scrim` is a constant dark gradient overlay
   present at every scroll position (`--scrim-strong`, `variables.css`),
-  independent of the dark-transition layer. Both images run through the
+  independent of the dark-transition layer. All images run through the
   same `--photo-filter` (grayscale/contrast/darken) as every other photo on
   the site.
 - `cockpit.jpg` (an earlier per-section still this replaced) is still in

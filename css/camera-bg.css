@@ -18,6 +18,31 @@
   background: radial-gradient(ellipse at 50% 40%, #242424 0%, #111111 55%, #0a0a0a 100%);
 }
 
+/* The vapor-trail layer — a second copy of the same jet photo, positioned
+   behind (to the right of, since the jet flies right-to-left) the jet
+   itself and driven far more heavily blurred/masked/translucent, so it
+   reads as haze streaming off the rear of the aircraft as it exits rather
+   than a visible second airframe. Painted first (before .camera-bg__jet in
+   the DOM) so the sharper jet sits on top of it. Same "no CSS transition,
+   only a custom property for the filter" reasoning as the jet below. */
+.camera-bg__jet-trail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  width: auto;
+  height: auto;
+  transform-origin: 0 0;
+  filter: var(--photo-filter) blur(var(--jet-trail-blur, 0px));
+  /* Fades the half of the copy nearest the jet itself to transparent, so
+     only the trailing (rear) side reads as a cloud — not a full ghost
+     silhouette of the aircraft riding alongside it. */
+  mask-image: linear-gradient(to left, black 0%, transparent 60%);
+  -webkit-mask-image: linear-gradient(to left, black 0%, transparent 60%);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
 /* Positioned/sized entirely via JS transform (js/camera.js), not the usual
    min-width/height:100% cover trick — that technique fights percentage-based
    translate()/transform-origin math once you need an arbitrary, continuously
@@ -42,9 +67,14 @@
   width: auto;
   height: auto;
   transform-origin: 0 0;
-  filter: var(--photo-filter);
+  /* --jet-blur is written per scroll frame by js/camera.js, ramping up as
+     the jet nears its exit point so it smears/dissolves out of view
+     (heat-haze style) instead of just sliding off against a hard-edged
+     rectangle. Composed with --photo-filter here rather than overwritten
+     from JS, so JS only ever has to touch the one custom property. */
+  filter: var(--photo-filter) blur(var(--jet-blur, 0px));
   opacity: 0;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
 }
 
 /* Runway is a plain full-bleed cover image, not transform-driven — it never
@@ -85,6 +115,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .camera-bg__jet,
+  .camera-bg__jet-trail,
   .camera-bg__runway {
     transition: none;
   }
