@@ -34,7 +34,8 @@
   border: 1px solid var(--color-border);
   background: transparent;
   transition: background var(--duration-fast) var(--ease),
-    border-color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+    border-color var(--duration-fast) var(--ease),
+    transform var(--duration-base) var(--ease-settle);
 }
 
 .dots__item:hover .dots__dot,

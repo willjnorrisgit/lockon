@@ -45,6 +45,25 @@
   flex-shrink: 0;
 }
 
+/* Real logo mark (assets/lockon-logo.png) swaps in for the reticle SVG
+   once it loads — see the onload/is-loaded pattern in index.html. Until
+   then the img stays display:none and the SVG fallback shows. */
+.nav__logo-img {
+  display: none;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.nav__logo-img.is-loaded {
+  display: block;
+}
+
+.nav__logo-img.is-loaded ~ svg {
+  display: none;
+}
+
 .nav__links {
   display: flex;
   gap: clamp(20px, 3vw, 44px);

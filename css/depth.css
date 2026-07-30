@@ -1,0 +1,112 @@
+/* ==========================================================================
+   Depth system — shared background/foreground layering, section-entrance
+   reveal, and photography treatment used by every section except Landing
+   (which gets its own Ken Burns treatment in sections/landing.css).
+   ========================================================================== */
+
+.section--depth {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Oversized (inset < 0) so the parallax translate never exposes an edge;
+   the section's own `overflow: hidden` (css/base.css) clips it. */
+.section__bg {
+  position: absolute;
+  inset: -18% 0;
+  z-index: 0;
+  will-change: transform;
+}
+
+.section__bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: var(--photo-filter);
+}
+
+/* Each background references a real asset path first, a themed gradient
+   second — CSS paints whichever layer actually loads, so a missing photo
+   just leaves the gradient visible instead of a broken image. Swap in the
+   real files at these paths (see assets/images/README.md) and they take
+   over automatically, no markup changes needed. */
+.section__bg-image--formation {
+  background-image: url("../assets/images/formation.jpg"),
+    linear-gradient(155deg, #242424 0%, #101010 55%, #0a0a0a 100%);
+}
+
+.section__bg-image--cockpit {
+  background-image: url("../assets/images/cockpit.jpg"),
+    radial-gradient(ellipse at 50% 70%, #262626 0%, #0d0d0d 60%, #0a0a0a 100%);
+}
+
+.section__bg-image--runway {
+  background-image: url("../assets/images/runway.jpg"),
+    linear-gradient(to bottom, #1c1c1c 0%, #141414 45%, #0a0a0a 100%);
+}
+
+.section__bg-image--sky {
+  background-image: url("../assets/images/sky.jpg"),
+    linear-gradient(to bottom, #26282b 0%, #17181a 60%, #0a0a0a 100%);
+}
+
+.section__bg-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.section__bg-scrim--strong {
+  background: var(--scrim-strong);
+}
+
+.section__bg-scrim--low {
+  background: var(--scrim-low);
+}
+
+.section__inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Photography behind text needs a legibility guarantee the scrim alone
+   doesn't always provide at every scroll offset. */
+.section--depth .section__label,
+.section--depth .section__heading,
+.section--depth .section__intro {
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
+}
+
+/* Cinematic entrance: content masks/fades in as its section scrolls into
+   view rather than hard-cutting between sections. Toggled by js/reveal.js. */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  clip-path: inset(10% 0 10% 0);
+  transition: opacity var(--duration-reveal) var(--ease),
+    transform var(--duration-reveal) var(--ease),
+    clip-path var(--duration-reveal) var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-parallax-speed] {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: opacity var(--duration-base) var(--ease);
+  }
+}

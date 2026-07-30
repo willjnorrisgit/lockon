@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Why Us — differentiator grid
+   Why Us — parallax background (cockpit shot), differentiator points with
+   a subtle relative-depth offset against the heading
    ========================================================================== */
 
 .differentiators {
@@ -9,7 +10,7 @@
 }
 
 .differentiator {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
   padding-top: 24px;
 }
 
@@ -20,6 +21,7 @@
   font-size: 1.5rem;
   color: var(--color-active);
   margin-bottom: 20px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
 }
 
 .differentiator__title {
@@ -29,6 +31,7 @@
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
   margin: 0 0 12px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
 }
 
 .differentiator__text {
@@ -36,6 +39,7 @@
   font-weight: 300;
   color: var(--color-text-secondary);
   margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 1023px) {
