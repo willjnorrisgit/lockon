@@ -1,36 +1,64 @@
 /* ==========================================================================
-   Meet the Team — card grid with hover reveal (tap fallback on touch)
+   Meet the Team — masked cutout portraits over a shared parallax backdrop.
+   Hover/tap "character reveal": cutout lifts + scales slightly, bio panel
+   fades in. Same touch fallback logic as before (js/team.js).
    ========================================================================== */
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: repeat(2, minmax(240px, 420px));
+  justify-content: center;
+  gap: clamp(24px, 4vw, 64px);
 }
 
 .team-card {
   position: relative;
   aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #141414;
-  border: 1px solid var(--color-border);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 .team-card:focus-visible {
   outline: 1px solid var(--color-active);
-  outline-offset: 2px;
+  outline-offset: 6px;
 }
 
-.team-card__photo {
+/* The cutout itself — image + fallback both live here so both get the
+   exact same mask/vignette treatment regardless of which one is showing. */
+.team-card__cutout {
+  position: absolute;
+  inset: 0;
+  transition: transform var(--duration-base) var(--ease-settle);
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(ellipse 68% 82% at 50% 38%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 68% 82% at 50% 38%, #000 58%, transparent 100%);
+}
+
+.team-card__photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--photo-filter);
+  display: none;
+}
+
+.team-card__photo-img.is-loaded {
+  display: block;
+}
+
+.team-card__photo-fallback {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #1c1c1c, #0d0d0d);
-  transition: transform var(--duration-slow) var(--ease), filter var(--duration-slow) var(--ease);
+  background: radial-gradient(ellipse at 50% 35%, #262626 0%, #121212 65%, #0a0a0a 100%);
+}
+
+.team-card__photo-img.is-loaded ~ .team-card__photo-fallback {
+  display: none;
 }
 
 .team-card__initials {
@@ -41,17 +69,29 @@
   color: var(--color-text-secondary);
 }
 
+.team-card__ground-shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 6%;
+  height: 20%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, transparent 75%);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .team-card__overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 22px;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.96) 20%, rgba(10, 10, 10, 0.55) 65%, rgba(10, 10, 10, 0) 100%);
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.92) 15%, rgba(10, 10, 10, 0.4) 55%, rgba(10, 10, 10, 0) 85%);
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease);
+  transform: translateY(10px);
+  transition: opacity var(--duration-base) var(--ease), transform var(--duration-base) var(--ease-settle);
 }
 
 .team-card__role {
@@ -66,7 +106,7 @@
 .team-card__name {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   letter-spacing: var(--ls-heading);
   text-transform: uppercase;
   margin: 0 0 10px;
@@ -80,43 +120,33 @@
   line-height: 1.5;
 }
 
-/* Desktop hover reveal */
+/* Desktop hover — the "character reveal": cutout lifts/scales with a
+   slight overshoot, bio panel rises in underneath it. */
 @media (hover: hover) and (pointer: fine) {
+  .team-card:hover .team-card__cutout,
+  .team-card:focus-visible .team-card__cutout {
+    transform: scale(1.045) translateY(-10px);
+  }
+
   .team-card:hover .team-card__overlay,
   .team-card:focus-visible .team-card__overlay {
     opacity: 1;
     transform: translateY(0);
   }
-
-  .team-card:hover .team-card__photo,
-  .team-card:focus-visible .team-card__photo {
-    transform: scale(1.04);
-    filter: brightness(0.6);
-  }
 }
 
 /* Touch / tap fallback — JS toggles .is-active */
+.team-card.is-active .team-card__cutout {
+  transform: scale(1.045) translateY(-10px);
+}
+
 .team-card.is-active .team-card__overlay {
   opacity: 1;
   transform: translateY(0);
 }
 
-.team-card.is-active .team-card__photo {
-  filter: brightness(0.6);
-}
-
-@media (max-width: 1023px) {
+@media (max-width: 640px) {
   .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .team-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .team-card__bio {
-    display: none;
+    grid-template-columns: minmax(0, 340px);
   }
 }

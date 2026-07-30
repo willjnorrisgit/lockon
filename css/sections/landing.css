@@ -15,6 +15,32 @@
   overflow: hidden;
 }
 
+/* Ken Burns: slow, subtle zoom + drift on the video/fallback only — the
+   scrim sits outside this wrapper so the darkening overlay stays put.
+   `alternate` + matching easing on both legs keeps the loop seamless
+   (no snap-back). Disabled under reduced-motion (media query below). */
+.landing__zoom {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 42%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing__zoom {
+    animation: landing-kenburns var(--duration-kenburns) var(--ease) infinite alternate;
+    will-change: transform;
+  }
+}
+
+@keyframes landing-kenburns {
+  from {
+    transform: scale(1) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-1.5%, 1%);
+  }
+}
+
 .landing__video {
   position: absolute;
   top: 50%;
@@ -25,6 +51,7 @@
   height: auto;
   transform: translate(-50%, -50%);
   object-fit: cover;
+  filter: var(--photo-filter);
 }
 
 /* Abstract fallback backdrop shown while the video loads (or if it's
@@ -87,6 +114,21 @@
 .landing__logo svg {
   width: 38px;
   height: 38px;
+}
+
+.landing__logo-img {
+  display: none;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.landing__logo-img.is-loaded {
+  display: block;
+}
+
+.landing__logo-img.is-loaded ~ svg {
+  display: none;
 }
 
 .landing__logo-word {

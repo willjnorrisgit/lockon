@@ -14,6 +14,21 @@
   --color-active: #e5e5e5;
   --color-overlay: rgba(10, 10, 10, 0.55);
 
+  /* Photography treatment — keeps real imagery inside the monochrome
+     palette instead of letting it introduce colour */
+  --photo-filter: grayscale(55%) contrast(1.08) brightness(0.85);
+  --scrim-strong: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.55) 0%,
+    rgba(10, 10, 10, 0.55) 35%,
+    rgba(10, 10, 10, 0.92) 100%
+  );
+  --scrim-low: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.75) 0%,
+    rgba(10, 10, 10, 0.75) 100%
+  );
+
   /* Type */
   --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -39,9 +54,15 @@
   --section-padding-y: clamp(96px, 12vh, 160px);
   --max-content-width: 1280px;
 
-  /* Motion */
+  /* Motion — custom, non-default curves throughout; no plain ease/linear.
+     --ease: smooth emphasized deceleration, for continuous/large reveals.
+     --ease-settle: slight overshoot then settle, for discrete UI feedback
+     (hover, tap, active states) so it reads as considered, not mechanical. */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-settle: cubic-bezier(0.34, 1.56, 0.64, 1);
   --duration-fast: 0.2s;
   --duration-base: 0.4s;
   --duration-slow: 0.7s;
+  --duration-reveal: 0.9s;
+  --duration-kenburns: 26s;
 }

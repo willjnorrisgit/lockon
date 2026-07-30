@@ -23,6 +23,7 @@
 
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/depth.css" />
   <link rel="stylesheet" href="css/nav.css" />
   <link rel="stylesheet" href="css/dots.css" />
   <link rel="stylesheet" href="css/sections/landing.css" />
@@ -32,7 +33,9 @@
   <link rel="stylesheet" href="css/sections/contact.css" />
 </head>
 <body>
-  <!-- Shared icon sprite: single reticle mark reused in nav + landing logo -->
+  <!-- Shared icon sprite: reticle mark, used as the logo fallback until
+       assets/lockon-logo.png loads (see .is-loaded swap in nav.css /
+       sections/landing.css). -->
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <symbol id="icon-reticle" viewBox="0 0 40 40" fill="none">
       <circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="1.5" />
@@ -49,6 +52,12 @@
   <!-- ============================== NAV ============================== -->
   <header class="nav" id="site-nav">
     <a href="#landing" class="nav__logo" aria-label="Lock On — back to top">
+      <img
+        class="nav__logo-img"
+        src="assets/lockon-logo.png"
+        alt=""
+        onload="this.classList.add('is-loaded')"
+      />
       <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
       <span>Lock On</span>
     </a>
@@ -88,28 +97,39 @@
     <!-- =========================== 01 LANDING =========================== -->
     <section class="section landing" id="landing">
       <div class="landing__media">
-        <div class="landing__fallback"></div>
         <!--
-          Drop compressed hero footage in assets/video/ as hero.webm + hero.mp4
-          (see README for ffmpeg commands). Until then, the animated fallback
-          backdrop above shows through.
+          Primary hero clip: assets/video/hero.mp4 (+ hero.webm). Whatever
+          sits at that exact filename is what plays — if you're dropping in
+          the 8-second clip as the primary, name it hero.mp4 / hero.webm.
+          Until a real file is there, the animated fallback backdrop below
+          shows through and the Ken Burns zoom (.landing__zoom) still runs
+          on it, so the section never looks broken or static.
         -->
-        <video
-          class="landing__video"
-          autoplay
-          muted
-          loop
-          playsinline
-          poster="assets/img/hero-poster.jpg"
-        >
-          <source src="assets/video/hero.webm" type="video/webm" />
-          <source src="assets/video/hero.mp4" type="video/mp4" />
-        </video>
+        <div class="landing__zoom">
+          <div class="landing__fallback"></div>
+          <video
+            class="landing__video"
+            autoplay
+            muted
+            loop
+            playsinline
+            poster="assets/img/hero-poster.jpg"
+          >
+            <source src="assets/video/hero.webm" type="video/webm" />
+            <source src="assets/video/hero.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="landing__scrim"></div>
       </div>
 
       <div class="landing__content">
         <div class="landing__logo">
+          <img
+            class="landing__logo-img"
+            src="assets/lockon-logo.png"
+            alt=""
+            onload="this.classList.add('is-loaded')"
+          />
           <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
           <span class="landing__logo-word">Lock On</span>
         </div>
@@ -127,8 +147,13 @@
     </section>
 
     <!-- ========================= 02 WHAT WE DO ========================= -->
-    <section class="section section--alt" id="what-we-do">
-      <div class="section__inner">
+    <section class="section section--depth" id="what-we-do">
+      <div class="section__bg" data-parallax-speed="0.35">
+        <div class="section__bg-image section__bg-image--formation"></div>
+      </div>
+      <div class="section__bg-scrim section__bg-scrim--strong"></div>
+
+      <div class="section__inner reveal">
         <p class="section__label">02 — Capabilities</p>
         <h2 class="section__heading">What We Do</h2>
         <p class="section__intro">
@@ -174,13 +199,18 @@
     </section>
 
     <!-- =========================== 03 WHY US =========================== -->
-    <section class="section" id="why-us">
-      <div class="section__inner">
+    <section class="section section--depth" id="why-us">
+      <div class="section__bg" data-parallax-speed="0.3">
+        <div class="section__bg-image section__bg-image--cockpit"></div>
+      </div>
+      <div class="section__bg-scrim section__bg-scrim--strong"></div>
+
+      <div class="section__inner reveal">
         <p class="section__label">03 — Why Us</p>
         <h2 class="section__heading">Why Us</h2>
         <p class="section__intro">Four things that set Lock On apart.</p>
 
-        <div class="differentiators">
+        <div class="differentiators" data-parallax-speed="1.08">
           <div class="differentiator">
             <span class="differentiator__index">01</span>
             <h3 class="differentiator__title">Founded 2018</h3>
@@ -218,8 +248,13 @@
     </section>
 
     <!-- ========================= 04 MEET THE TEAM ========================= -->
-    <section class="section section--alt" id="team">
-      <div class="section__inner">
+    <section class="section section--depth" id="team">
+      <div class="section__bg" data-parallax-speed="0.3">
+        <div class="section__bg-image section__bg-image--runway"></div>
+      </div>
+      <div class="section__bg-scrim section__bg-scrim--strong"></div>
+
+      <div class="section__inner reveal">
         <p class="section__label">04 — Meet the Team</p>
         <h2 class="section__heading">Meet the Team</h2>
         <p class="section__intro">
@@ -228,52 +263,55 @@
         </p>
 
         <!--
-          Placeholder roster — swap names, roles, bios and photos for the real
-          team (see README). Hover reveals the overlay on desktop; on touch
-          devices, tapping a card toggles the same reveal (js/team.js).
+          Real names (Jamie Norris, Guy Lockwood) per the brief; roles/bios
+          below are placeholder copy pending the real thing, and the photos
+          expect assets/team/jamie-norris.jpg + guy-lockwood.jpg. Until those
+          exist, the masked initials fallback (same vignette/mask treatment)
+          shows instead — see css/sections/team.css. Hover reveals on
+          desktop; tapping does the same on touch (js/team.js).
         -->
         <div class="team-grid">
-          <div class="team-card">
-            <div class="team-card__photo"><span class="team-card__initials">JW</span></div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">James Whitfield</h3>
-              <p class="team-card__bio">
-                Former fast-jet pilot and test instructor; leads Lock On's operational
-                and client strategy.
-              </p>
+          <div class="team-card" data-parallax-speed="1.06">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/guy-lockwood.jpg"
+                alt="Guy Lockwood"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">GL</span>
+              </div>
             </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__photo"><span class="team-card__initials">SC</span></div>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__overlay">
               <p class="team-card__role">Head of Flight Test</p>
-              <h3 class="team-card__name">Sarah Coleman</h3>
+              <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
                 Qualified test pilot with two decades across fixed-wing combat air
                 programmes.
               </p>
             </div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo"><span class="team-card__initials">DO</span></div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Senior Tactics Consultant</p>
-              <h3 class="team-card__name">David Okafor</h3>
-              <p class="team-card__bio">
-                Specialist in tactics and doctrine development for fast-jet and
-                multi-role platforms.
-              </p>
+          <div class="team-card" data-parallax-speed="0.95">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/team/jamie-norris.jpg"
+                alt="Jamie Norris"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">JN</span>
+              </div>
             </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__photo"><span class="team-card__initials">EH</span></div>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__overlay">
-              <p class="team-card__role">Head of Programmes</p>
-              <h3 class="team-card__name">Emily Hartson</h3>
+              <p class="team-card__role">Managing Director</p>
+              <h3 class="team-card__name">Jamie Norris</h3>
               <p class="team-card__bio">
-                Leads programme and acquisition advisory across UK and allied defence
-                clients.
+                Former fast-jet pilot and test instructor; leads Lock On's operational
+                and client strategy.
               </p>
             </div>
           </div>
@@ -282,8 +320,13 @@
     </section>
 
     <!-- ========================== 05 CONTACT US ========================== -->
-    <section class="section contact" id="contact">
-      <div class="section__inner contact__inner">
+    <section class="section section--depth contact" id="contact">
+      <div class="section__bg" data-parallax-speed="0.6">
+        <div class="section__bg-image section__bg-image--sky"></div>
+      </div>
+      <div class="section__bg-scrim section__bg-scrim--low"></div>
+
+      <div class="section__inner contact__inner reveal">
         <p class="section__label">05 — Contact</p>
         <h2 class="section__heading">Contact Us</h2>
 
