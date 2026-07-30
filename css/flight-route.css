@@ -1,0 +1,85 @@
+/* ==========================================================================
+   Flight route — decorative, scroll-linked rail on the left edge, running
+   from What We Do to the footer. Monochrome except the amber node glow
+   (--color-amber / --color-amber-glow, the one deliberate accent in the
+   system — see the comment in css/variables.css). All geometry (path 'd',
+   viewBox, node cx/cy, plane transform) is set at runtime by
+   js/flight-route.js; this file only styles what's there.
+   ========================================================================== */
+
+.flight-route {
+  position: fixed;
+  left: clamp(14px, 2.5vw, 28px);
+  top: 16vh;
+  bottom: 16vh;
+  width: 32px;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.flight-route__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Always-visible dim guide for the full route */
+.flight-route__base {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+}
+
+/* "Flown" portion — revealed via stroke-dashoffset tied to scroll position */
+.flight-route__progress {
+  fill: none;
+  stroke: var(--color-active);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.flight-route__node-dot {
+  fill: var(--color-border);
+  stroke: var(--color-bg);
+  stroke-width: 1;
+  transition: fill 0.6s var(--ease);
+}
+
+.flight-route__node-glow {
+  fill: var(--color-amber);
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+
+.flight-route__node.is-lit .flight-route__node-dot {
+  fill: var(--color-amber);
+}
+
+.flight-route__node.is-lit .flight-route__node-glow {
+  opacity: 0.6;
+}
+
+.flight-route__plane {
+  fill: var(--color-active);
+}
+
+.flight-route__plane path {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
+}
+
+@media (max-width: 900px) {
+  .flight-route {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flight-route__plane {
+    display: none;
+  }
+}

@@ -3,6 +3,7 @@ import { initDots } from "./dots.js";
 import { initTeam } from "./team.js";
 import { initParallax } from "./parallax.js";
 import { initReveal } from "./reveal.js";
+import { initFlightRoute } from "./flight-route.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
@@ -10,4 +11,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initTeam();
   initParallax();
   initReveal();
+  initFlightRoute();
 });

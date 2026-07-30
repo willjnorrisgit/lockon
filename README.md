@@ -24,6 +24,7 @@ css/
                              every section except Landing
   nav.css                   Top nav bar
   dots.css                  Scroll-progress dot sidebar
+  flight-route.css          Decorative scroll-linked route rail (left edge)
   footer.css                Legal/registration footer (outside the scroll-snap flow)
   legal.css                 Chrome shared by privacy/terms/cookies.html
   sections/
@@ -39,6 +40,7 @@ js/
   team.js                   Click/tap/keyboard open-in-place for team tiles
   parallax.js               rAF-throttled scroll-parallax engine
   reveal.js                 Continuous IntersectionObserver-ratio crossfade
+  flight-route.js           Scroll-linked route line, plane marker, node lighting
 assets/
   lockon-logo.webp           Logo (nav only) — full wordmark lockup
   favicon/                  Favicon set, cropped from the logo mark (see its README)
@@ -199,6 +201,55 @@ address above.
   fade with no clip-path/translate. This is enforced in both CSS (belt) and
   JS (suspenders: `parallax.js`/`reveal.js` bail out entirely rather than
   relying on the CSS override).
+
+## Flight route
+
+A decorative rail on the left edge (`css/flight-route.css` +
+`js/flight-route.js`), separate from the hero and not a nav control — the
+dots already cover navigation. Runs from the top of What We Do to the
+footer; hidden on Landing and below 900px width.
+
+- **Line draw** — a dim dashed grey guide (`.flight-route__base`) always
+  shows the full route. A brighter overlay with identical path geometry
+  (`.flight-route__progress`) reveals itself via `stroke-dashoffset` tied
+  directly to scroll position within that range (0 at the top of What We
+  Do, 1 at the footer) — not a class toggle, a continuous value recomputed
+  every scroll tick.
+- **Path geometry is built at runtime, not hardcoded.** A static SVG
+  `viewBox` stretched with `preserveAspectRatio="none"` to fill a
+  fixed-height rail would scale non-uniformly and turn the node circles
+  into ellipses. `flight-route.js` measures the rail's actual rendered
+  pixel size instead and builds the path's `d` attribute in that same
+  coordinate space (1 SVG unit == 1 CSS px), so circles stay circular at
+  any viewport height. The path waypoints are the node fractions
+  themselves (plus start/end), with a small alternating left/right sway
+  between them — partly for a "flight route with turns" look, partly so
+  the plane marker's rotation actually has something to show.
+- **Plane marker** — a small arrow/dart positioned via
+  `path.getPointAtLength()` at the current scroll fraction, rotated to the
+  path's tangent angle at that point (`Math.atan2` between two nearby
+  points on the path). Stays monochrome (`--color-active`) — amber is
+  reserved for the nodes only.
+- **Node lighting is cumulative and position-based, not a single active-item
+  highlight.** A node lights up amber once scroll progress has reached its
+  fraction of the route (`fraction >= nodeFraction`), and *stays* lit as you
+  scroll past it — several nodes can be lit at once, like waypoints already
+  flown. This is deliberately different from the dots sidebar's one-at-a-time
+  active state, which the flight route doesn't duplicate. It's recomputed
+  every scroll tick rather than using an `IntersectionObserver`, so
+  scrolling back up un-lights a node the moment you pass back above its
+  point — no separate enter/exit event wiring needed.
+- **Glow** — an SVG `<filter>` (`feGaussianBlur`, `stdDeviation="2.5"`) on a
+  slightly larger circle behind each node's dot, faded in/out by opacity
+  rather than a hard toggle. `--color-amber` / `--color-amber-glow` are the
+  one deliberate colour accent in the entire system, scoped to this feature
+  only (see the comment above them in `variables.css`) — everything else
+  stays black/white/grey.
+- **Reduced motion** — the progress path renders fully drawn (static, no
+  scroll-tied reveal) and the plane is hidden entirely; node lighting still
+  updates (it's a discrete position check, not continuous motion), same
+  reasoning as the dots' active state staying live under reduced motion
+  elsewhere in this build.
 
 ## Interaction notes
 

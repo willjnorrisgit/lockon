@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/depth.css" />
   <link rel="stylesheet" href="css/nav.css" />
   <link rel="stylesheet" href="css/dots.css" />
+  <link rel="stylesheet" href="css/flight-route.css" />
   <link rel="stylesheet" href="css/sections/landing.css" />
   <link rel="stylesheet" href="css/sections/what-we-do.css" />
   <link rel="stylesheet" href="css/sections/why-us.css" />
@@ -101,6 +102,50 @@
       <span class="dots__label">Contact</span>
     </button>
   </nav>
+
+  <!-- ========================== FLIGHT ROUTE =========================== -->
+  <!--
+    Decorative, scroll-linked — not a nav control (dots above already cover
+    that). Runs from the top of What We Do to the footer. Path geometry,
+    node positions, line-draw offset, and the plane's position/rotation are
+    all computed in js/flight-route.js (a static viewBox here would either
+    letterbox or make the node circles render as ellipses under non-uniform
+    scaling, so the 'd'/viewBox/cx/cy are all set at runtime instead).
+    aria-hidden: purely atmospheric, nothing here is announced or focusable.
+  -->
+  <aside class="flight-route" aria-hidden="true">
+    <svg class="flight-route__svg" preserveAspectRatio="none">
+      <defs>
+        <filter id="flight-route-glow" x="-300%" y="-300%" width="700%" height="700%">
+          <feGaussianBlur stdDeviation="2.5" />
+        </filter>
+      </defs>
+
+      <path class="flight-route__base" />
+      <path class="flight-route__progress" />
+
+      <g class="flight-route__node" data-target="what-we-do">
+        <circle class="flight-route__node-glow" r="7" filter="url(#flight-route-glow)" />
+        <circle class="flight-route__node-dot" r="3" />
+      </g>
+      <g class="flight-route__node" data-target="why-us">
+        <circle class="flight-route__node-glow" r="7" filter="url(#flight-route-glow)" />
+        <circle class="flight-route__node-dot" r="3" />
+      </g>
+      <g class="flight-route__node" data-target="team">
+        <circle class="flight-route__node-glow" r="7" filter="url(#flight-route-glow)" />
+        <circle class="flight-route__node-dot" r="3" />
+      </g>
+      <g class="flight-route__node" data-target="contact">
+        <circle class="flight-route__node-glow" r="7" filter="url(#flight-route-glow)" />
+        <circle class="flight-route__node-dot" r="3" />
+      </g>
+
+      <g class="flight-route__plane">
+        <path d="M7,0 L-4,4 L-1,0 L-4,-4 Z" />
+      </g>
+    </svg>
+  </aside>
 
   <main class="scroll-container">
     <!-- =========================== 01 LANDING =========================== -->

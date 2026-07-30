@@ -17,6 +17,12 @@
   --color-active-glow: rgba(229, 229, 229, 0.4);
   --color-overlay: rgba(10, 10, 10, 0.55);
 
+  /* The one deliberate colour accent in the system, scoped to a single
+     feature: the flight-route rail's lit node glow (css/flight-route.css).
+     Warm/engine-like, not neon — do not reuse this elsewhere. */
+  --color-amber: #ffab5c;
+  --color-amber-glow: rgba(255, 171, 92, 0.55);
+
   /* Photography treatment — keeps real imagery inside the monochrome
      palette instead of letting it introduce colour */
   --photo-filter: grayscale(55%) contrast(1.08) brightness(0.85);
