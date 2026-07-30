@@ -82,8 +82,9 @@
 
   <!-- ========================== FLIGHT ROUTE =========================== -->
   <!--
-    Decorative, scroll-linked — not a nav control (dots above already cover
-    that). Runs from the top of What We Do to the footer. Path geometry,
+    Decorative, scroll-linked — not a nav control (the top nav links cover
+    section-jumping). Runs from the top of What We Do to the footer, on the
+    right edge. Path geometry,
     node positions, line-draw offset, and the plane's position/rotation are
     all computed in js/flight-route.js (a static viewBox here would either
     letterbox or make the node circles render as ellipses under non-uniform
@@ -127,10 +128,12 @@
   <!-- ============================ CAMERA BG ============================ -->
   <!--
     Two-act scroll-driven background behind What We Do / Why Us / Team /
-    Contact: the jet (formation.jpg) flies right-to-left and shrinks across
-    What We Do into early Why Us, then exits off-screen for good; a dark
-    transition follows through the rest of Why Us; then runway.jpg
-    crossfades in and stays put through Team and Contact. See
+    Contact: the jet (formation.jpg) starts at the right edge and flies the
+    full screen width to past the left edge across What We Do into early
+    Why Us, shrinking and dissolving as it goes; the screen darkens tied to
+    the jet's own horizontal position (not scroll time), reaching full
+    black exactly as it exits, then runway.jpg starts crossfading in
+    immediately (no gap) and stays put through Team and Contact. See
     css/camera-bg.css / js/camera.js for the choreography. Fixed + low
     z-index so normal section content (z-index:2, css/depth.css) always
     paints above it; hidden on Landing and past the footer, same fade
@@ -142,6 +145,7 @@
     <img class="camera-bg__jet" src="assets/images/formation.jpg" alt="" />
     <img class="camera-bg__runway" src="assets/images/runway.jpg" alt="" />
     <div class="camera-bg__scrim"></div>
+    <div class="camera-bg__vignette"></div>
     <div class="camera-bg__fade"></div>
   </div>
 

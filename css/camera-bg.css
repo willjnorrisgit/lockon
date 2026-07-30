@@ -102,9 +102,22 @@
   pointer-events: none;
 }
 
+/* Cinematic edge-darkening — opacity tracks the same position-derived
+   black amount as .camera-bg__fade (js/camera.js), just scaled down and
+   shaped as a vignette instead of a flat overlay, so the frame edges
+   deepen together with the fade-to-black rather than as a separate
+   effect. Recedes back out in sync as the runway crossfades in. */
+.camera-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* The jet-exit -> runway-reveal dark transition — opacity driven by
-   js/camera.js from the same scroll position as everything else, ramping
-   up then back down as the runway crossfades in over it. */
+   js/camera.js from the jet's own horizontal position (not scroll time),
+   ramping up then back down as the runway crossfades in over it. */
 .camera-bg__fade {
   position: absolute;
   inset: 0;

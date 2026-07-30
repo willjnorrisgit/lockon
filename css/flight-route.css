@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Flight route — decorative, scroll-linked rail on the left edge, running
+   Flight route — decorative, scroll-linked rail on the right edge, running
    from What We Do to the footer. Monochrome except the amber node glow
    (--color-amber / --color-amber-glow, the one deliberate accent in the
    system — see the comment in css/variables.css). All geometry (path 'd',
@@ -9,7 +9,7 @@
 
 .flight-route {
   position: fixed;
-  left: clamp(14px, 2.5vw, 28px);
+  right: clamp(14px, 2.5vw, 28px);
   top: 16vh;
   bottom: 16vh;
   width: 32px;
