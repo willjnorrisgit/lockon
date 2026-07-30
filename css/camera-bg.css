@@ -1,7 +1,9 @@
 /* ==========================================================================
-   Camera background — one shared jet photo behind What We Do / Why Us /
-   Team / Contact, panned and zoomed to a different framing per section by
-   js/camera.js as the user scrolls (continuous, not per-section jumps).
+   Camera background — two acts driven by js/camera.js as the user scrolls:
+   1) the jet (formation.jpg) flies right-to-left across What We Do into
+      early Why Us, shrinking as it goes, then exits off-screen for good;
+   2) a dark transition through the rest of Why Us, then runway.jpg
+      crossfades in and stays put through Team and Contact.
    Fixed + low z-index: sits behind normal section content (.section__inner
    is z-index:2, css/depth.css) but above the plain page background.
    ========================================================================== */
@@ -20,10 +22,13 @@
    min-width/height:100% cover trick — that technique fights percentage-based
    translate()/transform-origin math once you need an arbitrary, continuously
    changing focal point rather than a fixed center. Starting from natural
-   top-left placement with transform-origin:0 0 makes the pan/zoom formula a
+   top-left placement with transform-origin:0 0 makes the flyover formula a
    plain, verifiable `translate(Tx,Ty) scale(s)` (see js/camera.js), still
-   entirely on the compositor (no layout/paint per frame). */
-.camera-bg__image {
+   entirely on the compositor (no layout/paint per frame). Opacity is also
+   written every scroll frame (js/camera.js), so this deliberately carries
+   no CSS transition — one would fight the per-frame value and lag the
+   crossfade behind the actual scroll position. */
+.camera-bg__jet {
   position: absolute;
   top: 0;
   left: 0;
@@ -39,17 +44,27 @@
   transform-origin: 0 0;
   filter: var(--photo-filter);
   opacity: 0;
-  transition: opacity var(--duration-slow) var(--ease);
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
-.camera-bg__image.is-loaded {
-  opacity: 1;
+/* Runway is a plain full-bleed cover image, not transform-driven — it never
+   moves or zooms, so the simple object-fit approach is all it needs. Only
+   its opacity is scroll-driven (the crossfade in from the dark transition),
+   same "no CSS transition" reasoning as the jet above. */
+.camera-bg__runway {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  filter: var(--photo-filter);
+  opacity: 0;
+  will-change: opacity;
 }
 
 /* Constant legibility darkening, present at every scroll position/zoom
-   level — independent of the fade-to-black overlay below, which only
-   ramps up through Contact. */
+   level — independent of the fade-to-black transition overlay below. */
 .camera-bg__scrim {
   position: absolute;
   inset: 0;
@@ -57,8 +72,9 @@
   pointer-events: none;
 }
 
-/* Contact's "fade to black" — opacity driven by js/camera.js from the
-   same continuous scroll fraction as the pan/zoom, not a separate effect. */
+/* The jet-exit -> runway-reveal dark transition — opacity driven by
+   js/camera.js from the same scroll position as everything else, ramping
+   up then back down as the runway crossfades in over it. */
 .camera-bg__fade {
   position: absolute;
   inset: 0;
@@ -68,7 +84,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .camera-bg__image {
-    transition: opacity var(--duration-slow) var(--ease);
+  .camera-bg__jet,
+  .camera-bg__runway {
+    transition: none;
   }
 }

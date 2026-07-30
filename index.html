@@ -126,22 +126,20 @@
 
   <!-- ============================ CAMERA BG ============================ -->
   <!--
-    One shared jet photo behind What We Do / Why Us / Team / Contact,
-    replacing the old per-section background images. js/camera.js pans and
-    zooms it to a different framing per section as you scroll, fading it
-    to black through Contact — see css/camera-bg.css / js/camera.js for how
-    the pan/zoom math and keyframes work. Fixed + low z-index so normal
-    section content (z-index:2, css/depth.css) always paints above it;
-    hidden on Landing and past the footer, same fade approach as the
-    flight-route rail. aria-hidden: decorative, not announced.
+    Two-act scroll-driven background behind What We Do / Why Us / Team /
+    Contact: the jet (formation.jpg) flies right-to-left and shrinks across
+    What We Do into early Why Us, then exits off-screen for good; a dark
+    transition follows through the rest of Why Us; then runway.jpg
+    crossfades in and stays put through Team and Contact. See
+    css/camera-bg.css / js/camera.js for the choreography. Fixed + low
+    z-index so normal section content (z-index:2, css/depth.css) always
+    paints above it; hidden on Landing and past the footer, same fade
+    approach as the flight-route rail. aria-hidden: decorative, not
+    announced.
   -->
   <div class="camera-bg" aria-hidden="true">
-    <img
-      class="camera-bg__image"
-      src="assets/images/formation.jpg"
-      alt=""
-      onload="this.classList.add('is-loaded')"
-    />
+    <img class="camera-bg__jet" src="assets/images/formation.jpg" alt="" />
+    <img class="camera-bg__runway" src="assets/images/runway.jpg" alt="" />
     <div class="camera-bg__scrim"></div>
     <div class="camera-bg__fade"></div>
   </div>

@@ -23,15 +23,15 @@ css/
                              treatment shared by every section except Landing
   nav.css                   Top nav bar
   flight-route.css          Decorative scroll-linked route rail (left edge)
-  camera-bg.css             Shared scroll-panned jet photo behind 4 sections
+  camera-bg.css             Jet flyover + dark transition + runway background (4 sections)
   footer.css                Legal/registration footer (outside the scroll-snap flow)
   legal.css                 Chrome shared by privacy/terms/cookies.html
   sections/
     landing.css              01 — hero video/fallback, Ken Burns, tagline
-    what-we-do.css           02 — capability cards over the camera background
-    why-us.css                03 — differentiator grid over the camera background
-    team.css                   04 — 12-tile masked cutout grid, click-to-open
-    contact.css                 05 — contact block, fades to black via the camera background
+    what-we-do.css           02 — capability cards over the jet flyover
+    why-us.css                03 — differentiator grid over the jet flyover/dark transition
+    team.css                   04 — 12-tile masked cutout grid, over the runway background
+    contact.css                 05 — contact block, over the runway background
 js/
   main.js                   Entry point, wires everything up on load
   nav.js                    Hide-on-scroll-down / show-on-scroll-up nav
@@ -39,12 +39,12 @@ js/
   parallax.js               rAF-throttled scroll-parallax engine (foreground depth only now — see below)
   reveal.js                 Continuous IntersectionObserver-ratio crossfade
   flight-route.js           Scroll-linked route line, plane marker, node lighting
-  camera.js                 Scroll-linked pan/zoom camera + fade-to-black
+  camera.js                 Scroll-linked jet flyover, dark transition, runway reveal
 assets/
   lockon-logo.webp           Logo (nav only) — full wordmark lockup
   favicon/                  Favicon set, cropped from the logo mark (see its README)
   video/                    Hero background video + other stock clips (see its README)
-  images/                   Camera background photo, hero poster, unused legacy stills, cert badges
+  images/                   Camera background photos (jet + runway), hero poster, unused legacy stills, cert badges
   team/                     Team portraits (see its README)
 ```
 
@@ -83,9 +83,9 @@ Then open the printed localhost URL.
   12-tile placeholder grid (Guy's tile ×8, Jamie's ×4 — only 2 real team
   members exist, this is filler until more people/photos are confirmed).
 - **Camera background** — done. `assets/images/formation.jpg` (your F-35
-  banking shot) is now the single shared, scroll-panned background behind
-  What We Do / Why Us / Team / Contact, replacing the earlier one-photo-
-  per-section setup — see "Camera background" below and
+  banking shot) flies across What We Do into early Why Us, then
+  `assets/images/runway.jpg` takes over as the background for Team and
+  Contact after a dark transition — see "Camera background" below and
   `assets/images/README.md`.
 - **Logo** — done. `assets/lockon-logo.webp`, the real "LockOn" wordmark
   lockup, used in the nav only.
@@ -209,64 +209,72 @@ address above.
 
 ## Camera background
 
-`css/camera-bg.css` + `js/camera.js`. One shared jet photo
-(`assets/images/formation.jpg`) sits as a `position: fixed` full-bleed layer
+`css/camera-bg.css` + `js/camera.js`, a `position: fixed` full-bleed layer
 (`z-index: 1`, behind `.section__inner`'s `z-index: 2`) behind What We Do,
-Why Us, Team, and Contact, replacing what used to be four separate
-per-section background stills. As the user scrolls through that span, a
-single continuous scroll fraction drives a pan+zoom "camera" move across the
-same image — wide framing at the top of What We Do, zoomed into the nose at
-Why Us, pulled back to show more of the airframe at Team, then fading to
-black through Contact.
+Why Us, Team, and Contact. Two acts, both driven by one scroll-fraction
+calculation per `requestAnimationFrame` tick:
 
-- **Keyframes, not per-section jumps.** `KEYFRAMES` in `camera.js` is an
-  array of `{ fraction, fx, fy, zoom, black }` objects — `fx`/`fy` are the
-  focal point as a fraction of the image's natural size, `zoom` is extra
-  zoom on top of the baseline "cover" scale, `black` is the fade-to-black
-  overlay opacity. The four section keyframes' `fraction`s are computed at
-  measure time from each section's actual `offsetTop` within the scroll
-  range, and `update()` finds the surrounding keyframe pair for the current
-  scroll fraction and interpolates every field with a `smoothstep` ease —
-  so it reads as one fluid continuous move, the same interpolation pattern
-  the flight route uses for its progress path.
+1. **Jet flyover** (What We Do → 40% into Why Us) — `assets/images/
+   formation.jpg` (`.camera-bg__jet`) starts large on the right at the top
+   of What We Do, then a single scroll fraction across that specific range
+   drives a continuous `translate(Tx,Ty) scale(s)` move: it slides left and
+   shrinks until it's fully past the left edge (`jetTransformAt()` in
+   `camera.js` interpolates translateX/scale together from a "start"
+   framing to an "exit" framing with a `smoothstep` ease — same easing
+   pattern as the flight route's path progress). Past that point the
+   fraction is clamped at `1`, so the jet stays parked off-screen and its
+   opacity is explicitly set to `0` — it can't drift back into view later.
+2. **Dark transition, then runway** (40% into Why Us → 25% into Team) — with
+   the jet gone, `.camera-bg__fade` ramps to full black by the start of
+   Team (nothing else renders in between — no jet, no runway — just the
+   layer's own dark radial-gradient backdrop deepening under it), then
+   `assets/images/runway.jpg` (`.camera-bg__runway`) crossfades in as the
+   black recedes, finishing early in Team so "Team through Contact" reads
+   as runway being the settled background. Runway doesn't move or zoom —
+   it's a plain `object-fit: cover`, no transform math needed since nothing
+   animates but its opacity.
+
+Both images' transforms/opacity are recomputed every scroll tick from pixel
+ranges measured off each section's actual `offsetTop` (`measure()`), not
+hardcoded — `JET_EXIT_FRACTION` (0.4) and `RUNWAY_REVEAL_FRACTION` (0.25)
+are the two tunable knobs if you want the flyover or the reveal to take
+more/less of their section.
+
 - **Transform math is compositor-only.** Every scroll tick only ever writes
-  `transform: translate(Tx,Ty) scale(s)` (plus the separate fade layer's
-  `opacity`) — never `width`/`height`/`top`/`left`/`background-position` —
-  so there's no layout/paint cost per frame, just compositing. With
-  `transform-origin: 0 0`, scaling is applied before translating (it's
-  closer to the point in the transform-function list), so a point at
-  natural-image coordinates `(fx * naturalWidth, fy * naturalHeight)` always
-  lands exactly at the viewport's center regardless of `zoom` — verified
-  both algebraically and by screenshotting all four keyframes plus mobile
-  and ultrawide viewports for edge exposure.
-- **Two bugs worth knowing about if you touch this file.** (1) The global
-  `img { max-width: 100% }` reset in `css/base.css` silently capped
-  `.camera-bg__image`'s rendered box below its true natural size, which
-  broke the translate/scale math (it assumes the untransformed box is
-  exactly `naturalWidth x naturalHeight`) — fixed with `max-width: none;
-  width: auto; height: auto;` in `camera-bg.css`. (2) `rangeEnd =
-  footer.offsetTop` is only reachable if the page can actually scroll that
-  far; if the footer is shorter than one viewport (typical), max scrollY
-  tops out below it and the scroll fraction could never hit `1`, so the
-  fade-to-black would never fully complete. Fixed by capping with
-  `Math.min(footer.offsetTop, document.documentElement.scrollHeight -
-  window.innerHeight)` — the same fix was needed in `flight-route.js` for
-  the identical reason (see below).
-- **Reduced motion** — no camera movement: `camera.js` applies the Team
-  keyframe's framing once as a static crop (a representative, well-composed
-  shot without Why Us's dramatic close-up zoom) and never calls
-  `applyFraming()` again. The black fade-through-Contact still animates,
-  since it's a simple opacity ramp tied to scroll position rather than
-  continuous camera motion — same reasoning as the flight route's node
-  lighting staying live under reduced motion.
+  `transform`/`opacity` — never `width`/`height`/`top`/`left`/
+  `background-position` — so there's no layout/paint cost per frame, just
+  compositing. The jet uses `transform-origin: 0 0` with pixel-based
+  `translate`/`scale` (not the min-width/height:100% cover trick, which
+  fights this kind of arbitrary continuously-changing framing), verified
+  both algebraically and by screenshotting the flyover at 1440px, 390px,
+  and 1920px-wide viewports to confirm no edge exposure and a fully
+  off-screen exit at every width. Deliberately no CSS `transition` on
+  either image's opacity — JS sets a new value every frame, and a
+  transition would fight that, lagging the crossfade behind the actual
+  scroll position instead of tracking it exactly.
+- **A bug worth knowing about if you touch this file.** The global `img {
+  max-width: 100% }` reset in `css/base.css` silently caps an `<img>`'s
+  rendered box below its true natural size unless overridden — the jet's
+  transform math assumes its untransformed box is exactly `naturalWidth x
+  naturalHeight`, so `.camera-bg__jet` overrides with `max-width: none;
+  width: auto; height: auto;` in `camera-bg.css` (the runway image doesn't
+  need this override since it's sized via `width/height: 100%` +
+  `object-fit: cover`, not natural-size transform math).
+- **Reduced motion** — no camera movement: `camera.js` applies the jet's
+  start framing once as a static crop and never updates its transform
+  again, only toggling its opacity off once scroll passes the (still
+  measured) exit point. The dark-transition/runway crossfade still
+  animates, since it's a simple opacity ramp tied to scroll position rather
+  than continuous camera motion — same reasoning as the flight route's
+  node lighting staying live under reduced motion.
 - **Legibility** — `.camera-bg__scrim` is a constant dark gradient overlay
-  present at every scroll position and zoom level (`--scrim-strong`,
-  `variables.css`), independent of the fade-to-black layer. The image itself
-  runs through the same `--photo-filter` (grayscale/contrast/darken) as
-  every other photo on the site.
-- `cockpit.jpg` and `runway.jpg` (the two previous per-section stills this
-  replaced) are still in `assets/images/` but unreferenced by any CSS/HTML
-  now — see `assets/images/README.md`.
+  present at every scroll position (`--scrim-strong`, `variables.css`),
+  independent of the dark-transition layer. Both images run through the
+  same `--photo-filter` (grayscale/contrast/darken) as every other photo on
+  the site.
+- `cockpit.jpg` (an earlier per-section still this replaced) is still in
+  `assets/images/` but unreferenced by any CSS/HTML — see
+  `assets/images/README.md`.
 
 ## Flight route
 

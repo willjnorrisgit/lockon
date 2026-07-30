@@ -1,48 +1,62 @@
 /**
- * Camera background: one shared jet photo (assets/images/formation.jpg)
- * behind What We Do / Why Us / Team / Contact. A single continuous scroll
- * fraction across that whole range drives a pan+zoom interpolated between
- * per-section keyframes, so the "camera" reads as one fluid move rather
- * than snapping section to section — then fades to black through Contact.
+ * Camera background, two acts:
  *
- * The transform math (`translate(Tx,Ty) scale(s)` with transform-origin at
- * the image's top-left) is chosen so it's directly verifiable: scaling
- * happens first (closest to the point in the transform list), so a point
- * at natural-image coordinates (fx*naturalW, fy*naturalH) always lands
- * exactly at (containerW/2, containerH/2), for any scale — see `update()`.
- * Both functions are compositor-only (no layout/paint per frame).
+ * 1) Jet flyover — spans "What We Do" (start) through part-way into
+ *    "Why Us" (JET_EXIT_FRACTION of the way through it). A single scroll
+ *    fraction across that specific range drives one continuous move:
+ *    assets/images/formation.jpg starts large on the right, translates
+ *    left while shrinking, and by the exit point has moved fully past the
+ *    left edge. It's parked off-screen (clamped, not reset) for the rest
+ *    of the page, so it never reappears.
+ * 2) Dark transition + runway reveal — from the jet's exit point through
+ *    early "Team", the screen ramps to full black (no jet, no runway:
+ *    just the layer's own dark backdrop deepening), then assets/images/
+ *    runway.jpg crossfades in as the black recedes. Runway then stays put,
+ *    unanimated, through Team and Contact.
+ *
+ * Both acts are driven by one rAF-throttled scroll handler and only ever
+ * write `transform`/`opacity` per frame (compositor-only, no layout/paint).
  */
 export function initCamera() {
   const root = document.querySelector(".camera-bg");
   if (!root) return;
 
-  const img = root.querySelector(".camera-bg__image");
+  const jet = root.querySelector(".camera-bg__jet");
+  const runway = root.querySelector(".camera-bg__runway");
   const fadeEl = root.querySelector(".camera-bg__fade");
 
-  const sectionIds = ["what-we-do", "why-us", "team", "contact"];
-  const sections = sectionIds.map((id) => document.getElementById(id));
+  const whatWeDo = document.getElementById("what-we-do");
+  const whyUs = document.getElementById("why-us");
+  const team = document.getElementById("team");
+  const contact = document.getElementById("contact");
   const footer = document.querySelector(".site-footer");
-  if (sections.some((el) => !el) || !footer || !img || !fadeEl) return;
+  if (!whatWeDo || !whyUs || !team || !contact || !footer || !jet || !runway || !fadeEl) return;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Framing per keyframe: fx/fy = focal point as a fraction of the natural
-  // image; zoom = extra zoom on top of the baseline "cover" scale (always
-  // >=1 with enough headroom that panning to an off-centre focal point
-  // never exposes an edge — verified visually, not just by formula, since
-  // the safe minimum depends on viewport aspect ratio too).
-  const KEYFRAMES = [
-    { fraction: 0, fx: 0.5, fy: 0.56, zoom: 1.1, black: 0 }, // top of What We Do: wide
-    { fraction: null, fx: 0.27, fy: 0.58, zoom: 2.4, black: 0 }, // Why Us: nose
-    { fraction: null, fx: 0.62, fy: 0.56, zoom: 1.3, black: 0 }, // Team: pulled back, different framing
-    { fraction: null, fx: 0.5, fy: 0.5, zoom: 1.55, black: 0 }, // Contact start: begin fade
-    { fraction: 1, fx: 0.5, fy: 0.45, zoom: 1.7, black: 1 }, // footer: fully black
-  ];
+  // How far into "Why Us" the jet has fully exited left (0-1 of that
+  // section's own height) — leaves the remainder of Why Us as dark
+  // transition, per the requested choreography.
+  const JET_EXIT_FRACTION = 0.4;
+  // How far into "Team" the runway reveal completes (0-1 of Team's own
+  // height) — the crossfade finishes early so "Team through Contact"
+  // reads as runway being the settled background.
+  const RUNWAY_REVEAL_FRACTION = 0.25;
 
-  let rangeStart = 0;
-  let rangeEnd = 1;
-  let naturalW = 1920;
-  let naturalH = 1280;
+  const JET_FY = 0.58; // jet's vertical center in formation.jpg (natural-image fraction)
+  const JET_FX_START = 0.6; // focal point (within the jet) framed at the right at t=0
+  const JET_ZOOM_START = 1.7; // large
+  const JET_ZOOM_END = 0.75; // shrunk, on its way out
+
+  let rangeStart = 0; // overall layer fade-in point (top of What We Do)
+  let rangeEnd = 1; // overall layer fade-out point (capped at reachable max scroll)
+  let jetRangeStart = 0;
+  let jetRangeEnd = 1;
+  let darkRangeStart = 0;
+  let darkRangeEnd = 1;
+  let runwayRangeEnd = 1;
+  let jetNaturalW = 1920;
+  let jetNaturalH = 1280;
 
   function clamp01(v) {
     return Math.max(0, Math.min(1, v));
@@ -53,74 +67,84 @@ export function initCamera() {
   }
 
   function measure() {
-    rangeStart = sections[0].offsetTop;
-    // footer.offsetTop is the semantic target ("end at the footer"), but
-    // if the footer is shorter than one viewport the page can never
-    // actually be scrolled that far (max scrollY tops out below it) — so
-    // cap at whatever's really reachable, or fraction would never hit 1
-    // and the fade-to-black/final framing would never fully complete.
+    rangeStart = whatWeDo.offsetTop;
     const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
     rangeEnd = Math.min(footer.offsetTop, maxScrollY);
-    if (img.naturalWidth) {
-      naturalW = img.naturalWidth;
-      naturalH = img.naturalHeight;
+
+    jetRangeStart = whatWeDo.offsetTop;
+    jetRangeEnd = whyUs.offsetTop + (team.offsetTop - whyUs.offsetTop) * JET_EXIT_FRACTION;
+
+    darkRangeStart = jetRangeEnd;
+    darkRangeEnd = team.offsetTop;
+
+    runwayRangeEnd = team.offsetTop + (contact.offsetTop - team.offsetTop) * RUNWAY_REVEAL_FRACTION;
+
+    if (jet.naturalWidth) {
+      jetNaturalW = jet.naturalWidth;
+      jetNaturalH = jet.naturalHeight;
     }
-    const span = Math.max(1, rangeEnd - rangeStart);
-    KEYFRAMES[1].fraction = clamp01((sections[1].offsetTop - rangeStart) / span); // why-us
-    KEYFRAMES[2].fraction = clamp01((sections[2].offsetTop - rangeStart) / span); // team
-    KEYFRAMES[3].fraction = clamp01((sections[3].offsetTop - rangeStart) / span); // contact
   }
 
-  function interpolate(fraction) {
-    let a = KEYFRAMES[0];
-    let b = KEYFRAMES[KEYFRAMES.length - 1];
-    for (let i = 0; i < KEYFRAMES.length - 1; i++) {
-      if (fraction >= KEYFRAMES[i].fraction && fraction <= KEYFRAMES[i + 1].fraction) {
-        a = KEYFRAMES[i];
-        b = KEYFRAMES[i + 1];
-        break;
-      }
-    }
-    const span = b.fraction - a.fraction;
-    const t = span > 0 ? smoothstep(clamp01((fraction - a.fraction) / span)) : 0;
-    return {
-      fx: a.fx + (b.fx - a.fx) * t,
-      fy: a.fy + (b.fy - a.fy) * t,
-      zoom: a.zoom + (b.zoom - a.zoom) * t,
-      black: a.black + (b.black - a.black) * t,
-    };
-  }
-
-  function applyFraming(fx, fy, zoom) {
+  /** translateX/scale for the jet at eased flyover fraction t (0 = start
+   * framing on the right, 1 = fully exited past the left edge). */
+  function jetTransformAt(t) {
     const containerW = window.innerWidth;
     const containerH = window.innerHeight;
-    const coverScale = Math.max(containerW / naturalW, containerH / naturalH);
-    const totalScale = coverScale * zoom;
-    const translateX = containerW / 2 - fx * naturalW * totalScale;
-    const translateY = containerH / 2 - fy * naturalH * totalScale;
-    img.style.transform = `translate(${translateX.toFixed(1)}px, ${translateY.toFixed(1)}px) scale(${totalScale.toFixed(4)})`;
+    const coverScale = Math.max(containerW / jetNaturalW, containerH / jetNaturalH);
+
+    const scaleStart = coverScale * JET_ZOOM_START;
+    const scaleEnd = coverScale * JET_ZOOM_END;
+    const scale = scaleStart + (scaleEnd - scaleStart) * t;
+
+    const txStart = containerW * 0.72 - JET_FX_START * jetNaturalW * scaleStart;
+    const txEnd = -(jetNaturalW * scaleEnd) - 60; // fully past the left edge, plus margin
+    const translateX = txStart + (txEnd - txStart) * t;
+    const translateY = containerH / 2 - JET_FY * jetNaturalH * scale;
+
+    return { translateX, translateY, scale };
+  }
+
+  function applyJetStatic() {
+    const { translateX, translateY, scale } = jetTransformAt(0);
+    jet.style.transform = `translate(${translateX.toFixed(1)}px, ${translateY.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+    jet.style.opacity = "1";
   }
 
   function update() {
     const y = window.scrollY;
-    const span = rangeEnd - rangeStart;
-    const fraction = clamp01((y - rangeStart) / span);
 
+    // Overall layer visibility — faded in/out at the very top/bottom of
+    // its whole active span so it's invisible over Landing and the footer.
     const fadeZone = 140;
-    let opacity = 1;
-    if (y < rangeStart) opacity = clamp01(1 - (rangeStart - y) / fadeZone);
-    else if (y > rangeEnd) opacity = clamp01(1 - (y - rangeEnd) / fadeZone);
-    root.style.opacity = opacity.toFixed(3);
+    let layerOpacity = 1;
+    if (y < rangeStart) layerOpacity = clamp01(1 - (rangeStart - y) / fadeZone);
+    else if (y > rangeEnd) layerOpacity = clamp01(1 - (y - rangeEnd) / fadeZone);
+    root.style.opacity = layerOpacity.toFixed(3);
 
-    const state = interpolate(fraction);
-    // The black fade-through-Contact is a simple opacity ramp, not camera
-    // movement, so it keeps animating under reduced motion (same reasoning
-    // as the flight-route nodes staying live there: a discrete/simple
-    // state change isn't what prefers-reduced-motion is asking to disable).
-    fadeEl.style.opacity = state.black.toFixed(3);
+    // Act 1: jet flyover.
+    const jetSpan = Math.max(1, jetRangeEnd - jetRangeStart);
+    const jetFraction = clamp01((y - jetRangeStart) / jetSpan);
+    if (!reducedMotion) {
+      const t = smoothstep(jetFraction);
+      const { translateX, translateY, scale } = jetTransformAt(t);
+      jet.style.transform = `translate(${translateX.toFixed(1)}px, ${translateY.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+    }
+    // Once fully exited, hidden for good — jetFraction is clamped at 1 so
+    // it stays parked off-screen and this stays 0 for the rest of scroll.
+    jet.style.opacity = jetFraction >= 1 ? "0" : "1";
 
-    if (reducedMotion) return;
-    applyFraming(state.fx, state.fy, state.zoom);
+    // Act 2: dark transition, then runway reveal.
+    const darkSpan = Math.max(1, darkRangeEnd - darkRangeStart);
+    const darkFraction = clamp01((y - darkRangeStart) / darkSpan);
+
+    const runwaySpan = Math.max(1, runwayRangeEnd - darkRangeEnd);
+    const runwayFraction = clamp01((y - darkRangeEnd) / runwaySpan);
+
+    // Black ramps up through the dark range, then back down as the
+    // runway crossfades in over it.
+    const blackOpacity = darkFraction * (1 - runwayFraction);
+    fadeEl.style.opacity = blackOpacity.toFixed(3);
+    runway.style.opacity = runwayFraction.toFixed(3);
   }
 
   let ticking = false;
@@ -135,24 +159,19 @@ export function initCamera() {
   }
 
   measure();
-  if (reducedMotion) {
-    // Static, well-framed crop — the "Team" keyframe reads as a clear,
-    // representative shot of the aircraft without the Why Us close-up's
-    // more dramatic zoom.
-    applyFraming(KEYFRAMES[2].fx, KEYFRAMES[2].fy, KEYFRAMES[2].zoom);
-  }
+  if (reducedMotion) applyJetStatic();
   update();
 
-  img.addEventListener("load", () => {
+  jet.addEventListener("load", () => {
     measure();
-    if (reducedMotion) applyFraming(KEYFRAMES[2].fx, KEYFRAMES[2].fy, KEYFRAMES[2].zoom);
+    if (reducedMotion) applyJetStatic();
     update();
   });
 
   window.addEventListener("scroll", onScrollOrResize, { passive: true });
   window.addEventListener("resize", () => {
     measure();
-    if (reducedMotion) applyFraming(KEYFRAMES[2].fx, KEYFRAMES[2].fy, KEYFRAMES[2].zoom);
+    if (reducedMotion) applyJetStatic();
     update();
   });
 }
