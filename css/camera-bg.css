@@ -15,7 +15,17 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(ellipse at 50% 40%, #242424 0%, #111111 55%, #0a0a0a 100%);
+  /* Matches formation.jpg's own sky tone *after* --photo-filter is applied
+     (sampled directly in-browser: drew the filtered jet image to a canvas
+     with the same CSS filter and read pixels from several sky-only points
+     — corners/edges away from the airframe — averaging to ~#9ba1ac). Used
+     to be a dark gradient, which made the jet's edges (wherever it hasn't
+     yet slid into, or has already slid out of, a given point on screen)
+     read as an obvious rectangle sliding over a black backdrop rather than
+     the jet itself being the only thing that moves. js/camera.js's fade/
+     vignette layers still darken this toward black as the jet exits, same
+     as before — this only changes the *undarkened* base tone. */
+  background: #9ba1ac;
 }
 
 /* The vapor-trail layer — a second copy of the same jet photo, positioned
