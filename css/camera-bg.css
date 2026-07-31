@@ -15,7 +15,13 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(ellipse at 50% 40%, #242424 0%, #111111 55%, #0a0a0a 100%);
+  /* Flat colour matching formation.jpg's own (filtered) sky, not a dark
+     gradient — the plain space either side of the jet while it's mid-flight
+     (before .camera-bg__fade below ramps to black on exit) should read as
+     more of the same sky, not a black frame the photo is visibly sliding
+     across. See --jet-sky-grey in variables.css for how the exact value was
+     derived. */
+  background: var(--jet-sky-grey);
 }
 
 /* The vapor-trail layer — a second copy of the same jet photo, positioned
