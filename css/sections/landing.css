@@ -106,7 +106,7 @@
 
 .landing__title {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-hero);
   line-height: 1.02;
   letter-spacing: var(--ls-heading);

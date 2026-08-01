@@ -20,7 +20,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
-  font-weight: 400;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -74,7 +74,7 @@ ul {
 
 .section__heading {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-h2);
   line-height: 1.05;
   letter-spacing: var(--ls-heading);

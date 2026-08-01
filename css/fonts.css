@@ -1,0 +1,24 @@
+/* ==========================================================================
+   Self-hosted variable fonts — Inter (body) + Space Grotesk (headings,
+   nav, labels). Self-hosted rather than loaded from Google Fonts: one
+   same-origin request per family, no third-party CDN dependency. Both
+   files are true variable fonts (a single `wght`-axis file covers every
+   weight the site uses via the font-weight range below), so this is two
+   requests total rather than one per weight.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../assets/fonts/space-grotesk-variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}

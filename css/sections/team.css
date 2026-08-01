@@ -69,7 +69,7 @@
 
 .team-card__initials {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.5rem;
   letter-spacing: 0.02em;
   color: var(--color-text-secondary);
@@ -177,7 +177,7 @@
 
 .team-card__name {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: var(--ls-heading);
   text-transform: uppercase;

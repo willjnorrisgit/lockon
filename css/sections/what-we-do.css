@@ -27,7 +27,7 @@
 
 .capability__title {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-h3);
   letter-spacing: var(--ls-heading);
   text-transform: uppercase;

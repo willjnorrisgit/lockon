@@ -44,9 +44,13 @@
     rgba(10, 10, 10, 0.75) 100%
   );
 
-  /* Type */
-  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  /* Type — Space Grotesk for headings/labels (geometric grotesk, closer to
+     SpaceX's own display type than Inter's more humanist forms) paired with
+     Inter for body copy, which stays the more legible of the two at the
+     light weights long-form text needs. Both self-hosted as variable fonts
+     — see css/fonts.css. */
+  --font-heading: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
 
@@ -58,7 +62,10 @@
   --fs-small: 0.8125rem;
   --fs-label: 0.8125rem;
 
-  --ls-heading: 0.04em;
+  /* Widened from 0.04em — SpaceX's own headings/nav read noticeably more
+     spaced-out than a typical tight-tracked heading. --ls-label (nav
+     links, eyebrow labels) was already generous and is unchanged. */
+  --ls-heading: 0.06em;
   --ls-label: 0.28em;
 
   --lh-body: 1.6;

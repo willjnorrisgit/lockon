@@ -16,7 +16,7 @@
 
 .differentiator__title {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
