@@ -56,7 +56,7 @@
 
 /* Abstract fallback backdrop shown while the video loads (or if it's
    missing) — a slow, subtle radial pulse plus a fine targeting grid, a
-   quiet nod to the "Lock On" mark without introducing any colour. */
+   quiet nod to the "LockOn" mark without introducing any colour. */
 .landing__fallback {
   position: absolute;
   inset: 0;

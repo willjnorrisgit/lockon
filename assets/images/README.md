@@ -7,6 +7,14 @@ former. This folder is background stills + the hero poster frame.
 - `hero-poster.jpg` — done. Grabbed from the hero video source at ~0.7s in,
   shown via the `<video poster>` attribute while the clip buffers. Regenerate
   it (see `assets/video/README.md`) if the hero video is ever replaced.
+- `placeholder-man.png` — a generic silhouette avatar, used by the Team
+  grid's 10 placeholder tiles (`#team` in `index.html`) standing in for
+  team members not yet confirmed. Runs through the same masked-cutout +
+  `--photo-filter` treatment as the real team photos.
+- `afc_logo_grey.webp`, `CE+Plus.webp`, `Joscar-Regsistered-Resized.webp` —
+  certification/membership badges (Armed Forces Covenant, Cyber Essentials
+  Plus, JOSCAR Registered) shown in the footer's `.site-footer__badges`
+  (see `css/footer.css`).
 
 ## Camera background (What We Do / Why Us / Team / Contact)
 

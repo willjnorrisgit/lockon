@@ -1,6 +1,6 @@
-# Lock On — Website Rebuild
+# LockOn — Website Rebuild
 
-Static, single-page, scroll-driven site for Lock On (aerospace &amp; defence
+Static, single-page, scroll-driven site for LockOn (aerospace &amp; defence
 consultancy). Plain HTML/CSS/JS — no framework, no build step, no backend.
 
 Visual direction is cinematic/layered: real photography and footage with
@@ -72,16 +72,18 @@ Then open the printed localhost URL.
 
 ## Asset status
 
-- **Hero video** — done. `assets/video/hero.mp4` / `.webm` are your
-  landscape (1920×1080, 12.9s) export, compressed from 11.1MB down to
-  ~5.2MB/3.4MB (see `assets/video/README.md`). The poster frame
-  (`assets/images/hero-poster.jpg`) was regenerated from this same clip.
-  Landing shows only the nav logo now — the larger logo lockup that used to
-  sit above the headline was removed.
+- **Hero video** — done. `assets/video/hero.mp4` / `.webm` are the
+  cockpit/sunset flying footage (1920×1080, 13.6s), compressed from a
+  29.4MB source down to ~5.8MB/3.6MB (see `assets/video/README.md`). The
+  poster frame (`assets/images/hero-poster.jpg`) was regenerated from this
+  same clip. Landing shows only the nav logo now — the larger logo lockup
+  that used to sit above the headline was removed.
 - **Team photos** — done. `assets/team/guy-lockwood.jpg` and
-  `jamie-norris.jpg` render through the masked-cutout treatment across a
-  12-tile placeholder grid (Guy's tile ×8, Jamie's ×4 — only 2 real team
-  members exist, this is filler until more people/photos are confirmed).
+  `jamie-norris.jpg` render through the masked-cutout treatment for tiles 1
+  and 2. Tiles 3-12 use `assets/images/placeholder-man.png` with fluff
+  name/title/bio, clearly marked as placeholder in `index.html` — only 2
+  real team members are confirmed right now, this is filler until more
+  people/photos are.
 - **Camera background** — done. `assets/images/formation.jpg` (your F-35
   banking shot) flies across What We Do into early Why Us, then
   `assets/images/runway.jpg` takes over as the background for Team and
@@ -95,10 +97,11 @@ Then open the printed localhost URL.
   backing (a transparent version would disappear on a light-themed browser
   tab bar) — see `assets/favicon/README.md` for the exact crop/regenerate
   steps.
-- **Certification badges** — not placed. Mentioned as coming "from the old
-  website," but that site 403s automated fetches and the badges weren't
-  shared as attached files (same limitation as the rest of this list) — see
-  `assets/images/badges/README.md`.
+- **Certification badges** — done. `assets/images/afc_logo_grey.webp`
+  (Armed Forces Covenant), `CE+Plus.webp` (Cyber Essentials Plus), and
+  `Joscar-Regsistered-Resized.webp` (JOSCAR Registered) sit in the footer's
+  `.site-footer__badges`, desaturated through the same `--photo-filter` as
+  every other photo on the site.
 
 Every real-asset reference in this build follows the same rule: if a file
 isn't there, something sensible (a themed gradient, the reticle mark, or the

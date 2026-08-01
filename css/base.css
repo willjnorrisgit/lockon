@@ -91,6 +91,32 @@ ul {
   margin: 0 0 56px;
 }
 
+/* Multi-paragraph section intro — same treatment as .section__intro (body
+   copy over photography needs the same size/colour/weight either way), just
+   wider and with paragraph-to-paragraph spacing instead of being a single
+   <p>. `strong` inside is the one emphasis mechanism sanctioned by the
+   monochrome palette: brighter text, not colour (see --color-text below). */
+.section__lead {
+  max-width: 780px;
+  font-size: var(--fs-body);
+  color: var(--color-text-secondary);
+  font-weight: 300;
+  margin: 0 0 56px;
+}
+
+.section__lead p {
+  margin: 0 0 1em;
+}
+
+.section__lead p:last-child {
+  margin-bottom: 0;
+}
+
+.section__lead strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

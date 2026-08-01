@@ -24,7 +24,8 @@
 /* Photography behind text needs a legibility guarantee the scrim alone
    doesn't always provide at every scroll offset. */
 .section--depth .section__heading,
-.section--depth .section__intro {
+.section--depth .section__intro,
+.section--depth .section__lead {
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.65);
 }
 

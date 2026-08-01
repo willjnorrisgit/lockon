@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lock On — Aerospace &amp; Defence Consultancy</title>
+  <title>LockOn — Aerospace &amp; Defence Consultancy</title>
   <meta
     name="description"
-    content="Lock On is an aerospace and defence consultancy providing proactive, tailored expertise drawn from top-tier tactical, test and fast-jet operational experience."
+    content="LockOn is an aerospace and defence consultancy providing proactive, tailored expertise drawn from top-tier tactical, test and fast-jet operational experience."
   />
 
   <!-- Favicon set generated from the real logo mark (the target-rings +
@@ -44,7 +44,7 @@
   <!-- Shared icon sprite: reticle mark, used as the logo fallback until
        assets/lockon-logo.webp loads (see .is-loaded swap in nav.css /
        sections/landing.css). The real logo is a full "LockOn" wordmark
-       lockup, so once it loads the "Lock On" text span is hidden too —
+       lockup, so once it loads the "LockOn" text span is hidden too —
        otherwise it'd be redundant. -->
   <svg width="0" height="0" style="position: absolute" aria-hidden="true">
     <symbol id="icon-reticle" viewBox="0 0 40 40" fill="none">
@@ -61,15 +61,15 @@
 
   <!-- ============================== NAV ============================== -->
   <header class="nav" id="site-nav">
-    <a href="#landing" class="nav__logo" aria-label="Lock On — back to top">
+    <a href="#landing" class="nav__logo" aria-label="LockOn — back to top">
       <img
         class="nav__logo-img"
         src="assets/lockon-logo.webp"
-        alt="Lock On"
+        alt="LockOn"
         onload="this.classList.add('is-loaded')"
       />
       <svg aria-hidden="true"><use href="#icon-reticle" /></svg>
-      <span>Lock On</span>
+      <span>LockOn</span>
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#what-we-do">What We Do</a>
@@ -196,10 +196,22 @@
     <section class="section section--depth" id="what-we-do">
       <div class="section__inner reveal">
         <h2 class="section__heading">What We Do</h2>
-        <p class="section__intro">
-          Proactive, tailored expertise, always focused on your requirements — with a
-          premium placed on information security in every engagement.
-        </p>
+        <div class="section__lead">
+          <p>
+            Founded in 2018, we provide <strong>consultancy services</strong> for the
+            <strong>aerospace industry</strong>, with a specialisation in the defence
+            sector. Our team of consultants have flown
+            <strong>4th and 5th generation combat air platforms</strong>; each with
+            impressive backgrounds in strategy, capability development and
+            operational delivery.
+          </p>
+          <p>
+            All of our consultants have <strong>combat experience</strong> and
+            <strong>fast-jet instructional expertise</strong>. We currently work with
+            UK, US, European and Middle Eastern clients utilising a network of
+            specialists to provide <strong>tailored expertise and advice</strong>.
+          </p>
+        </div>
 
         <div class="capabilities">
           <article class="capability">
@@ -238,7 +250,22 @@
     <section class="section section--depth" id="why-us">
       <div class="section__inner reveal">
         <h2 class="section__heading">Why Us</h2>
-        <p class="section__intro">Four things that set Lock On apart.</p>
+        <div class="section__lead">
+          <p>
+            Our team can enhance the output and performance of your organisation
+            through timely, insightful and contemporary advice. We offer proactive
+            and tailored expertise to clients, focussed on their requirements,
+            always placing a premium on information security.
+          </p>
+          <p>
+            Our services span a broad remit of the aerospace sector to include the
+            development of operating procedures, provision of specialist aerospace
+            advice, creation of training and tactical syllabi and validation of
+            best practice. We also work across the entire procurement chain with
+            aerospace companies, third parties and end-users to develop and
+            represent capabilities to ensure programmatic success.
+          </p>
+        </div>
 
         <div class="differentiators" data-parallax-speed="1.08">
           <div class="differentiator">
@@ -278,16 +305,35 @@
     <section class="section section--depth" id="team">
       <div class="section__inner reveal">
         <h2 class="section__heading">Meet the Team</h2>
-        <p class="section__intro">
-          Our people are drawn from top-tier tactical, test and pilot instructors on
-          modern combat air platforms.
-        </p>
+        <div class="section__lead">
+          <p>
+            Since operations began in 2018, the LockOn team has grown from strength
+            to strength. We are a committed and passionate team, who have
+            continually delivered success on a diverse portfolio of projects.
+          </p>
+          <p>
+            We only recruit the very best. Our employees and associates are all
+            drawn from the top tier of tactical, test and instructor pilots from
+            cutting-edge 4th and 5th generation combat air platforms across the
+            world.
+          </p>
+          <p>
+            Together with their considerable experience in strategy, capability
+            development and operational planning, they possess unique skill sets
+            that have proved highly valuable to our clients. If you are looking for
+            a battle-proven team to make a positive difference to your
+            organisation, please get in touch.
+          </p>
+        </div>
 
         <!--
-          12-tile placeholder grid: Guy Lockwood's tile x8, Jamie Norris's x4
-          (real names/photos; only 2 actual team members exist right now).
-          Roles/bios are reasonable copy pending confirmed per-person detail
-          — see README.md "Copy status" for what's independently verified vs.
+          12-tile grid: tiles 1-2 are the two confirmed real team members
+          (Guy Lockwood, Jamie Norris — real names/photos). Tiles 3-12 are
+          PLACEHOLDERS — assets/images/placeholder-man.png with fluff
+          name/title/bio, standing in for team members not yet confirmed.
+          Swap each placeholder's photo/name/role/bio for the real person as
+          they're confirmed; nothing else about the tile needs to change.
+          See README.md "Copy status" for what's independently verified vs.
           filler. Two-stage interaction: hover reveals a brief name/role
           summary (.team-card__summary, mouse only — see css/sections/team.css
           for why touch skips straight to stage 2), click/tap/keyboard opens
@@ -317,224 +363,7 @@
               <p class="team-card__role">Co-Founder</p>
               <h3 class="team-card__name">Guy Lockwood</h3>
               <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
-                pilot, with a background in operational planning and delivery.
-              </p>
-              <p class="team-card__detail">
-                Focuses on operational planning, mission rehearsal and capability
-                integration across fast-jet and multi-role platforms.
-              </p>
-            </div>
-          </div>
-          <div class="team-card">
-            <div class="team-card__cutout">
-              <img
-                class="team-card__photo-img"
-                src="assets/team/guy-lockwood.jpg"
-                alt="Guy Lockwood"
-                onload="this.classList.add('is-loaded')"
-              />
-              <div class="team-card__photo-fallback">
-                <span class="team-card__initials">GL</span>
-              </div>
-            </div>
-            <span class="team-card__expand" aria-hidden="true">+</span>
-            <div class="team-card__ground-shadow" aria-hidden="true"></div>
-            <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-            </div>
-            <div class="team-card__overlay">
-              <p class="team-card__role">Co-Founder</p>
-              <h3 class="team-card__name">Guy Lockwood</h3>
-              <p class="team-card__bio">
-                Co-founder of Lock On; combat experience as a fast-jet instructor
+                Co-founder of LockOn; combat experience as a fast-jet instructor
                 pilot, with a background in operational planning and delivery.
               </p>
               <p class="team-card__detail">
@@ -569,8 +398,39 @@
                 development and operational delivery.
               </p>
               <p class="team-card__detail">
-                Focuses on client strategy and the day-to-day running of Lock
-                On's engagements.
+                Focuses on client strategy and the day-to-day running of
+                LockOn's engagements.
+              </p>
+            </div>
+          </div>
+          <!-- PLACEHOLDER — tiles 3-12: fluff names/titles/bios pending real team members -->
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">AC</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Senior Consultant</p>
+              <h3 class="team-card__name">Alex Carter</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Senior Consultant</p>
+              <h3 class="team-card__name">Alex Carter</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
               </p>
             </div>
           </div>
@@ -578,30 +438,29 @@
             <div class="team-card__cutout">
               <img
                 class="team-card__photo-img"
-                src="assets/team/jamie-norris.jpg"
-                alt="Jamie Norris"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
                 onload="this.classList.add('is-loaded')"
               />
               <div class="team-card__photo-fallback">
-                <span class="team-card__initials">JN</span>
+                <span class="team-card__initials">SW</span>
               </div>
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Capability Advisor</p>
+              <h3 class="team-card__name">Sam Whitfield</h3>
             </div>
             <div class="team-card__overlay">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Capability Advisor</p>
+              <h3 class="team-card__name">Sam Whitfield</h3>
               <p class="team-card__bio">
-                Fast-jet instructor pilot with a background in capability
-                development and operational delivery.
+                Placeholder profile — background and experience to be confirmed.
               </p>
               <p class="team-card__detail">
-                Focuses on client strategy and the day-to-day running of Lock
-                On's engagements.
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
               </p>
             </div>
           </div>
@@ -609,30 +468,29 @@
             <div class="team-card__cutout">
               <img
                 class="team-card__photo-img"
-                src="assets/team/jamie-norris.jpg"
-                alt="Jamie Norris"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
                 onload="this.classList.add('is-loaded')"
               />
               <div class="team-card__photo-fallback">
-                <span class="team-card__initials">JN</span>
+                <span class="team-card__initials">CB</span>
               </div>
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Tactical Advisor</p>
+              <h3 class="team-card__name">Chris Bennett</h3>
             </div>
             <div class="team-card__overlay">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Tactical Advisor</p>
+              <h3 class="team-card__name">Chris Bennett</h3>
               <p class="team-card__bio">
-                Fast-jet instructor pilot with a background in capability
-                development and operational delivery.
+                Placeholder profile — background and experience to be confirmed.
               </p>
               <p class="team-card__detail">
-                Focuses on client strategy and the day-to-day running of Lock
-                On's engagements.
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
               </p>
             </div>
           </div>
@@ -640,30 +498,209 @@
             <div class="team-card__cutout">
               <img
                 class="team-card__photo-img"
-                src="assets/team/jamie-norris.jpg"
-                alt="Jamie Norris"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
                 onload="this.classList.add('is-loaded')"
               />
               <div class="team-card__photo-fallback">
-                <span class="team-card__initials">JN</span>
+                <span class="team-card__initials">JH</span>
               </div>
             </div>
             <span class="team-card__expand" aria-hidden="true">+</span>
             <div class="team-card__ground-shadow" aria-hidden="true"></div>
             <div class="team-card__summary" aria-hidden="true">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Programme Lead</p>
+              <h3 class="team-card__name">Jordan Hale</h3>
             </div>
             <div class="team-card__overlay">
-              <p class="team-card__role">Managing Director</p>
-              <h3 class="team-card__name">Jamie Norris</h3>
+              <p class="team-card__role">Programme Lead</p>
+              <h3 class="team-card__name">Jordan Hale</h3>
               <p class="team-card__bio">
-                Fast-jet instructor pilot with a background in capability
-                development and operational delivery.
+                Placeholder profile — background and experience to be confirmed.
               </p>
               <p class="team-card__detail">
-                Focuses on client strategy and the day-to-day running of Lock
-                On's engagements.
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">MR</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Test &amp; Evaluation Consultant</p>
+              <h3 class="team-card__name">Morgan Reid</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Test &amp; Evaluation Consultant</p>
+              <h3 class="team-card__name">Morgan Reid</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">TB</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Strategy Advisor</p>
+              <h3 class="team-card__name">Taylor Brooks</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Strategy Advisor</p>
+              <h3 class="team-card__name">Taylor Brooks</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">CS</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Operations Consultant</p>
+              <h3 class="team-card__name">Casey Sinclair</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Operations Consultant</p>
+              <h3 class="team-card__name">Casey Sinclair</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">RF</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Acquisition Advisor</p>
+              <h3 class="team-card__name">Riley Foster</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Acquisition Advisor</p>
+              <h3 class="team-card__name">Riley Foster</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">DA</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Information Security Consultant</p>
+              <h3 class="team-card__name">Drew Ashford</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Information Security Consultant</p>
+              <h3 class="team-card__name">Drew Ashford</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
+              </p>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card__cutout">
+              <img
+                class="team-card__photo-img"
+                src="assets/images/placeholder-man.png"
+                alt="Placeholder — team member to be confirmed"
+                onload="this.classList.add('is-loaded')"
+              />
+              <div class="team-card__photo-fallback">
+                <span class="team-card__initials">HL</span>
+              </div>
+            </div>
+            <span class="team-card__expand" aria-hidden="true">+</span>
+            <div class="team-card__ground-shadow" aria-hidden="true"></div>
+            <div class="team-card__summary" aria-hidden="true">
+              <p class="team-card__role">Training &amp; Syllabus Advisor</p>
+              <h3 class="team-card__name">Harper Lennox</h3>
+            </div>
+            <div class="team-card__overlay">
+              <p class="team-card__role">Training &amp; Syllabus Advisor</p>
+              <h3 class="team-card__name">Harper Lennox</h3>
+              <p class="team-card__bio">
+                Placeholder profile — background and experience to be confirmed.
+              </p>
+              <p class="team-card__detail">
+                Placeholder detail — to be replaced once this team member is
+                confirmed.
               </p>
             </div>
           </div>
@@ -717,14 +754,17 @@
       </nav>
 
       <!--
-        Certification badges from the previous site weren't reachable —
-        lockon.ltd blocks automated fetches, and these weren't shared as
-        attached files. Drop the badge images in assets/images/badges/ and
-        replace this placeholder with <img> tags once you have them (see
-        assets/images/badges/README.md).
+        Certification/membership badges — desaturated to the site's
+        monochrome palette via the shared --photo-filter, same treatment as
+        every other photo (see .site-footer__badges img, css/footer.css).
       -->
       <div class="site-footer__badges">
-        <p class="site-footer__badges-note">Certification badges — pending</p>
+        <img src="assets/images/afc_logo_grey.webp" alt="Armed Forces Covenant" />
+        <img src="assets/images/CE+Plus.webp" alt="Cyber Essentials Plus certified" />
+        <img
+          src="assets/images/Joscar-Regsistered-Resized.webp"
+          alt="JOSCAR Registered"
+        />
       </div>
     </div>
   </footer>

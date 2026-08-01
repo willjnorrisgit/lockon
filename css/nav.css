@@ -45,7 +45,7 @@
   flex-shrink: 0;
 }
 
-/* Real logo (assets/lockon-logo.webp) swaps in for the reticle + "Lock On"
+/* Real logo (assets/lockon-logo.webp) swaps in for the reticle + "LockOn"
    text once it loads — see the onload/is-loaded pattern in index.html.
    It's a full wordmark lockup (394x100), not just an icon, so once it
    loads both the SVG *and* the text span are redundant and get hidden.

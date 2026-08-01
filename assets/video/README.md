@@ -1,21 +1,24 @@
 # Hero video
 
-`hero.mp4` and `hero.webm` are in place — your landscape (1920×1080, 12.9s)
-export, compressed down from the 11.1MB source:
+`hero.mp4` and `hero.webm` are in place — cockpit/sunset flying footage
+(1920×1080, 13.6s), compressed down from a 29.4MB `landing-video.mp4`
+source (same encode spec as the previous hero clip; the source file itself
+isn't kept in the repo once compressed, same as every other clip below):
 
-- `hero.mp4` — H.264, 1920×1080, ~5.2MB, `+faststart` (Safari/older-browser fallback)
-- `hero.webm` — VP9, 1920×1080, ~3.4MB (primary; smaller at equal quality,
+- `hero.mp4` — H.264, 1920×1080, ~5.8MB, `+faststart` (Safari/older-browser fallback)
+- `hero.webm` — VP9, 1920×1080, ~3.6MB (primary; smaller at equal quality,
   and what most browsers will actually load)
 
-Both generated with `-an` (audio stripped — the source had none). Being
-landscape now, it fills the hero with far less cropping than the earlier
-portrait clip did. `assets/images/hero-poster.jpg` was regenerated from this
-same file (frame at ~0.7s) so the loading-frame still matches.
+Both generated with `-an` (audio stripped — the source had a near-silent
+AAC track, not worth keeping since the `<video>` element is muted anyway).
+`assets/images/hero-poster.jpg` was regenerated from this same file (frame
+at ~0.7s — the cockpit-canopy silhouette against the sunset) so the
+loading-frame still matches.
 
 This pushed the total a bit over the "well under 4-5MB" guideline below —
-that's the resolution/duration trade-off (1080p at ~13s vs. the earlier
-tiny 540×960/8s clip). If you'd rather trim it down further, say so and
-I'll re-encode at a higher `-crf` (lower quality) or shorter loop.
+that's the resolution/duration trade-off (1080p at ~13-14s vs. a shorter
+clip). If you'd rather trim it down further, say so and I'll re-encode at a
+higher `-crf` (lower quality) or shorter loop.
 
 The `<video>` element in `index.html` picks whichever of the two files the
 browser supports first, so whatever sits at these two exact filenames is
