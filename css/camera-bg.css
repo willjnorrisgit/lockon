@@ -1,4 +1,3 @@
-/* ==========================================================================
    Camera background — two acts driven by js/camera.js as the user scrolls:
    1) the jet (formation.jpg) flies right-to-left across What We Do into
       early Why Us, shrinking as it goes, then exits off-screen for good;
@@ -15,17 +14,13 @@
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
-  /* Matches formation.jpg's own sky tone *after* --photo-filter is applied
-     (sampled directly in-browser: drew the filtered jet image to a canvas
-     with the same CSS filter and read pixels from several sky-only points
-     — corners/edges away from the airframe — averaging to ~#9ba1ac). Used
-     to be a dark gradient, which made the jet's edges (wherever it hasn't
-     yet slid into, or has already slid out of, a given point on screen)
-     read as an obvious rectangle sliding over a black backdrop rather than
-     the jet itself being the only thing that moves. js/camera.js's fade/
-     vignette layers still darken this toward black as the jet exits, same
-     as before — this only changes the *undarkened* base tone. */
-  background: #9ba1ac;
+/* Flat colour matching formation.jpg's own (filtered) sky, not a dark
+     gradient — the plain space either side of the jet while it's mid-flight
+     (before .camera-bg__fade below ramps to black on exit) should read as
+     more of the same sky, not a black frame the photo is visibly sliding
+     across. See --jet-sky-grey in variables.css for how the exact value was
+     derived. */
+  background: var(--jet-sky-grey);
 }
 
 /* The vapor-trail layer — a second copy of the same jet photo, positioned

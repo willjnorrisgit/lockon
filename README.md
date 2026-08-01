@@ -300,6 +300,17 @@ range.
   `mask-image: linear-gradient(...)` that fades out the half of the copy
   nearest the jet — so it reads as diffuse haze trailing off the airframe
   rather than a second, recognisable aircraft riding alongside it.
+- **Backdrop matches the photo's own sky, not black.** `.camera-bg`'s own
+  background (visible in the plain space either side of the jet — the
+  `JET_START_LEFT_GAP_FRACTION` gap at the start, and the gap that opens up
+  on the right once the jet's flown past) is `--jet-sky-grey`
+  (`variables.css`), a flat colour sampled from `formation.jpg`'s own sky and
+  run through `--photo-filter` by hand so it matches what the photo itself
+  renders as. The intent is that the jet reads as the only thing moving
+  against a static sky, not a rectangular photo sliding across a black void.
+  It was a dark radial-gradient before; the darkening on exit (below) still
+  works the same way regardless, since it's a separate overlay layer on top
+  of this backdrop, not the backdrop itself.
 - **A bug worth knowing about if you touch this file.** The global `img {
   max-width: 100% }` reset in `css/base.css` silently caps an `<img>`'s
   rendered box below its true natural size unless overridden — the jet's

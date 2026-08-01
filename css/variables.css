@@ -26,6 +26,12 @@
   /* Photography treatment — keeps real imagery inside the monochrome
      palette instead of letting it introduce colour */
   --photo-filter: grayscale(55%) contrast(1.08) brightness(0.85);
+  /* formation.jpg's own sky colour, run through --photo-filter above (sampled
+     and computed, not eyeballed — see css/camera-bg.css .camera-bg comment).
+     Used as the camera background's flat backdrop so the plain space either
+     side of the jet mid-flight reads as more of the same sky rather than a
+     black frame the photo is sliding across. */
+  --jet-sky-grey: #9ba1ad;
   --scrim-strong: linear-gradient(
     to bottom,
     rgba(10, 10, 10, 0.55) 0%,
