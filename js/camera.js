@@ -112,6 +112,12 @@ export function initCamera() {
   const JET_ZOOM_START = 1.3; // large, but not so zoomed-in that the gap above collapses on narrow viewports
   const JET_ZOOM_END = 0.75; // shrunk, on its way out
 
+  // Overall layer fade-in/out (top of What We Do / down past the footer) —
+  // shared between measure() and update(): measure() needs it to make sure
+  // the fade-out zone actually fits inside the reachable scroll range (see
+  // rangeEnd below), not just update()'s own opacity ramp.
+  const FADE_ZONE = 140;
+
   let rangeStart = 0; // overall layer fade-in point (top of What We Do)
   let rangeEnd = 1; // overall layer fade-out point (capped at reachable max scroll)
   let jetRangeStart = 0;
@@ -133,7 +139,17 @@ export function initCamera() {
   function measure() {
     rangeStart = whatWeDo.offsetTop;
     const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
-    rangeEnd = Math.min(footer.offsetTop, maxScrollY);
+    // Fade-out normally starts at footer.offsetTop and finishes FADE_ZONE
+    // past it — but a footer shorter than one viewport (true here; true for
+    // almost any compact footer) puts that finish point beyond maxScrollY,
+    // which scrollY can physically never reach. Capping rangeEnd at plain
+    // maxScrollY in that case (rather than pulling the whole zone back)
+    // made `y > rangeEnd` permanently false past the last scroll position —
+    // the layer never faded and sat opaque over the footer. Capping the
+    // *finish* point at maxScrollY and working FADE_ZONE back from there
+    // instead guarantees opacity actually reaches 0 by the max reachable
+    // scroll position either way.
+    rangeEnd = Math.min(footer.offsetTop, maxScrollY - FADE_ZONE);
 
     jetRangeStart = whatWeDo.offsetTop;
     jetRangeEnd = whyUs.offsetTop + (team.offsetTop - whyUs.offsetTop) * JET_EXIT_FRACTION;
@@ -186,10 +202,9 @@ export function initCamera() {
 
     // Overall layer visibility — faded in/out at the very top/bottom of
     // its whole active span so it's invisible over Landing and the footer.
-    const fadeZone = 140;
     let layerOpacity = 1;
-    if (y < rangeStart) layerOpacity = clamp01(1 - (rangeStart - y) / fadeZone);
-    else if (y > rangeEnd) layerOpacity = clamp01(1 - (y - rangeEnd) / fadeZone);
+    if (y < rangeStart) layerOpacity = clamp01(1 - (rangeStart - y) / FADE_ZONE);
+    else if (y > rangeEnd) layerOpacity = clamp01(1 - (y - rangeEnd) / FADE_ZONE);
     root.style.opacity = layerOpacity.toFixed(3);
 
     // Act 1 math — computed unconditionally (cheap: a handful of
