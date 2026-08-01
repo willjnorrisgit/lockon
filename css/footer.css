@@ -75,12 +75,16 @@
 .site-footer__badges {
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-height: 32px;
+  gap: clamp(16px, 2.5vw, 28px);
+  min-height: clamp(56px, 7vw, 84px);
 }
 
+/* ~2.5x the original 32px so the badges read as credentials, not an
+   afterthought — clamped rather than fixed so 3 landscape-ish badges at
+   this height still fit inside the footer without wrapping awkwardly on
+   narrow viewports (see .site-footer__inner's column layout below). */
 .site-footer__badges img {
-  height: 32px;
+  height: clamp(56px, 7vw, 84px);
   width: auto;
   filter: var(--photo-filter);
   opacity: 0.9;

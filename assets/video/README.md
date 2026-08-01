@@ -1,9 +1,13 @@
 # Hero video
 
 `hero.mp4` and `hero.webm` are in place — cockpit/sunset flying footage
-(1920×1080, 13.6s), compressed down from a 29.4MB `landing-video.mp4`
-source (same encode spec as the previous hero clip; the source file itself
-isn't kept in the repo once compressed, same as every other clip below):
+(1920×1080, 13.6s), compressed down from a 29.4MB `landingvideo.mp4` source
+(same encode spec as the previous hero clip; the source file itself isn't
+kept in the repo once compressed, same as every other clip below). This
+superseded an earlier `landing-video.mp4` source that turned out to be the
+wrong export — the re-supplied `landingvideo.mp4` re-encoded to the exact
+same `hero.mp4` bytes, so the two sources were effectively identical
+footage regardless of the mix-up.
 
 - `hero.mp4` — H.264, 1920×1080, ~5.8MB, `+faststart` (Safari/older-browser fallback)
 - `hero.webm` — VP9, 1920×1080, ~3.6MB (primary; smaller at equal quality,
