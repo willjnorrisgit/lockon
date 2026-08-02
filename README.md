@@ -86,8 +86,10 @@ Then open the printed localhost URL.
   people/photos are.
 - **Camera background** — done. `assets/images/formation.jpg` (your F-35
   banking shot) flies across What We Do into early Why Us, then
-  `assets/images/runway.jpg` takes over as the background for Team and
-  Contact after a dark transition — see "Camera background" below and
+  `assets/images/cockpit.jpg` takes over after a dark transition, holding
+  through the rest of Why Us into early Team; partway through Team it
+  crossfades into `assets/images/runway.jpg`, which then stays put through
+  the rest of Team and all of Contact — see "Camera background" below and
   `assets/images/README.md`.
 - **Logo** — done. `assets/lockon-logo.webp`, the real "LockOn" wordmark
   lockup, used in the nav only.
@@ -214,7 +216,7 @@ address above.
 
 `css/camera-bg.css` + `js/camera.js`, a `position: fixed` full-bleed layer
 (`z-index: 1`, behind `.section__inner`'s `z-index: 2`) behind What We Do,
-Why Us, Team, and Contact. Two acts, both driven by one scroll-fraction
+Why Us, Team, and Contact. Three acts, all driven by one scroll-fraction
 calculation per `requestAnimationFrame` tick:
 
 1. **Jet flyover** (What We Do → 40% into Why Us) — `assets/images/
@@ -244,7 +246,7 @@ calculation per `requestAnimationFrame` tick:
    exit point. Past the exit point both fractions are clamped at `1`, so
    both layers stay parked off-screen/invisible and can't drift back into
    view later.
-2. **Position-linked darkening, then an immediate runway reveal** — the
+2. **Position-linked darkening, then an immediate cockpit reveal** — the
    screen doesn't darken on a scroll-time schedule; `darkness` in
    `update()` is computed directly from the jet's own current horizontal
    screen position (the same `JET_FX_START` anchor point tracked
@@ -262,31 +264,44 @@ calculation per `requestAnimationFrame` tick:
    as glowing a little more intensely as the screen approaches full black
    — tying the dissolve and the darkening into one continuous beat instead
    of two independently-timed ones. The instant darkness reaches `1`,
-   `assets/images/runway.jpg` (`.camera-bg__runway`) starts crossfading
-   in — `runwayRangeStart` is set to exactly `jetRangeEnd` in `measure()`,
+   `assets/images/cockpit.jpg` (`.camera-bg__cockpit`) starts crossfading
+   in — `cockpitRangeStart` is set to exactly `jetRangeEnd` in `measure()`,
    the same pixel point darkness is guaranteed to hit `1` at, so there's no
-   added delay — finishing over `RUNWAY_REVEAL_SPAN_FRACTION` (50%) of the
-   remaining distance to Team. Runway doesn't move or zoom — it's a plain
-   `object-fit: cover`, no transform math needed since nothing animates but
-   its opacity.
+   added delay — finishing over `COCKPIT_REVEAL_SPAN_FRACTION` (50%) of the
+   remaining distance to Team, then holding unanimated through the rest of
+   Why Us into early Team. Neither cockpit nor runway move or zoom — both
+   are plain `object-fit: cover`, no transform math needed since nothing
+   animates but opacity.
+3. **A second, plain crossfade partway through Team** — no darkening step
+   this time (nothing on screen is "exiting" the way the jet did, so a
+   black dip here would read as a flicker rather than a beat), just a
+   straight opacity swap: starting at `TEAM_RUNWAY_START_FRACTION` (45%)
+   of Team's own height (`team.offsetTop` → `contact.offsetTop`, measured
+   the same way every other span in this file is) and finishing
+   `TEAM_RUNWAY_SPAN_FRACTION` (25%) later, `assets/images/runway.jpg`
+   (`.camera-bg__runway`) crossfades in as `.camera-bg__cockpit` crossfades
+   out — complementary opacities (`cockpitRevealFraction * (1 -
+   teamRunwayFraction)` vs. plain `teamRunwayFraction`), so they sum to 1
+   and never both show through or both go dark at once. Runway then holds
+   through the remainder of Team and all of Contact.
 
 All layers' transforms/opacity/blur are recomputed every scroll tick from
 pixel ranges measured off each section's actual `offsetTop` (`measure()`)
 or from the jet's own live position (`darkness`), not hardcoded — the
 constants at the top of `initCamera()` (`JET_EXIT_FRACTION`,
 `JET_BLUR_START`, `JET_START_LEFT_GAP_FRACTION`,
-`RUNWAY_REVEAL_SPAN_FRACTION`, `VIGNETTE_MAX_OPACITY`, etc.) are the
-tunable knobs if you want any of these beats to take more/less of their
-range.
+`COCKPIT_REVEAL_SPAN_FRACTION`, `TEAM_RUNWAY_START_FRACTION`,
+`TEAM_RUNWAY_SPAN_FRACTION`, `VIGNETTE_MAX_OPACITY`, etc.) are the tunable
+knobs if you want any of these beats to take more/less of their range.
 
 - **The position math runs unconditionally, reduced motion or not.** The
   jet's transform (`translateX`/`translateY`/`scale`) and the `darkness`
   derived from it are computed every frame regardless of
   `prefers-reduced-motion` — only *applying* the result to the jet/trail's
   visible transform/blur is skipped under reduced motion. That keeps the
-  dark/vignette/runway ramp genuinely tied to the same (hypothetical) jet
-  position either way, rather than needing a separate scroll-time fallback
-  formula just for reduced motion.
+  dark/vignette/cockpit/runway ramps genuinely tied to the same
+  (hypothetical) jet position either way, rather than needing a separate
+  scroll-time fallback formula just for reduced motion.
 - **Transform math is compositor-only.** Every scroll tick only ever writes
   `transform`/`opacity`/`filter: blur()` — never `width`/`height`/`top`/
   `left`/`background-position` — so there's no layout/paint cost per frame,

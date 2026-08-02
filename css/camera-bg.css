@@ -1,9 +1,12 @@
 /* ==========================================================================
-   Camera background — two acts driven by js/camera.js as the user scrolls:
+   Camera background — three acts driven by js/camera.js as the user scrolls:
    1) the jet (formation.jpg) flies right-to-left across What We Do into
       early Why Us, shrinking as it goes, then exits off-screen for good;
-   2) a dark transition through the rest of Why Us, then runway.jpg
-      crossfades in and stays put through Team and Contact.
+   2) a dark transition through the exit, then cockpit.jpg crossfades in
+      and holds through the rest of Why Us into early Team;
+   3) partway through Team, cockpit.jpg crossfades out as runway.jpg
+      crossfades in, which then stays put through the rest of Team and
+      all of Contact.
    Fixed + low z-index: sits behind normal section content (.section__inner
    is z-index:2, css/depth.css) but above the plain page background.
    ========================================================================== */
@@ -83,10 +86,26 @@
   will-change: transform, opacity, filter;
 }
 
-/* Runway is a plain full-bleed cover image, not transform-driven — it never
-   moves or zooms, so the simple object-fit approach is all it needs. Only
-   its opacity is scroll-driven (the crossfade in from the dark transition),
-   same "no CSS transition" reasoning as the jet above. */
+/* Cockpit and runway are both plain full-bleed cover images, not
+   transform-driven like the jet — neither moves or zooms, so the simple
+   object-fit approach is all either needs. Only opacity is scroll-driven
+   (cockpit's crossfade in from the dark transition, then back out again
+   partway through Team as runway crossfades in over it), same "no CSS
+   transition" reasoning as the jet above — js/camera.js writes both
+   opacities every frame the layer is active, not just at the two
+   crossfade windows, so a CSS transition would only ever fight that. */
+.camera-bg__cockpit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  filter: var(--photo-filter);
+  opacity: 0;
+  will-change: opacity;
+}
+
 .camera-bg__runway {
   position: absolute;
   inset: 0;

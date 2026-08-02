@@ -18,20 +18,20 @@ former. This folder is background stills + the hero poster frame.
 
 ## Camera background (What We Do / Why Us / Team / Contact)
 
-Two images, two acts — see the "Camera background" section in the root
+Three images, three acts — see the "Camera background" section in the root
 `README.md` and `js/camera.js` for the full choreography:
 
 - `formation.jpg` (the F-35 banking shot, weapons bay open) flies across the
   screen right-to-left, shrinking, from the top of What We Do until it
   exits fully off the left edge partway into Why Us.
-- `runway.jpg` (the F-22 nose-on in a hangar) crossfades in after a dark
-  transition and is the static background for Team and Contact.
+- `cockpit.jpg` (the canopy-open cockpit shot) crossfades in after a dark
+  transition and holds through the rest of Why Us into early Team.
+- `runway.jpg` (the F-22 nose-on in a hangar) crossfades in over `cockpit.jpg`
+  partway through Team and is the static background for the remainder of
+  Team and all of Contact.
 
-`cockpit.jpg` (an earlier per-section still from before this system existed)
-is still here, just unreferenced by any CSS/HTML now, in case you want to
-reuse it elsewhere rather than delete it. `sky.jpg` was never added
-(Contact's low-intensity treatment didn't end up needing it, and Contact is
-covered by the runway background instead now).
+`sky.jpg` was never added (Contact's low-intensity treatment didn't end up
+needing it, and Contact is covered by the runway background instead now).
 
 Every image referenced by the site is run through `--photo-filter`
 (grayscale + contrast + darken, defined in `css/variables.css`) at render
