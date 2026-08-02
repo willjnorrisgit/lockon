@@ -15,41 +15,49 @@
  *    vapor/exhaust streaming off the rear of the aircraft. Both are parked
  *    off-screen (clamped, not reset) for the rest of the page, so neither
  *    reappears.
- * 2) Position-linked darkening, then a cockpit reveal — the screen doesn't
- *    darken on a separate timer. It's tied directly to the jet's own
- *    horizontal screen position: `darkness` is 0 while the jet's anchor
- *    point is still right of screen-center, then ramps 0->1 as that point
- *    crosses toward (and past) the left edge, reaching exactly 1 at the
- *    same instant the jet finishes exiting — so the grey-to-black shift
- *    reads as one continuous, position-driven transition rather than a
- *    boxy, independently-timed event. A matching vignette deepens in step
- *    with it for a more cinematic frame. assets/images/cockpit.jpg then
- *    fades in from that black — its own opacity ramps up across the whole
- *    reveal span, but the black overlay covering it clears over only the
- *    *first* COCKPIT_BLACK_CLEAR_FRACTION of that span (both eased,
- *    decoupled from each other rather than simple complementary opacities)
- *    so the dark hold reads as brief rather than the image visibly
- *    "fighting through" a slowly-lifting black overlay the whole time —
- *    holds, unanimated, through the rest of Why Us into early Team.
- * 3) A second dark beat partway through Team (TEAM_RUNWAY_START_FRACTION of
- *    its own height): cockpit.jpg fades to black, holds briefly, then
- *    assets/images/runway.jpg fades in from that same black — mirroring
- *    act 2's structure (and its decoupled black-clears-faster-than-the-
- *    image-reveals technique) rather than a plain crossfade between the
- *    two photos, so both dark beats in this file read as one consistent
- *    style. Runway then holds through the remainder of Team and all of
- *    Contact. This whole three-phase beat still fits inside the same
- *    overall span the earlier plain crossfade used — it's a change to the
- *    internal choreography, not the section timing.
+ * 2) Position-linked darkening, then a cockpit reveal. Both this and act 3
+ *    below are built from four named transitions — jet-exit -> dark,
+ *    dark -> cockpit, cockpit -> dark, dark -> runway — that all share one
+ *    duration (TRANSITION_SPAN_PX) and the same smoothstep ease, so the
+ *    whole sequence reads as one consistent, deliberate rhythm rather than
+ *    four different speeds. "Jet-exit -> dark" ends exactly at jetRangeEnd
+ *    (the same instant the jet finishes exiting, so the grey-to-black
+ *    shift still reads as caused by the jet leaving, not an independently-
+ *    timed event) and ramps for TRANSITION_SPAN_PX before that. A matching
+ *    vignette deepens in step for a more cinematic frame, and the vapor
+ *    trail gets a small extra blur/opacity boost tied to the same value so
+ *    it reads as glowing a little more intensely as the screen approaches
+ *    full black. "Dark -> cockpit" starts immediately after (no gap) and
+ *    fades assets/images/cockpit.jpg in from that black: its own opacity
+ *    ramps across the *entire* transition, but the black overlay covering
+ *    it clears over only the first COCKPIT_BLACK_CLEAR_FRACTION of it —
+ *    deliberately not 1:1 with cockpit's own reveal. Plain complementary
+ *    opacities (overlay = 1 - image) compound multiplicatively when one
+ *    sits on top of the other: the visible result is image_opacity * (1 -
+ *    overlay_opacity), which for two equal ramps works out to
+ *    image_opacity², a curve that reads as "stuck in black" for a long
+ *    first stretch before suddenly catching up. Clearing the overlay well
+ *    ahead of the image breaks that compounding, so cockpit is visibly
+ *    present soon after the transition starts, while its own brightness
+ *    keeps gently resolving to full across the whole (deliberately long)
+ *    transition rather than popping in instantly. Cockpit then holds,
+ *    unanimated, through the rest of Why Us into early Team.
+ * 3) The other two named transitions, partway through Team
+ *    (TEAM_TRANSITION_START_FRACTION of its own height): "cockpit -> dark"
+ *    fades assets/images/cockpit.jpg out to black over TRANSITION_SPAN_PX,
+ *    then "dark -> runway" immediately fades assets/images/runway.jpg in
+ *    from that same black, using the same overlay-clears-faster-than-image
+ *    technique as act 2 (RUNWAY_BLACK_CLEAR_FRACTION). Runway then holds
+ *    through the remainder of Team and all of Contact.
  *
  * All three acts are driven by one rAF-throttled scroll handler and only
  * ever write `transform`/`opacity`/`filter:blur()` per frame (compositor-
- * only, no layout/paint). The position math (jet transform + darkness) is
- * computed unconditionally every frame, reduced motion or not — only
- * *applying* it to the jet/trail's visible transform/blur is skipped under
- * reduced motion, so the dark/vignette/cockpit/runway ramps stay tied to
- * the same (hypothetical) jet position either way instead of needing a
- * separate time-based fallback.
+ * only, no layout/paint). The position math (jet transform) is computed
+ * unconditionally every frame, reduced motion or not — only *applying* it
+ * to the jet/trail's visible transform/blur is skipped under reduced
+ * motion, so the dark/vignette/cockpit/runway ramps (all scroll-position-
+ * driven, not motion-driven) stay identical either way instead of needing
+ * a separate time-based fallback.
  */
 export function initCamera() {
   const root = document.querySelector(".camera-bg");
@@ -86,7 +94,7 @@ export function initCamera() {
 
   // How far into "Why Us" the jet has fully exited left (0-1 of that
   // section's own height) — leaves the remainder of Why Us for the
-  // darkening/runway-reveal handoff, per the requested choreography.
+  // darkening/cockpit-reveal handoff, per the requested choreography.
   const JET_EXIT_FRACTION = 0.4;
   // Where in the jet's own flight (0-1 of jetFraction) the exit blur+fade
   // starts ramping — only the tail of the flight dissolves, not the whole
@@ -108,51 +116,42 @@ export function initCamera() {
   const JET_TRAIL_PEAK = 0.65;
   const JET_TRAIL_DARK_BLUR_BOOST_PX = 16;
   const JET_TRAIL_DARK_GLOW_BOOST = 0.25;
-  // How far past the jet's own exit point (0-1 of the remaining Why-Us ->
-  // Team span) the cockpit reveal takes to finish — it *starts* the instant
-  // darkness hits 1 (no separate constant needed for that: see `update()`).
-  // Shortened from 0.5 — combined with COCKPIT_BLACK_CLEAR_FRACTION below,
-  // this is the "cockpit should appear sooner" knob.
-  const COCKPIT_REVEAL_SPAN_FRACTION = 0.35;
-  // The black overlay covering cockpit.jpg clears (eased) over only this
-  // fraction of the reveal span above, while cockpit's own opacity ramps
-  // across the *entire* span — i.e. the overlay lifts well before the image
-  // reaches full brightness, rather than the two ramping down/up together
-  // at the same rate. Plain complementary opacities (overlay = 1 - image)
-  // compound multiplicatively when one sits on top of the other — the
-  // visible result is image_opacity * (1 - overlay_opacity), which for
-  // equal linear ramps works out to image_opacity², a curve that looks
-  // like it "takes forever" to leave black before suddenly catching up.
-  // Clearing the overlay faster than the image finishes fading in breaks
-  // that compounding: darkness visibly lifts soon after the reveal starts,
-  // then the image keeps gently resolving to full clarity — a shorter-
-  // feeling hold that's still a fade, not a cut.
-  const COCKPIT_BLACK_CLEAR_FRACTION = 0.5;
+
+  // Shared duration (scroll px) for EVERY fade transition below: jet-exit
+  // -> dark, dark -> cockpit, cockpit -> dark, dark -> runway. One knob,
+  // same value for all four, so the whole sequence reads as a single
+  // consistent, unhurried rhythm rather than four different speeds. This
+  // is deliberately long — roughly 2x this file's previous per-transition
+  // spans — per "noticeably slower, not a minor adjustment." Sized against
+  // the tightest-fitting viewport measured (desktop: ~540px of Why Us left
+  // after the jet exits, ~1700px of Team height), leaving a real hold
+  // after "dark -> cockpit" and a real settled buffer after "dark ->
+  // runway" before Contact on every viewport checked, not just the
+  // roomiest one.
+  const TRANSITION_SPAN_PX = 420;
+  // Within "dark -> cockpit", the black overlay clears (eased) by this
+  // fraction of TRANSITION_SPAN_PX, well before cockpit's own opacity
+  // (which ramps across the *entire* transition) finishes fading in — see
+  // the file header for why these are deliberately decoupled rather than
+  // simple complementary opacities. Well below this file's previous pass
+  // (0.5 of a 189px span = ~95px) — "cockpit needs to appear even sooner,
+  // still too long" — 0.15 of this transition's now-longer 420px span is
+  // ~63px, a clear reduction in absolute scroll distance despite the
+  // transition itself taking longer overall.
+  const COCKPIT_BLACK_CLEAR_FRACTION = 0.15;
+  // Same technique/reasoning, for "dark -> runway".
+  const RUNWAY_BLACK_CLEAR_FRACTION = 0.15;
   // Peak vignette opacity at full darkness (subtle, not a hard black frame).
   const VIGNETTE_MAX_OPACITY = 0.55;
-  // Act 3 — cockpit.jpg -> runway.jpg, both 0-1 of Team's own height
-  // (Team.offsetTop -> Contact.offsetTop, mirroring how every other span in
-  // this file is measured off the next section's offsetTop rather than a
-  // guessed pixel height). Starting a touch before the midpoint means the
-  // beat's *center* lands near halfway through Team, matching "cockpit
-  // through roughly the first half of Team" — and finishing well short of
-  // 1.0 leaves runway settled in for a while before Contact, not resolving
-  // right up to the section boundary. Same total span as the plain
-  // crossfade this replaced — only the internal choreography changed, via
-  // TEAM_FADEOUT_END/HOLD_END/BLACK_CLEAR_END below (all cumulative
-  // fractions of this same span, in order: cockpit fades to black by
-  // FADEOUT_END, holds black until HOLD_END, then runway fades in from
-  // black over the remainder, with the black overlay itself clearing by
-  // BLACK_CLEAR_END — same faster-overlay-than-image technique as
-  // COCKPIT_BLACK_CLEAR_FRACTION above, for the same reason).
-  const TEAM_RUNWAY_START_FRACTION = 0.45;
-  const TEAM_RUNWAY_SPAN_FRACTION = 0.25;
-  const TEAM_FADEOUT_END = 0.3;
-  const TEAM_HOLD_END = 0.45;
-  const TEAM_BLACK_CLEAR_END = 0.75;
+  // Where in Team's own height (team.offsetTop -> contact.offsetTop) the
+  // "cockpit -> dark -> runway" pair starts — leaves cockpit holding
+  // through roughly the first 40% of Team, matching "cockpit through
+  // roughly the first half of Team," with both TRANSITION_SPAN_PX-long
+  // transitions plus a real settled buffer still fitting before Contact.
+  const TEAM_TRANSITION_START_FRACTION = 0.4;
 
   const JET_FY = 0.58; // jet's vertical center in formation.jpg (natural-image fraction)
-  const JET_FX_START = 0.6; // focal point (within the jet) used as the "jet position" reference for darkness
+  const JET_FX_START = 0.6; // focal point (within the jet) used to frame it — no longer feeds a darkness calculation, see act 2 above
   // How much of the screen's left side stays plain grey at t=0 — a direct
   // fraction of viewport width, deliberately NOT expressed via a focal
   // point anchored at some multiple of containerW: the image is scaled to
@@ -175,13 +174,12 @@ export function initCamera() {
   let rangeEnd = 1; // overall layer fade-out point (capped at reachable max scroll)
   let jetRangeStart = 0;
   let jetRangeEnd = 1;
-  let cockpitRangeStart = 0;
-  let cockpitRangeEnd = 1;
-  let teamRunwayRangeStart = 0;
-  let teamRunwayRangeEnd = 1;
+  let darknessRangeStart = 0; // jet-exit -> dark
+  let cockpitRangeStart = 0; // dark -> cockpit
+  let teamDarkRangeStart = 0; // cockpit -> dark
+  let teamRunwayRangeStart = 0; // dark -> runway
   let jetNaturalW = 1920;
   let jetNaturalH = 1280;
-  let jetExitAnchorX = 0; // the focal point's screen X at t=1, cached at measure time
 
   function clamp01(v) {
     return Math.max(0, Math.min(1, v));
@@ -209,23 +207,22 @@ export function initCamera() {
     jetRangeStart = whatWeDo.offsetTop;
     jetRangeEnd = whyUs.offsetTop + (team.offsetTop - whyUs.offsetTop) * JET_EXIT_FRACTION;
 
-    // No gap: cockpit starts revealing the instant darkness reaches 1,
-    // which by construction happens exactly at jetRangeEnd (see update()).
+    // Transition 1 (jet-exit -> dark) ends exactly at jetRangeEnd, so full
+    // black lands at the same instant the jet finishes exiting.
+    darknessRangeStart = jetRangeEnd - TRANSITION_SPAN_PX;
+    // Transition 2 (dark -> cockpit) starts immediately after — no gap.
     cockpitRangeStart = jetRangeEnd;
-    cockpitRangeEnd = jetRangeEnd + (team.offsetTop - jetRangeEnd) * COCKPIT_REVEAL_SPAN_FRACTION;
 
-    // Act 3 — see TEAM_RUNWAY_START_FRACTION/SPAN_FRACTION above.
+    // Transitions 3-4 (cockpit -> dark -> runway), back to back, partway
+    // through Team.
     const teamSpan = contact.offsetTop - team.offsetTop;
-    teamRunwayRangeStart = team.offsetTop + teamSpan * TEAM_RUNWAY_START_FRACTION;
-    teamRunwayRangeEnd = teamRunwayRangeStart + teamSpan * TEAM_RUNWAY_SPAN_FRACTION;
+    teamDarkRangeStart = team.offsetTop + teamSpan * TEAM_TRANSITION_START_FRACTION;
+    teamRunwayRangeStart = teamDarkRangeStart + TRANSITION_SPAN_PX;
 
     if (jet.naturalWidth) {
       jetNaturalW = jet.naturalWidth;
       jetNaturalH = jet.naturalHeight;
     }
-
-    const exit = jetTransformAt(1);
-    jetExitAnchorX = exit.translateX + JET_FX_START * jetNaturalW * exit.scale;
   }
 
   /** translateX/scale for the jet at eased flyover fraction t (0 = start,
@@ -268,23 +265,23 @@ export function initCamera() {
     root.style.opacity = layerOpacity.toFixed(3);
 
     // Act 1 math — computed unconditionally (cheap: a handful of
-    // multiplications) so the darkness derived from it stays position-
-    // linked even under reduced motion, where the jet itself just sits at
-    // its start pose rather than actually animating through these values.
+    // multiplications) so it stays available for act 2 below even under
+    // reduced motion, where the jet itself just sits at its start pose
+    // rather than actually animating through these values.
     const jetSpan = Math.max(1, jetRangeEnd - jetRangeStart);
     const jetFraction = clamp01((y - jetRangeStart) / jetSpan);
     const t = smoothstep(jetFraction);
     const { translateX, translateY, scale } = jetTransformAt(t);
     const dissolve = smoothstep(clamp01((jetFraction - JET_BLUR_START) / (1 - JET_BLUR_START)));
 
-    // Darkness tied directly to the jet's current horizontal position, not
-    // scroll time: 0 while its anchor point is right of screen-center,
-    // ramping to exactly 1 as that point reaches its (fully-exited) end
-    // position — see jetExitAnchorX in measure().
-    const containerW = window.innerWidth;
-    const anchorX = translateX + JET_FX_START * jetNaturalW * scale;
-    const midX = containerW / 2;
-    const darkness = smoothstep(clamp01((midX - anchorX) / (midX - jetExitAnchorX)));
+    // Transition 1: jet-exit -> dark — a fixed TRANSITION_SPAN_PX ramp
+    // ending exactly at jetRangeEnd (see measure()), not tied to the jet's
+    // continuous on-screen position the way earlier versions of this file
+    // had it — that left this transition's *length* at the mercy of the
+    // flyover's own geometry, which fought "make every transition the same
+    // length." Runs unconditionally (like the rest of act 1's math above)
+    // so it stays scroll-position-driven under reduced motion too.
+    const darkness = smoothstep(clamp01((y - darknessRangeStart) / TRANSITION_SPAN_PX));
 
     if (!reducedMotion) {
       jet.style.transform = `translate(${translateX.toFixed(1)}px, ${translateY.toFixed(1)}px) scale(${scale.toFixed(4)})`;
@@ -311,49 +308,30 @@ export function initCamera() {
     // drift back into view later.
     jet.style.opacity = reducedMotion ? (jetFraction >= 1 ? "0" : "1") : (1 - dissolve).toFixed(3);
 
-    // Act 2: cockpit.jpg starts fading in the instant darkness reaches 1
-    // (which happens exactly at jetRangeEnd) — no added delay — and
-    // finishes over COCKPIT_REVEAL_SPAN_FRACTION of the remaining distance
-    // to Team. Its own opacity ramps across the whole span; the black
-    // overlay on top of it clears faster (COCKPIT_BLACK_CLEAR_FRACTION) so
-    // the dark hold reads as brief without the reveal itself feeling
-    // instant — see the constant comments above for why these are
-    // deliberately decoupled rather than simple complementary opacities.
-    const cockpitSpan = Math.max(1, cockpitRangeEnd - cockpitRangeStart);
-    const cockpitFraction = clamp01((y - cockpitRangeStart) / cockpitSpan);
+    // Transition 2: dark -> cockpit — see the constant comments above for
+    // why the overlay-clear and the image-reveal are deliberately
+    // decoupled rather than simple complementary opacities.
+    const cockpitFraction = clamp01((y - cockpitRangeStart) / TRANSITION_SPAN_PX);
     const cockpitRevealFraction = smoothstep(cockpitFraction);
     const cockpitBlackClear = smoothstep(clamp01(cockpitFraction / COCKPIT_BLACK_CLEAR_FRACTION));
-
-    // Black (and the matching vignette) ramp up with position-linked
-    // darkness (still 1 throughout this act — the jet's fully exited by
-    // now), then back down as the overlay clears, per cockpitBlackClear
-    // above rather than 1:1 with cockpit's own reveal.
     const exitBlackOpacity = darkness * (1 - cockpitBlackClear);
 
-    // Act 3: partway through Team, cockpit.jpg fades to black, holds, then
-    // runway.jpg fades in from that same black — mirroring act 2's
-    // structure/technique instead of a plain crossfade (see header comment
-    // and the TEAM_* constants above). `f` is this beat's own 0-1 position
-    // across its span, sub-divided into fade-out / hold / reveal phases.
-    const teamRunwaySpan = Math.max(1, teamRunwayRangeEnd - teamRunwayRangeStart);
-    const f = clamp01((y - teamRunwayRangeStart) / teamRunwaySpan);
+    // Transitions 3-4: cockpit -> dark -> runway, back to back, each its
+    // own TRANSITION_SPAN_PX. teamDarkFraction (3) ramps 0->1 as cockpit
+    // fades out; teamRunwayFraction/runwayReveal (4) then ramp 0->1 as
+    // runway fades in, with runwayBlackClear clearing the overlay ahead of
+    // that reveal the same way cockpitBlackClear does in transition 2.
+    const teamDarkFraction = smoothstep(clamp01((y - teamDarkRangeStart) / TRANSITION_SPAN_PX));
+    const teamRunwayFraction = clamp01((y - teamRunwayRangeStart) / TRANSITION_SPAN_PX);
+    const runwayReveal = smoothstep(teamRunwayFraction);
+    const runwayBlackClear = smoothstep(clamp01(teamRunwayFraction / RUNWAY_BLACK_CLEAR_FRACTION));
+    const teamBlackOpacity = teamDarkFraction * (1 - runwayBlackClear);
 
-    const cockpitFadeOut = smoothstep(clamp01(f / TEAM_FADEOUT_END));
-    const runwayReveal = smoothstep(clamp01((f - TEAM_HOLD_END) / (1 - TEAM_HOLD_END)));
-    const teamBlackClear = smoothstep(
-      clamp01((f - TEAM_HOLD_END) / (TEAM_BLACK_CLEAR_END - TEAM_HOLD_END))
-    );
-    // 0 at f=0 (nothing's happened yet), ramps to 1 as cockpit fades out
-    // (by TEAM_FADEOUT_END), holds at 1 through TEAM_HOLD_END, then ramps
-    // back to 0 as teamBlackClear catches up (by TEAM_BLACK_CLEAR_END).
-    const teamBlackOpacity = cockpitFadeOut * (1 - teamBlackClear);
+    const blackOpacity = Math.max(exitBlackOpacity, teamBlackOpacity);
+    fadeEl.style.opacity = blackOpacity.toFixed(3);
+    vignette.style.opacity = (blackOpacity * VIGNETTE_MAX_OPACITY).toFixed(3);
 
-    fadeEl.style.opacity = Math.max(exitBlackOpacity, teamBlackOpacity).toFixed(3);
-    vignette.style.opacity = (
-      Math.max(exitBlackOpacity, teamBlackOpacity) * VIGNETTE_MAX_OPACITY
-    ).toFixed(3);
-
-    cockpit.style.opacity = (cockpitRevealFraction * (1 - cockpitFadeOut)).toFixed(3);
+    cockpit.style.opacity = (cockpitRevealFraction * (1 - teamDarkFraction)).toFixed(3);
     runway.style.opacity = runwayReveal.toFixed(3);
   }
 

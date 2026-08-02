@@ -132,14 +132,14 @@ close to it:
   in the original brief, not independently re-verified here)
 
 Not confirmed anywhere public: Jamie Norris's and Guy Lockwood's individual
-titles and bios (`#team`). Per your steer, those are reasonable filler
-copy — built from the same public company-level language above (fast-jet
-instructor pilot, capability development, operational delivery) rather than
-invented from nothing, but the specific title/bio pairing per person isn't
-sourced. Guy's tile now says "Co-Founder" per your instruction; that one
-detail *is* a direct instruction, not a guess. Easy to swap — every
-role/bio pairing is isolated in its own `.team-card__role` / `.team-card__bio`
-elements in `index.html`.
+bios (`#team`). Per your steer, those are reasonable filler copy — built
+from the same public company-level language above (fast-jet instructor
+pilot, capability development, operational delivery) rather than invented
+from nothing, but the specific bio pairing per person isn't sourced. Guy's
+tile says "Co-Founder" and Jamie's says "Associate," both per your direct
+instruction rather than a guess. Easy to swap — every role/bio pairing is
+isolated in its own `.team-card__role` / `.team-card__bio` elements in
+`index.html`.
 
 The footer's registration line ("Registered in England No. 11282660") is
 independently confirmed via Companies House, same as the founding year and
@@ -246,75 +246,74 @@ calculation per `requestAnimationFrame` tick:
    exit point. Past the exit point both fractions are clamped at `1`, so
    both layers stay parked off-screen/invisible and can't drift back into
    view later.
-2. **Position-linked darkening, then a cockpit reveal** — the screen
-   doesn't darken on a scroll-time schedule; `darkness` in `update()` is
-   computed directly from the jet's own current horizontal screen position
-   (the same `JET_FX_START` anchor point tracked throughout the flight):
-   `0` while that point is still right of screen-center, ramping up as it
-   crosses toward the left edge, and reaching exactly `1` at the same
-   instant the jet finishes exiting (`jetExitAnchorX`, cached at measure
-   time, *is* that instant — the ramp is a clamped rescale of `(midX -
-   anchorX) / (midX - jetExitAnchorX)`, so it can't help but hit exactly
-   `1` there). A matching `.camera-bg__vignette` deepens in step with it
-   for a more cinematic frame, and the vapor trail gets a small extra
-   blur/opacity boost tied to the same value
+2. **Four consistent-duration transitions, not scroll-time-varied ones** —
+   the whole "jet exits → screen darkens → cockpit reveals → (later)
+   cockpit fades → runway reveals" sequence is built from four named
+   transitions (jet-exit → dark, dark → cockpit, cockpit → dark, dark →
+   runway) that all share one duration, `TRANSITION_SPAN_PX` (420px of
+   scroll), and the same `smoothstep` ease — deliberately so the whole
+   sequence reads as one consistent, unhurried, cinematic rhythm rather
+   than four transitions each running at their own speed. "Jet-exit →
+   dark" is a fixed `TRANSITION_SPAN_PX` ramp that ends exactly at
+   `jetRangeEnd` (the same instant the jet finishes exiting, so the
+   grey-to-black shift still reads as caused by the jet leaving) —
+   unlike an earlier version of this file, it's no longer tied to the
+   jet's own continuous on-screen position, since that let this
+   transition's *length* be dictated by flyover geometry rather than the
+   shared duration every other transition uses. A matching vignette
+   deepens in step for a more cinematic frame, and the vapor trail gets a
+   small extra blur/opacity boost tied to the same value
    (`JET_TRAIL_DARK_BLUR_BOOST_PX`/`JET_TRAIL_DARK_GLOW_BOOST`) so it reads
-   as glowing a little more intensely as the screen approaches full black
-   — tying the dissolve and the darkening into one continuous beat instead
-   of two independently-timed ones. The instant darkness reaches `1`,
-   `assets/images/cockpit.jpg` (`.camera-bg__cockpit`) starts fading in
-   from that black — `cockpitRangeStart` is set to exactly `jetRangeEnd` in
-   `measure()`, the same pixel point darkness is guaranteed to hit `1` at,
-   so there's no added delay — finishing over `COCKPIT_REVEAL_SPAN_FRACTION`
-   (35%) of the remaining distance to Team, then holding unanimated through
-   the rest of Why Us into early Team. Cockpit's own opacity ramps
-   (`smoothstep`-eased) across that *entire* span, but the black overlay on
-   top of it clears over only the first `COCKPIT_BLACK_CLEAR_FRACTION`
-   (50%) of it — deliberately not 1:1 with cockpit's own reveal. Plain
-   complementary opacities (overlay = 1 − image) compound multiplicatively
-   when one sits on top of the other: the visible result is
-   `image_opacity × (1 − overlay_opacity)`, which for two equal linear
-   ramps works out to `image_opacity²` — a curve that reads as "stuck in
-   black" for a long first stretch before suddenly catching up. Clearing
-   the overlay faster than the image finishes fading in breaks that
-   compounding, so the dark hold reads as brief while the image still
-   fades in gradually rather than popping in instantly. Neither cockpit nor
-   runway move or zoom — both are plain `object-fit: cover`, no transform
-   math needed since nothing animates but opacity.
-3. **A second dark beat partway through Team** — rather than a plain
-   crossfade, this mirrors act 2's structure: `assets/images/cockpit.jpg`
-   fades to black, holds briefly, then `assets/images/runway.jpg` fades in
-   from that same black, using the same overlay-clears-faster-than-image
-   technique described above so the reveal doesn't feel like it's fighting
-   through a slow fade. The whole beat spans `TEAM_RUNWAY_START_FRACTION`
-   (45%) → `+ TEAM_RUNWAY_SPAN_FRACTION` (25%) of Team's own height
-   (`team.offsetTop` → `contact.offsetTop`) — the same total span the
-   plain crossfade this replaced used, just restructured internally via
-   three cumulative breakpoints within it: `TEAM_FADEOUT_END` (30%, cockpit
-   fully faded to black), `TEAM_HOLD_END` (45%, hold ends/reveal starts),
-   and `TEAM_BLACK_CLEAR_END` (75%, black overlay fully cleared while
-   runway keeps gently brightening to full by 100%). Runway then holds
-   through the remainder of Team and all of Contact.
+   as glowing a little more intensely as the screen approaches full black.
+   "Dark → cockpit" starts immediately after (no gap) and fades
+   `assets/images/cockpit.jpg` in from that black over the same
+   `TRANSITION_SPAN_PX`: its own opacity ramps (`smoothstep`-eased) across
+   the *entire* transition, but the black overlay covering it clears over
+   only the first `COCKPIT_BLACK_CLEAR_FRACTION` (15%, ~63px) of it —
+   deliberately not 1:1 with cockpit's own reveal. Plain complementary
+   opacities (overlay = 1 − image) compound multiplicatively when one sits
+   on top of the other: the visible result is `image_opacity × (1 −
+   overlay_opacity)`, which for two equal ramps works out to
+   `image_opacity²` — a curve that reads as "stuck in black" for a long
+   first stretch before suddenly catching up. Clearing the overlay well
+   ahead of the image breaks that compounding, so cockpit is visibly
+   present soon after the transition starts, while its own brightness
+   keeps gently resolving to full across the whole (deliberately long)
+   transition rather than popping in instantly. Cockpit then holds,
+   unanimated, through the rest of Why Us into early Team. Neither cockpit
+   nor runway move or zoom — both are plain `object-fit: cover`, no
+   transform math needed since nothing animates but opacity.
+3. **The other two named transitions, partway through Team** — starting at
+   `TEAM_TRANSITION_START_FRACTION` (40%) of Team's own height
+   (`team.offsetTop` → `contact.offsetTop`), "cockpit → dark" fades
+   `assets/images/cockpit.jpg` out to black over `TRANSITION_SPAN_PX`, then
+   "dark → runway" immediately fades `assets/images/runway.jpg` in from
+   that same black over its own `TRANSITION_SPAN_PX`, using the same
+   overlay-clears-faster-than-image technique as the cockpit reveal above
+   (`RUNWAY_BLACK_CLEAR_FRACTION`, also 15%). Runway then holds through the
+   remainder of Team and all of Contact.
 
 All layers' transforms/opacity/blur are recomputed every scroll tick from
-pixel ranges measured off each section's actual `offsetTop` (`measure()`)
-or from the jet's own live position (`darkness`), not hardcoded — the
-constants at the top of `initCamera()` (`JET_EXIT_FRACTION`,
-`JET_BLUR_START`, `JET_START_LEFT_GAP_FRACTION`,
-`COCKPIT_REVEAL_SPAN_FRACTION`, `COCKPIT_BLACK_CLEAR_FRACTION`,
-`TEAM_RUNWAY_START_FRACTION`, `TEAM_RUNWAY_SPAN_FRACTION`,
-`TEAM_FADEOUT_END`, `TEAM_HOLD_END`, `TEAM_BLACK_CLEAR_END`,
+pixel ranges measured off each section's actual `offsetTop` (`measure()`),
+not hardcoded — the constants at the top of `initCamera()`
+(`JET_EXIT_FRACTION`, `JET_BLUR_START`, `JET_START_LEFT_GAP_FRACTION`,
+`TRANSITION_SPAN_PX`, `COCKPIT_BLACK_CLEAR_FRACTION`,
+`RUNWAY_BLACK_CLEAR_FRACTION`, `TEAM_TRANSITION_START_FRACTION`,
 `VIGNETTE_MAX_OPACITY`, etc.) are the tunable knobs if you want any of
-these beats to take more/less of their range.
+these beats to take more/less of their range. `TRANSITION_SPAN_PX` in
+particular is sized against the tightest-fitting viewport measured
+(desktop: ~540px of Why Us left after the jet exits, ~1700px of Team
+height) so a real hold still remains after "dark → cockpit" and a real
+settled buffer still remains after "dark → runway" before Contact, on
+every viewport checked (mobile/tablet/desktop), not just the roomiest one.
 
-- **The position math runs unconditionally, reduced motion or not.** The
-  jet's transform (`translateX`/`translateY`/`scale`) and the `darkness`
-  derived from it are computed every frame regardless of
+- **The jet's transform math runs unconditionally, reduced motion or not.**
+  `translateX`/`translateY`/`scale` are computed every frame regardless of
   `prefers-reduced-motion` — only *applying* the result to the jet/trail's
-  visible transform/blur is skipped under reduced motion. That keeps the
-  dark/vignette/cockpit/runway ramps genuinely tied to the same
-  (hypothetical) jet position either way, rather than needing a separate
-  scroll-time fallback formula just for reduced motion.
+  visible transform/blur is skipped under reduced motion. `darkness` and
+  the other three transitions are separately scroll-position-driven (not
+  derived from the jet's transform), so they animate identically either
+  way without needing a separate reduced-motion fallback of their own.
 - **Transform math is compositor-only.** Every scroll tick only ever writes
   `transform`/`opacity`/`filter: blur()` — never `width`/`height`/`top`/
   `left`/`background-position` — so there's no layout/paint cost per frame,
