@@ -26,9 +26,11 @@ Three images, three acts — see the "Camera background" section in the root
   exits fully off the left edge partway into Why Us.
 - `cockpit.jpg` (the canopy-open cockpit shot) crossfades in after a dark
   transition and holds through the rest of Why Us into early Team.
-- `runway.jpg` (the F-22 nose-on in a hangar) crossfades in over `cockpit.jpg`
-  partway through Team and is the static background for the remainder of
-  Team and all of Contact.
+- `runway.jpg` (the F-22 nose-on in a hangar) — partway through Team,
+  `cockpit.jpg` fades to black, holds briefly, then `runway.jpg` fades in
+  from that black (mirroring the earlier dark transition, not a direct
+  crossfade between the two) and is the static background for the
+  remainder of Team and all of Contact.
 
 `sky.jpg` was never added (Contact's low-intensity treatment didn't end up
 needing it, and Contact is covered by the runway background instead now).

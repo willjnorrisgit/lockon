@@ -246,43 +246,54 @@ calculation per `requestAnimationFrame` tick:
    exit point. Past the exit point both fractions are clamped at `1`, so
    both layers stay parked off-screen/invisible and can't drift back into
    view later.
-2. **Position-linked darkening, then an immediate cockpit reveal** — the
-   screen doesn't darken on a scroll-time schedule; `darkness` in
-   `update()` is computed directly from the jet's own current horizontal
-   screen position (the same `JET_FX_START` anchor point tracked
-   throughout the flight): `0` while that point is still right of
-   screen-center, ramping up as it crosses toward the left edge, and
-   reaching exactly `1` at the same instant the jet finishes exiting
-   (`jetExitAnchorX`, cached at measure time, *is* that instant — the ramp
-   is a clamped rescale of `(midX - anchorX) / (midX - jetExitAnchorX)`,
-   so it can't help but hit exactly `1` there). A matching
-   `.camera-bg__vignette` deepens in step with it (same `blackOpacity`
-   value, just scaled down and shaped as a radial edge-darken instead of a
-   flat overlay) for a more cinematic frame, and the vapor trail gets a
-   small extra blur/opacity boost tied to the same value
+2. **Position-linked darkening, then a cockpit reveal** — the screen
+   doesn't darken on a scroll-time schedule; `darkness` in `update()` is
+   computed directly from the jet's own current horizontal screen position
+   (the same `JET_FX_START` anchor point tracked throughout the flight):
+   `0` while that point is still right of screen-center, ramping up as it
+   crosses toward the left edge, and reaching exactly `1` at the same
+   instant the jet finishes exiting (`jetExitAnchorX`, cached at measure
+   time, *is* that instant — the ramp is a clamped rescale of `(midX -
+   anchorX) / (midX - jetExitAnchorX)`, so it can't help but hit exactly
+   `1` there). A matching `.camera-bg__vignette` deepens in step with it
+   for a more cinematic frame, and the vapor trail gets a small extra
+   blur/opacity boost tied to the same value
    (`JET_TRAIL_DARK_BLUR_BOOST_PX`/`JET_TRAIL_DARK_GLOW_BOOST`) so it reads
    as glowing a little more intensely as the screen approaches full black
    — tying the dissolve and the darkening into one continuous beat instead
    of two independently-timed ones. The instant darkness reaches `1`,
-   `assets/images/cockpit.jpg` (`.camera-bg__cockpit`) starts crossfading
-   in — `cockpitRangeStart` is set to exactly `jetRangeEnd` in `measure()`,
-   the same pixel point darkness is guaranteed to hit `1` at, so there's no
-   added delay — finishing over `COCKPIT_REVEAL_SPAN_FRACTION` (50%) of the
-   remaining distance to Team, then holding unanimated through the rest of
-   Why Us into early Team. Neither cockpit nor runway move or zoom — both
-   are plain `object-fit: cover`, no transform math needed since nothing
-   animates but opacity.
-3. **A second, plain crossfade partway through Team** — no darkening step
-   this time (nothing on screen is "exiting" the way the jet did, so a
-   black dip here would read as a flicker rather than a beat), just a
-   straight opacity swap: starting at `TEAM_RUNWAY_START_FRACTION` (45%)
-   of Team's own height (`team.offsetTop` → `contact.offsetTop`, measured
-   the same way every other span in this file is) and finishing
-   `TEAM_RUNWAY_SPAN_FRACTION` (25%) later, `assets/images/runway.jpg`
-   (`.camera-bg__runway`) crossfades in as `.camera-bg__cockpit` crossfades
-   out — complementary opacities (`cockpitRevealFraction * (1 -
-   teamRunwayFraction)` vs. plain `teamRunwayFraction`), so they sum to 1
-   and never both show through or both go dark at once. Runway then holds
+   `assets/images/cockpit.jpg` (`.camera-bg__cockpit`) starts fading in
+   from that black — `cockpitRangeStart` is set to exactly `jetRangeEnd` in
+   `measure()`, the same pixel point darkness is guaranteed to hit `1` at,
+   so there's no added delay — finishing over `COCKPIT_REVEAL_SPAN_FRACTION`
+   (35%) of the remaining distance to Team, then holding unanimated through
+   the rest of Why Us into early Team. Cockpit's own opacity ramps
+   (`smoothstep`-eased) across that *entire* span, but the black overlay on
+   top of it clears over only the first `COCKPIT_BLACK_CLEAR_FRACTION`
+   (50%) of it — deliberately not 1:1 with cockpit's own reveal. Plain
+   complementary opacities (overlay = 1 − image) compound multiplicatively
+   when one sits on top of the other: the visible result is
+   `image_opacity × (1 − overlay_opacity)`, which for two equal linear
+   ramps works out to `image_opacity²` — a curve that reads as "stuck in
+   black" for a long first stretch before suddenly catching up. Clearing
+   the overlay faster than the image finishes fading in breaks that
+   compounding, so the dark hold reads as brief while the image still
+   fades in gradually rather than popping in instantly. Neither cockpit nor
+   runway move or zoom — both are plain `object-fit: cover`, no transform
+   math needed since nothing animates but opacity.
+3. **A second dark beat partway through Team** — rather than a plain
+   crossfade, this mirrors act 2's structure: `assets/images/cockpit.jpg`
+   fades to black, holds briefly, then `assets/images/runway.jpg` fades in
+   from that same black, using the same overlay-clears-faster-than-image
+   technique described above so the reveal doesn't feel like it's fighting
+   through a slow fade. The whole beat spans `TEAM_RUNWAY_START_FRACTION`
+   (45%) → `+ TEAM_RUNWAY_SPAN_FRACTION` (25%) of Team's own height
+   (`team.offsetTop` → `contact.offsetTop`) — the same total span the
+   plain crossfade this replaced used, just restructured internally via
+   three cumulative breakpoints within it: `TEAM_FADEOUT_END` (30%, cockpit
+   fully faded to black), `TEAM_HOLD_END` (45%, hold ends/reveal starts),
+   and `TEAM_BLACK_CLEAR_END` (75%, black overlay fully cleared while
+   runway keeps gently brightening to full by 100%). Runway then holds
    through the remainder of Team and all of Contact.
 
 All layers' transforms/opacity/blur are recomputed every scroll tick from
@@ -290,9 +301,11 @@ pixel ranges measured off each section's actual `offsetTop` (`measure()`)
 or from the jet's own live position (`darkness`), not hardcoded — the
 constants at the top of `initCamera()` (`JET_EXIT_FRACTION`,
 `JET_BLUR_START`, `JET_START_LEFT_GAP_FRACTION`,
-`COCKPIT_REVEAL_SPAN_FRACTION`, `TEAM_RUNWAY_START_FRACTION`,
-`TEAM_RUNWAY_SPAN_FRACTION`, `VIGNETTE_MAX_OPACITY`, etc.) are the tunable
-knobs if you want any of these beats to take more/less of their range.
+`COCKPIT_REVEAL_SPAN_FRACTION`, `COCKPIT_BLACK_CLEAR_FRACTION`,
+`TEAM_RUNWAY_START_FRACTION`, `TEAM_RUNWAY_SPAN_FRACTION`,
+`TEAM_FADEOUT_END`, `TEAM_HOLD_END`, `TEAM_BLACK_CLEAR_END`,
+`VIGNETTE_MAX_OPACITY`, etc.) are the tunable knobs if you want any of
+these beats to take more/less of their range.
 
 - **The position math runs unconditionally, reduced motion or not.** The
   jet's transform (`translateX`/`translateY`/`scale`) and the `darkness`
